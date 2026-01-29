@@ -16,6 +16,7 @@ import {
 import { DatabaseClient } from './database/client.js';
 import { registerTools } from './tools/index.js';
 import { searchRequirements } from './tools/search.js';
+import { getRequirement } from './tools/get-requirement.js';
 
 /**
  * MCP Server class for OT Security standards and frameworks
@@ -123,17 +124,42 @@ export class McpServer {
 
   /**
    * Handle get_ot_requirement tool
-   * @param _args - Tool arguments (unused in stub)
+   * @param args - Tool arguments containing requirement_id, standard, and optional filters
    */
-  private async handleGetRequirement(_args: unknown) {
-    // Stub implementation - will be implemented in Task 7
+  private async handleGetRequirement(args: unknown) {
+    const { requirement_id, standard, version, include_mappings } = args as any;
+
+    const result = await getRequirement(this.db, {
+      requirement_id,
+      standard,
+      options: {
+        version,
+        include_mappings: include_mappings ?? true
+      }
+    });
+
+    if (!result) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify({
+              error: 'Requirement not found',
+              requirement_id,
+              standard
+            }, null, 2)
+          }
+        ]
+      };
+    }
+
     return {
       content: [
         {
           type: 'text',
-          text: 'Not implemented yet - get_ot_requirement will be implemented in Task 7',
-        },
-      ],
+          text: JSON.stringify(result, null, 2)
+        }
+      ]
     };
   }
 
