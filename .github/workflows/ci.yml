@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Run tests
+        run: npm test
+
+      - name: Ingest MITRE data
+        run: npm run ingest:mitre
+
+      - name: Verify MITRE data integrity
+        run: |
+          # Check that data was ingested successfully
+          if [ ! -f "data/ot-security.sqlite" ]; then
+            echo "Error: Database not created"
+            exit 1
+          fi
+
+          # Run a simple query to verify data exists
+          npx tsx -e "
+          import Database from 'better-sqlite3';
+          const db = new Database('data/ot-security.sqlite');
+          const techniques = db.prepare('SELECT COUNT(*) as count FROM mitre_techniques').get();
+          const mitigations = db.prepare('SELECT COUNT(*) as count FROM mitre_mitigations').get();
+          console.log('Techniques:', techniques.count);
+          console.log('Mitigations:', mitigations.count);
+          if (techniques.count === 0 || mitigations.count === 0) {
+            process.exit(1);
+          }
+          "
