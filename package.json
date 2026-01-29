@@ -29,6 +29,7 @@
     "ingest:iec62443": "tsx scripts/ingest-iec62443.ts",
     "validate:iec62443": "tsx scripts/validate-iec62443.ts",
     "verify:integrity": "tsx scripts/verify-data-integrity.ts",
+    "verify:setup": "tsx scripts/verify-setup.ts",
     "check-updates": "tsx scripts/check-updates.ts"
   },
   "dependencies": {
