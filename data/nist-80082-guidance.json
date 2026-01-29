@@ -1,0 +1,59 @@
+{
+  "meta": {
+    "title": "NIST SP 800-82 Rev 3: Guide to Operational Technology (OT) Security",
+    "version": "Rev 3",
+    "published_date": "2023-11-01",
+    "url": "https://csrc.nist.gov/publications/detail/sp/800-82/rev-3/final",
+    "extraction_notes": "Key guidance items from Chapters 5, 6, and Appendix G"
+  },
+  "guidance": [
+    {
+      "id": "G-5.1",
+      "section": "5.2",
+      "title": "Risk Assessment for ICS Environments",
+      "description": "Organizations should conduct risk assessments that account for ICS-specific factors including safety implications, operational requirements, and unique threat landscape.",
+      "ics_context": "ICS risk assessments must consider safety, availability as primary concern (vs confidentiality in IT), and operational constraints that limit patching.",
+      "related_800_53_controls": ["RA-3", "RA-5", "PM-9"]
+    },
+    {
+      "id": "G-5.2",
+      "section": "5.3",
+      "title": "Vulnerability Management in OT",
+      "description": "Establish vulnerability management processes that account for operational constraints, safety requirements, and vendor dependencies in ICS environments.",
+      "ics_context": "ICS systems often cannot be patched immediately due to uptime requirements, availability windows, and vendor support constraints. Compensating controls are critical.",
+      "related_800_53_controls": ["SI-2", "RA-5", "CM-3"]
+    },
+    {
+      "id": "G-6.1",
+      "section": "6.2",
+      "title": "Network Segmentation and Isolation",
+      "description": "Implement network segmentation using zones and conduits following the Purdue Model to isolate ICS networks from enterprise IT and external networks.",
+      "ics_context": "Defense-in-depth through network segmentation is critical for ICS. Use firewalls, DMZs, and unidirectional gateways between zones.",
+      "related_800_53_controls": ["SC-7", "AC-4", "SC-32"]
+    },
+    {
+      "id": "G-6.2",
+      "section": "6.3",
+      "title": "Access Control for ICS",
+      "description": "Implement role-based access control with consideration for operational roles, emergency access procedures, and multi-factor authentication where feasible.",
+      "ics_context": "ICS access control must balance security with operational needs. Consider console access, remote access, vendor access, and emergency override procedures.",
+      "related_800_53_controls": ["AC-2", "AC-3", "AC-6", "IA-2"]
+    },
+    {
+      "id": "G-6.3",
+      "section": "6.4",
+      "title": "Security Monitoring and Logging",
+      "description": "Deploy ICS-aware security monitoring that can detect anomalous behavior without disrupting operations. Log critical events for forensics and compliance.",
+      "ics_context": "ICS monitoring must be passive and non-disruptive. Focus on network traffic analysis, change detection, and protocol anomalies rather than active scanning.",
+      "related_800_53_controls": ["AU-2", "AU-6", "SI-4"]
+    },
+    {
+      "id": "G-AppG.1",
+      "section": "Appendix G",
+      "title": "ICS Overlay for NIST 800-53",
+      "description": "Apply the ICS overlay to tailor NIST 800-53 controls for operational technology environments, focusing on availability, safety, and operational constraints.",
+      "ics_context": "The overlay provides ICS-specific guidance for 800-53 controls, including implementation considerations, compensating controls, and priority adjustments.",
+      "related_800_53_controls": ["ALL_FAMILIES"]
+    }
+  ]
+}
