@@ -105,6 +105,59 @@ CREATE TABLE IF NOT EXISTS mitre_technique_mitigations (
 );
 
 -- =============================================================================
+-- Zones and Conduits (IEC 62443-3-2)
+-- =============================================================================
+
+-- Zone definitions (Purdue model levels 0-5)
+CREATE TABLE IF NOT EXISTS zones (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  purdue_level INTEGER CHECK (purdue_level >= 0 AND purdue_level <= 5),
+  security_level_target INTEGER CHECK (security_level_target IN (1, 2, 3, 4)),
+  description TEXT,
+  iec_reference TEXT,
+  typical_assets TEXT,
+  UNIQUE(name, purdue_level)
+);
+
+-- Conduit types (network connections between zones)
+CREATE TABLE IF NOT EXISTS conduits (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  conduit_type TEXT NOT NULL,
+  security_requirements TEXT,
+  description TEXT,
+  iec_reference TEXT,
+  minimum_security_level INTEGER CHECK (minimum_security_level IN (1, 2, 3, 4)),
+  UNIQUE(name, conduit_type)
+);
+
+-- Zone-to-zone flows via conduits
+CREATE TABLE IF NOT EXISTS zone_conduit_flows (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  source_zone_id INTEGER NOT NULL,
+  target_zone_id INTEGER NOT NULL,
+  conduit_id INTEGER NOT NULL,
+  data_flow_description TEXT,
+  security_level_requirement INTEGER CHECK (security_level_requirement IN (1, 2, 3, 4)),
+  bidirectional BOOLEAN DEFAULT 0,
+  FOREIGN KEY (source_zone_id) REFERENCES zones(id) ON DELETE CASCADE,
+  FOREIGN KEY (target_zone_id) REFERENCES zones(id) ON DELETE CASCADE,
+  FOREIGN KEY (conduit_id) REFERENCES conduits(id) ON DELETE CASCADE
+);
+
+-- Reference architectures
+CREATE TABLE IF NOT EXISTS reference_architectures (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL UNIQUE,
+  description TEXT,
+  diagram_url TEXT,
+  applicable_zones TEXT,
+  iec_reference TEXT,
+  industry_applicability TEXT
+);
+
+-- =============================================================================
 -- Sector Applicability
 -- =============================================================================
 
@@ -185,3 +238,9 @@ CREATE INDEX IF NOT EXISTS idx_zones_conduits_purdue
 
 CREATE INDEX IF NOT EXISTS idx_zones_conduits_security_level
   ON zones_conduits(security_level_target);
+
+-- Indexes for zone/conduit queries
+CREATE INDEX IF NOT EXISTS idx_zones_purdue ON zones(purdue_level);
+CREATE INDEX IF NOT EXISTS idx_zones_sl_target ON zones(security_level_target);
+CREATE INDEX IF NOT EXISTS idx_flows_source ON zone_conduit_flows(source_zone_id);
+CREATE INDEX IF NOT EXISTS idx_flows_target ON zone_conduit_flows(target_zone_id);

@@ -1,0 +1,274 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "IEC 62443 Data Schema",
+  "description": "JSON schema for user-supplied IEC 62443 standard data (parts 3-3, 4-2, 3-2)",
+  "type": "object",
+  "required": ["meta"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["part", "title", "version", "published_date"],
+      "properties": {
+        "part": {
+          "type": "string",
+          "enum": ["3-3", "4-2", "3-2"],
+          "description": "IEC 62443 part identifier"
+        },
+        "title": {
+          "type": "string",
+          "description": "Full standard title"
+        },
+        "version": {
+          "type": "string",
+          "description": "Standard version (e.g., v2.0)"
+        },
+        "published_date": {
+          "type": "string",
+          "format": "date",
+          "description": "Publication date (YYYY-MM-DD)"
+        }
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "type": "object",
+          "properties": {
+            "part": { "const": "3-3" }
+          }
+        },
+        "requirements": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/requirement" }
+        }
+      },
+      "required": ["requirements"]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "type": "object",
+          "properties": {
+            "part": { "const": "4-2" }
+          }
+        },
+        "requirements": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/requirement" }
+        }
+      },
+      "required": ["requirements"]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "meta": {
+          "type": "object",
+          "properties": {
+            "part": { "const": "3-2" }
+          }
+        },
+        "zones": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/zone" }
+        },
+        "conduits": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/conduit" }
+        },
+        "flows": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/flow" }
+        },
+        "reference_architectures": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/reference_architecture" }
+        }
+      },
+      "required": ["zones", "conduits"]
+    }
+  ],
+  "definitions": {
+    "requirement": {
+      "type": "object",
+      "required": ["requirement_id", "title", "description", "rationale", "component_type", "security_levels"],
+      "properties": {
+        "requirement_id": {
+          "type": "string",
+          "pattern": "^(SR|CR) \\d+\\.\\d+( RE \\d+)?$",
+          "description": "Requirement ID (e.g., SR 1.1, CR 2.3 RE 1)"
+        },
+        "parent_requirement_id": {
+          "type": ["string", "null"],
+          "description": "Parent requirement for REs (null for base requirements)"
+        },
+        "title": {
+          "type": "string",
+          "description": "Requirement title"
+        },
+        "description": {
+          "type": "string",
+          "description": "Full requirement description"
+        },
+        "rationale": {
+          "type": "string",
+          "description": "Rationale for requirement"
+        },
+        "component_type": {
+          "type": "string",
+          "enum": ["host", "network", "embedded", "app"],
+          "description": "Component type this requirement applies to"
+        },
+        "security_levels": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/security_level" }
+        }
+      }
+    },
+    "security_level": {
+      "type": "object",
+      "required": ["security_level", "sl_type", "capability_level"],
+      "properties": {
+        "security_level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4,
+          "description": "Security level (1-4)"
+        },
+        "sl_type": {
+          "type": "string",
+          "enum": ["SL-T", "SL-C", "SL-A"],
+          "description": "Security level type (Target, Capability, Achieved)"
+        },
+        "capability_level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4,
+          "description": "Capability level (1-4)"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional notes"
+        }
+      }
+    },
+    "zone": {
+      "type": "object",
+      "required": ["name", "purdue_level", "security_level_target", "description"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Zone name"
+        },
+        "purdue_level": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5,
+          "description": "Purdue model level (0-5)"
+        },
+        "security_level_target": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4,
+          "description": "Target security level (1-4)"
+        },
+        "description": {
+          "type": "string",
+          "description": "Zone description"
+        },
+        "typical_assets": {
+          "type": "string",
+          "description": "Typical assets in this zone"
+        }
+      }
+    },
+    "conduit": {
+      "type": "object",
+      "required": ["name", "conduit_type", "description"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Conduit name"
+        },
+        "conduit_type": {
+          "type": "string",
+          "enum": ["unidirectional", "filtered_bidirectional", "open_bidirectional"],
+          "description": "Conduit type"
+        },
+        "description": {
+          "type": "string",
+          "description": "Conduit description"
+        },
+        "minimum_security_level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4,
+          "description": "Minimum security level required"
+        }
+      }
+    },
+    "flow": {
+      "type": "object",
+      "required": ["source_zone_name", "target_zone_name", "conduit_name", "data_flow_description"],
+      "properties": {
+        "source_zone_name": {
+          "type": "string",
+          "description": "Name of source zone"
+        },
+        "target_zone_name": {
+          "type": "string",
+          "description": "Name of target zone"
+        },
+        "conduit_name": {
+          "type": "string",
+          "description": "Name of conduit connecting zones"
+        },
+        "data_flow_description": {
+          "type": "string",
+          "description": "Description of data flow"
+        },
+        "security_level_requirement": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4,
+          "description": "Security level required for this flow"
+        },
+        "bidirectional": {
+          "type": "boolean",
+          "description": "Whether flow is bidirectional"
+        }
+      }
+    },
+    "reference_architecture": {
+      "type": "object",
+      "required": ["name", "description"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Architecture name (e.g., ISA95, Purdue Model)"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of architecture"
+        },
+        "diagram_url": {
+          "type": "string",
+          "description": "URL to architecture diagram"
+        },
+        "applicable_zones": {
+          "type": "string",
+          "description": "Zones this architecture applies to"
+        },
+        "industry_applicability": {
+          "type": "string",
+          "description": "Industries where this architecture is commonly used"
+        }
+      }
+    }
+  }
+}

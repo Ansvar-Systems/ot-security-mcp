@@ -19,6 +19,9 @@ import { searchRequirements } from './tools/search.js';
 import { getRequirement } from './tools/get-requirement.js';
 import { listStandards } from './tools/list-standards.js';
 import { getMitreTechnique } from './tools/get-mitre-technique.js';
+import { mapSecurityLevelRequirements } from './tools/map-security-level-requirements.js';
+import { getZoneConduitGuidance } from './tools/get-zone-conduit-guidance.js';
+import { getRequirementRationale } from './tools/get-requirement-rationale.js';
 
 /**
  * MCP Server class for OT Security standards and frameworks
@@ -40,7 +43,7 @@ export class McpServer {
     this.server = new Server(
       {
         name: 'ot-security-mcp',
-        version: '0.1.0',
+        version: '0.2.0',
       },
       {
         capabilities: {
@@ -80,6 +83,15 @@ export class McpServer {
 
           case 'get_mitre_ics_technique':
             return this.handleGetMitreTechnique(args);
+
+          case 'map_security_level_requirements':
+            return this.handleMapSecurityLevelRequirements(args);
+
+          case 'get_zone_conduit_guidance':
+            return this.handleGetZoneConduitGuidance(args);
+
+          case 'get_requirement_rationale':
+            return this.handleGetRequirementRationale(args);
 
           default:
             throw new McpError(
@@ -235,6 +247,132 @@ export class McpServer {
             text: JSON.stringify({
               error: 'Technique not found',
               technique_id
+            }, null, 2)
+          }
+        ]
+      };
+    }
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(result, null, 2)
+        }
+      ]
+    };
+  }
+
+  /**
+   * Handle map_security_level_requirements tool
+   * @param args - Tool arguments containing security_level and optional filters
+   */
+  private async handleMapSecurityLevelRequirements(args: unknown) {
+    const { security_level, component_type, include_enhancements } = args as any;
+
+    const requirements = await mapSecurityLevelRequirements(this.db, {
+      security_level,
+      component_type,
+      include_enhancements
+    });
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(requirements, null, 2)
+        }
+      ]
+    };
+  }
+
+  /**
+   * Handle get_zone_conduit_guidance tool
+   * @param args - Tool arguments containing optional filters
+   */
+  private async handleGetZoneConduitGuidance(args: unknown) {
+    const { purdue_level, security_level_target, reference_architecture } = args as any;
+
+    const result = await getZoneConduitGuidance(this.db, {
+      purdue_level,
+      security_level_target,
+      reference_architecture
+    });
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(result, null, 2)
+        }
+      ]
+    };
+  }
+
+  /**
+   * Handle get_requirement_rationale tool
+   * @param args - Tool arguments containing requirement_id and standard
+   */
+  private async handleGetRequirementRationale(args: unknown) {
+    // Validate arguments
+    if (typeof args !== 'object' || args === null) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify({
+              error: 'Invalid arguments - expected an object'
+            }, null, 2)
+          }
+        ]
+      };
+    }
+
+    const { requirement_id, standard } = args as {
+      requirement_id?: string;
+      standard?: string;
+    };
+
+    if (!requirement_id) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify({
+              error: 'requirement_id parameter is required'
+            }, null, 2)
+          }
+        ]
+      };
+    }
+
+    if (!standard) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify({
+              error: 'standard parameter is required'
+            }, null, 2)
+          }
+        ]
+      };
+    }
+
+    const result = await getRequirementRationale(this.db, {
+      requirement_id,
+      standard
+    });
+
+    if (!result) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify({
+              error: 'Requirement not found',
+              requirement_id,
+              standard
             }, null, 2)
           }
         ]

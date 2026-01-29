@@ -49,6 +49,11 @@ describe('DatabaseClient', () => {
       expect(tableNames).toContain('mitre_ics_mitigations');
       expect(tableNames).toContain('mitre_technique_mitigations');
       expect(tableNames).toContain('sector_applicability');
+      // New tables for IEC 62443-3-2
+      expect(tableNames).toContain('zones');
+      expect(tableNames).toContain('conduits');
+      expect(tableNames).toContain('zone_conduit_flows');
+      expect(tableNames).toContain('reference_architectures');
     });
 
     it('should enable foreign keys', () => {
@@ -483,6 +488,56 @@ describe('DatabaseClient', () => {
 
       // Check for MITRE tactic index
       expect(indexNames.some(name => name.includes('tactic'))).toBe(true);
+    });
+  });
+
+  describe('Zones and Conduits Schema', () => {
+    it('should create zones table with correct structure', () => {
+      db.run(
+        `INSERT INTO zones (name, purdue_level, security_level_target, description)
+         VALUES (?, ?, ?, ?)`,
+        ['SCADA DMZ', 3, 2, 'Demilitarized zone for SCADA servers']
+      );
+
+      const zone = db.queryOne<any>('SELECT * FROM zones WHERE name = ?', ['SCADA DMZ']);
+      expect(zone).toBeDefined();
+      expect(zone.purdue_level).toBe(3);
+      expect(zone.security_level_target).toBe(2);
+    });
+
+    it('should enforce unique zone name + purdue_level', () => {
+      db.run(`INSERT INTO zones (name, purdue_level) VALUES (?, ?)`, ['Zone A', 2]);
+
+      expect(() => {
+        db.run(`INSERT INTO zones (name, purdue_level) VALUES (?, ?)`, ['Zone A', 2]);
+      }).toThrow();
+    });
+
+    it('should create conduits table with correct structure', () => {
+      db.run(
+        `INSERT INTO conduits (name, conduit_type, description)
+         VALUES (?, ?, ?)`,
+        ['Firewall', 'filtered_bidirectional', 'Deep packet inspection firewall']
+      );
+
+      const conduit = db.queryOne<any>('SELECT * FROM conduits WHERE name = ?', ['Firewall']);
+      expect(conduit).toBeDefined();
+      expect(conduit.conduit_type).toBe('filtered_bidirectional');
+    });
+
+    it('should create zone_conduit_flows with foreign keys', () => {
+      const zone1Id = db.run(`INSERT INTO zones (name, purdue_level) VALUES (?, ?)`, ['Zone 1', 2]).lastInsertRowid;
+      const zone2Id = db.run(`INSERT INTO zones (name, purdue_level) VALUES (?, ?)`, ['Zone 2', 3]).lastInsertRowid;
+      const conduitId = db.run(`INSERT INTO conduits (name, conduit_type) VALUES (?, ?)`, ['Firewall', 'filtered']).lastInsertRowid;
+
+      db.run(
+        `INSERT INTO zone_conduit_flows (source_zone_id, target_zone_id, conduit_id, data_flow_description)
+         VALUES (?, ?, ?, ?)`,
+        [zone1Id, zone2Id, conduitId, 'Process data to SCADA']
+      );
+
+      const flow = db.queryOne<any>('SELECT * FROM zone_conduit_flows WHERE source_zone_id = ?', [zone1Id]);
+      expect(flow).toBeDefined();
     });
   });
 });

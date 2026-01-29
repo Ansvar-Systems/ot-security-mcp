@@ -1,0 +1,66 @@
+{
+  "meta": {
+    "part": "3-3",
+    "title": "IEC 62443-3-3 System Security Requirements and Security Levels",
+    "version": "v2.0",
+    "published_date": "2023-10-01"
+  },
+  "requirements": [
+    {
+      "requirement_id": "SR 1.1",
+      "parent_requirement_id": null,
+      "title": "Human user identification and authentication",
+      "description": "The control system shall provide the capability to identify and authenticate all human users. This capability shall enforce such identification and authentication on all interfaces which provide human user access to the control system to support segregation of duties and least privilege in accordance with applicable security policies and procedures.",
+      "rationale": "Human user identification and authentication is the basis for most types of accesses control and for establishing accountability. Unique identification and authentication of authorized users is essential to ensure that the proper user is associated with any attempted or completed actions.",
+      "component_type": "host",
+      "security_levels": [
+        {
+          "security_level": 1,
+          "sl_type": "SL-T",
+          "capability_level": 1,
+          "notes": "Basic capability - identification and authentication required"
+        },
+        {
+          "security_level": 2,
+          "sl_type": "SL-T",
+          "capability_level": 1,
+          "notes": "Same as SL-1"
+        },
+        {
+          "security_level": 3,
+          "sl_type": "SL-T",
+          "capability_level": 2,
+          "notes": "Enhanced capability required - see SR 1.1 RE 1"
+        },
+        {
+          "security_level": 4,
+          "sl_type": "SL-T",
+          "capability_level": 3,
+          "notes": "Advanced capability required - see SR 1.1 RE 2"
+        }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.1 RE 1",
+      "parent_requirement_id": "SR 1.1",
+      "title": "Unique identification and authentication",
+      "description": "The control system shall provide the capability to uniquely identify and authenticate all human users. This capability shall enforce such identification and authentication on all interfaces which provide human user access to the control system.",
+      "rationale": "Provides enhanced capability by requiring unique identification for each user, supporting better accountability and audit trails.",
+      "component_type": "host",
+      "security_levels": [
+        {
+          "security_level": 3,
+          "sl_type": "SL-T",
+          "capability_level": 2,
+          "notes": "Required for SL-3"
+        },
+        {
+          "security_level": 4,
+          "sl_type": "SL-T",
+          "capability_level": 2,
+          "notes": "Minimum requirement for SL-4"
+        }
+      ]
+    }
+  ]
+}
