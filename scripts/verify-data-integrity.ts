@@ -350,10 +350,18 @@ class DataIntegrityVerifier {
     for (const standard of standards) {
       if (standard.id === 'mitre-ics') {
         // MITRE ICS uses techniques table
-        const count = this.db.queryOne<{ count: number }>(
+        const techniqueCount = this.db.queryOne<{ count: number }>(
           'SELECT COUNT(*) as count FROM mitre_ics_techniques'
         );
-        const actualCount = count?.count || 0;
+        if (!techniqueCount) {
+          this.addIssue(
+            'requirement_counts',
+            'ERROR',
+            'Failed to query MITRE ICS technique count'
+          );
+          continue;
+        }
+        const actualCount = techniqueCount.count;
         const expectedCount = expectedCounts[standard.id];
 
         if (actualCount !== expectedCount) {
@@ -370,7 +378,15 @@ class DataIntegrityVerifier {
           'SELECT COUNT(*) as count FROM ot_requirements WHERE standard_id = ?',
           [standard.id]
         );
-        const actualCount = count?.count || 0;
+        if (!count) {
+          this.addIssue(
+            'requirement_counts',
+            'ERROR',
+            `Failed to query requirement count for ${standard.name}`
+          );
+          continue;
+        }
+        const actualCount = count.count;
         const expectedCount = expectedCounts[standard.id];
 
         if (expectedCount !== undefined && actualCount !== expectedCount) {
