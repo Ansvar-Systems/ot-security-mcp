@@ -51,8 +51,31 @@
     "ot-security",
     "operational-technology",
     "ics",
+    "industrial-control-systems",
     "scada",
+    "plc",
+    "dcs",
+    "iec-62443",
+    "nist-800-53",
+    "nist-800-82",
+    "mitre-attack",
     "mitre-ics",
-    "security-standards"
-  ]
+    "security-standards",
+    "compliance",
+    "cybersecurity",
+    "critical-infrastructure",
+    "threat-intelligence",
+    "purdue-model",
+    "network-segmentation",
+    "claude",
+    "claude-desktop"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ansvar-Systems/ot-security-mcp.git"
+  },
+  "homepage": "https://github.com/Ansvar-Systems/ot-security-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/Ansvar-Systems/ot-security-mcp/issues"
+  }
 }
