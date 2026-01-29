@@ -89,25 +89,49 @@ export class MitreIngester {
   constructor(private db: DatabaseClient) {}
 
   /**
-   * Fetch MITRE ATT&CK ICS STIX data from GitHub
+   * Fetch MITRE ATT&CK ICS STIX data from GitHub with retry logic
    */
   async fetchMitreData(): Promise<StixBundle> {
     console.log(`Fetching MITRE ATT&CK ICS data from: ${MITRE_ICS_STIX_URL}`);
 
-    const response = await fetch(MITRE_ICS_STIX_URL);
+    const maxRetries = 3;
+    const retryDelays = [1000, 2000, 4000]; // 1s, 2s, 4s
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch MITRE data: ${response.status} ${response.statusText}`);
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        const response = await fetch(MITRE_ICS_STIX_URL);
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json() as StixBundle;
+
+        if (data.type !== 'bundle' || !Array.isArray(data.objects)) {
+          throw new Error('Invalid STIX bundle format');
+        }
+
+        console.log(`Fetched ${data.objects.length} STIX objects`);
+        return data;
+
+      } catch (error) {
+        const isLastAttempt = attempt === maxRetries;
+        const errorMessage = error instanceof Error ? error.message : String(error);
+
+        if (isLastAttempt) {
+          throw new Error(`Failed to fetch MITRE data after ${maxRetries + 1} attempts: ${errorMessage}`);
+        }
+
+        const delay = retryDelays[attempt];
+        console.warn(`Attempt ${attempt + 1} failed: ${errorMessage}. Retrying in ${delay}ms...`);
+
+        // Wait before retrying
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
     }
 
-    const data = await response.json() as StixBundle;
-
-    if (data.type !== 'bundle' || !Array.isArray(data.objects)) {
-      throw new Error('Invalid STIX bundle format');
-    }
-
-    console.log(`Fetched ${data.objects.length} STIX objects`);
-    return data;
+    // TypeScript requires this, but it's unreachable
+    throw new Error('Unexpected error in fetchMitreData');
   }
 
   /**
@@ -232,57 +256,69 @@ export class MitreIngester {
   async ingestAll(): Promise<void> {
     console.log('Starting MITRE ATT&CK ICS ingestion...\n');
 
-    // Fetch data
-    const bundle = await this.fetchMitreData();
+    try {
+      // Fetch data
+      const bundle = await this.fetchMitreData();
 
-    // Process in a transaction for atomicity
-    this.db.transaction(() => {
-      // Clear existing data
-      console.log('Clearing existing MITRE data...');
-      this.db.run('DELETE FROM mitre_technique_mitigations');
-      this.db.run('DELETE FROM mitre_ics_techniques');
-      this.db.run('DELETE FROM mitre_ics_mitigations');
+      // Process in a transaction for atomicity
+      // Note: better-sqlite3 transactions automatically rollback on any error
+      this.db.transaction(() => {
+        // Clear existing data
+        console.log('Clearing existing MITRE data...');
+        this.db.run('DELETE FROM mitre_technique_mitigations');
+        this.db.run('DELETE FROM mitre_ics_techniques');
+        this.db.run('DELETE FROM mitre_ics_mitigations');
 
-      // Ingest techniques
-      const techniques = bundle.objects.filter(obj => obj.type === 'attack-pattern') as StixAttackPattern[];
-      console.log(`\nIngesting ${techniques.length} techniques...`);
+        // Ingest techniques
+        const techniques = bundle.objects.filter(obj => obj.type === 'attack-pattern') as StixAttackPattern[];
+        console.log(`\nIngesting ${techniques.length} techniques...`);
 
-      for (const technique of techniques) {
-        this.ingestTechnique(technique);
-      }
+        for (const technique of techniques) {
+          this.ingestTechnique(technique);
+        }
 
-      // Ingest mitigations
-      const mitigations = bundle.objects.filter(obj => obj.type === 'course-of-action') as StixCourseOfAction[];
-      console.log(`Ingesting ${mitigations.length} mitigations...`);
+        // Ingest mitigations
+        const mitigations = bundle.objects.filter(obj => obj.type === 'course-of-action') as StixCourseOfAction[];
+        console.log(`Ingesting ${mitigations.length} mitigations...`);
 
-      for (const mitigation of mitigations) {
-        this.ingestMitigation(mitigation);
-      }
+        for (const mitigation of mitigations) {
+          this.ingestMitigation(mitigation);
+        }
 
-      // Ingest relationships
-      console.log('Ingesting relationships...');
-      this.ingestRelationships(bundle.objects);
-    });
+        // Ingest relationships
+        console.log('Ingesting relationships...');
+        this.ingestRelationships(bundle.objects);
+      });
 
-    // Report final counts
-    console.log('\n=== Ingestion Complete ===');
+      // Report final counts
+      console.log('\n=== Ingestion Complete ===');
 
-    const techniqueCount = this.db.queryOne<{ count: number }>(
-      'SELECT COUNT(*) as count FROM mitre_ics_techniques'
-    )?.count || 0;
+      const techniqueCount = this.db.queryOne<{ count: number }>(
+        'SELECT COUNT(*) as count FROM mitre_ics_techniques'
+      )?.count || 0;
 
-    const mitigationCount = this.db.queryOne<{ count: number }>(
-      'SELECT COUNT(*) as count FROM mitre_ics_mitigations'
-    )?.count || 0;
+      const mitigationCount = this.db.queryOne<{ count: number }>(
+        'SELECT COUNT(*) as count FROM mitre_ics_mitigations'
+      )?.count || 0;
 
-    const relationshipCount = this.db.queryOne<{ count: number }>(
-      'SELECT COUNT(*) as count FROM mitre_technique_mitigations'
-    )?.count || 0;
+      const relationshipCount = this.db.queryOne<{ count: number }>(
+        'SELECT COUNT(*) as count FROM mitre_technique_mitigations'
+      )?.count || 0;
 
-    console.log(`Techniques ingested: ${techniqueCount}`);
-    console.log(`Mitigations ingested: ${mitigationCount}`);
-    console.log(`Relationships ingested: ${relationshipCount}`);
-    console.log('=========================\n');
+      console.log(`Techniques ingested: ${techniqueCount}`);
+      console.log(`Mitigations ingested: ${mitigationCount}`);
+      console.log(`Relationships ingested: ${relationshipCount}`);
+      console.log('=========================\n');
+
+    } catch (error) {
+      // Transaction automatically rolled back by better-sqlite3
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error('\n=== Ingestion Failed ===');
+      console.error(`Error: ${errorMessage}`);
+      console.error('Database transaction has been rolled back to maintain consistency.');
+      console.error('========================\n');
+      throw error; // Re-throw to signal failure to caller
+    }
   }
 }
 

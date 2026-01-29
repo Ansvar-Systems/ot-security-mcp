@@ -100,7 +100,8 @@ CREATE TABLE IF NOT EXISTS mitre_technique_mitigations (
   mitigation_id TEXT NOT NULL,
   ot_requirement_id TEXT,
   FOREIGN KEY (technique_id) REFERENCES mitre_ics_techniques(technique_id) ON DELETE CASCADE,
-  FOREIGN KEY (mitigation_id) REFERENCES mitre_ics_mitigations(mitigation_id) ON DELETE CASCADE
+  FOREIGN KEY (mitigation_id) REFERENCES mitre_ics_mitigations(mitigation_id) ON DELETE CASCADE,
+  UNIQUE(technique_id, mitigation_id)
 );
 
 -- =============================================================================
