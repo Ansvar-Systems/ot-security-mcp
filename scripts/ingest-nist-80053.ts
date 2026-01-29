@@ -13,22 +13,23 @@
 
 import { DatabaseClient } from '../src/database/client.js';
 
-const NIST_OSCAL_URL = 'https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json';
+const NIST_OSCAL_URL =
+  'https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json';
 
 // OT-relevant control families (12 families)
 const OT_RELEVANT_FAMILIES = [
-  'AC',  // Access Control
-  'AU',  // Audit and Accountability
-  'CA',  // Assessment, Authorization, and Monitoring
-  'CM',  // Configuration Management
-  'CP',  // Contingency Planning
-  'IA',  // Identification and Authentication
-  'IR',  // Incident Response
-  'MA',  // Maintenance
-  'PE',  // Physical and Environmental Protection
-  'SA',  // System and Services Acquisition
-  'SC',  // System and Communications Protection
-  'SI'   // System and Information Integrity
+  'AC', // Access Control
+  'AU', // Audit and Accountability
+  'CA', // Assessment, Authorization, and Monitoring
+  'CM', // Configuration Management
+  'CP', // Contingency Planning
+  'IA', // Identification and Authentication
+  'IR', // Incident Response
+  'MA', // Maintenance
+  'PE', // Physical and Environmental Protection
+  'SA', // System and Services Acquisition
+  'SC', // System and Communications Protection
+  'SI', // System and Information Integrity
 ];
 
 /**
@@ -107,7 +108,7 @@ export class Nist80053Ingester {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
-        const data = await response.json() as OscalCatalog;
+        const data = (await response.json()) as OscalCatalog;
 
         if (!data.catalog || !Array.isArray(data.catalog.groups)) {
           throw new Error('Invalid OSCAL catalog format');
@@ -115,20 +116,21 @@ export class Nist80053Ingester {
 
         console.log(`Fetched OSCAL catalog: ${data.catalog.metadata.title}`);
         return data;
-
       } catch (error) {
         const isLastAttempt = attempt === maxRetries;
         const errorMessage = error instanceof Error ? error.message : String(error);
 
         if (isLastAttempt) {
-          throw new Error(`Failed to fetch NIST 800-53 data after ${maxRetries + 1} attempts: ${errorMessage}`);
+          throw new Error(
+            `Failed to fetch NIST 800-53 data after ${maxRetries + 1} attempts: ${errorMessage}`
+          );
         }
 
         const delay = retryDelays[attempt];
         console.warn(`Attempt ${attempt + 1} failed: ${errorMessage}. Retrying in ${delay}ms...`);
 
         // Wait before retrying
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }
 
@@ -179,9 +181,7 @@ export class Nist80053Ingester {
 
     // Join all collected parts, truncate if too long
     const description = parts.join(' ');
-    return description.length > 2000
-      ? description.substring(0, 2000) + '...'
-      : description;
+    return description.length > 2000 ? description.substring(0, 2000) + '...' : description;
   }
 
   /**
@@ -205,7 +205,7 @@ export class Nist80053Ingester {
           control_id: controlId,
           title: control.title,
           description,
-          family
+          family,
         });
       }
     }
@@ -218,8 +218,10 @@ export class Nist80053Ingester {
    * Filter controls to OT-relevant families
    */
   filterOtRelevantControls(controls: NistControl[]): NistControl[] {
-    const filtered = controls.filter(c => OT_RELEVANT_FAMILIES.includes(c.family));
-    console.log(`Filtered to ${filtered.length} OT-relevant controls from ${OT_RELEVANT_FAMILIES.length} families`);
+    const filtered = controls.filter((c) => OT_RELEVANT_FAMILIES.includes(c.family));
+    console.log(
+      `Filtered to ${filtered.length} OT-relevant controls from ${OT_RELEVANT_FAMILIES.length} families`
+    );
     return filtered;
   }
 
@@ -243,7 +245,7 @@ export class Nist80053Ingester {
           control.control_id,
           control.title,
           control.description,
-          control.family.toLowerCase()
+          control.family.toLowerCase(),
         ]
       );
     }
@@ -270,7 +272,7 @@ export class Nist80053Ingester {
           'Rev 5',
           '2020-09-01',
           'https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final',
-          'current'
+          'current',
         ]
       );
 
@@ -307,10 +309,9 @@ export class Nist80053Ingester {
           count?.count || 0,
           duration,
           'NIST SP 800-53 Rev 5',
-          `Control families: ${OT_RELEVANT_FAMILIES.join(', ')}`
+          `Control families: ${OT_RELEVANT_FAMILIES.join(', ')}`,
         ]
       );
-
     } catch (error) {
       // Transaction automatically rolled back by better-sqlite3
       const errorMessage = error instanceof Error ? error.message : String(error);
@@ -331,7 +332,7 @@ export class Nist80053Ingester {
             0,
             duration,
             'NIST SP 800-53 Rev 5',
-            `Error: ${errorMessage}`
+            `Error: ${errorMessage}`,
           ]
         );
       } catch (logError) {

@@ -119,7 +119,7 @@ export async function getZoneConduitGuidance(
 
     // If we're filtering zones, only show flows between those zones
     if (zoneParams.length > 0 && zones.length > 0) {
-      const zoneIds = zones.map(z => z.id);
+      const zoneIds = zones.map((z) => z.id);
       const placeholders = zoneIds.map(() => '?').join(',');
       flowQuery += ` WHERE f.source_zone_id IN (${placeholders}) OR f.target_zone_id IN (${placeholders})`;
       flowParams.push(...zoneIds, ...zoneIds);
@@ -138,7 +138,7 @@ export async function getZoneConduitGuidance(
     conduits,
     flows,
     reference_architecture: reference_architecture || 'IEC 62443-3-2 Purdue Model',
-    guidance
+    guidance,
   };
 }
 
@@ -164,13 +164,17 @@ function generateGuidance(
     parts.push(`## All Network Zones`);
   }
 
-  parts.push(`\nFound ${zones.length} zone(s), ${conduits.length} conduit type(s), and ${flows.length} flow(s).\n`);
+  parts.push(
+    `\nFound ${zones.length} zone(s), ${conduits.length} conduit type(s), and ${flows.length} flow(s).\n`
+  );
 
   // Zone-specific guidance
   if (zones.length > 0) {
     parts.push(`### Zone Security Considerations:`);
     for (const zone of zones) {
-      parts.push(`\n**${zone.name}** (Purdue Level ${zone.purdue_level}, Target SL-${zone.security_level_target}):`);
+      parts.push(
+        `\n**${zone.name}** (Purdue Level ${zone.purdue_level}, Target SL-${zone.security_level_target}):`
+      );
       parts.push(`- ${zone.description}`);
       parts.push(`- Typical assets: ${zone.typical_assets}`);
     }
@@ -196,7 +200,9 @@ function generateGuidance(
     parts.push(`### Data Flows:`);
     for (const flow of flows) {
       const direction = flow.bidirectional ? '<->' : '->';
-      parts.push(`\n**${flow.source_zone_name} ${direction} ${flow.target_zone_name}** via ${flow.conduit_name}:`);
+      parts.push(
+        `\n**${flow.source_zone_name} ${direction} ${flow.target_zone_name}** via ${flow.conduit_name}:`
+      );
       parts.push(`- ${flow.data_flow_description}`);
       parts.push(`- Required SL-${flow.security_level_requirement}`);
     }

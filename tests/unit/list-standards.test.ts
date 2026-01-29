@@ -72,7 +72,7 @@ describe('listStandards', () => {
       const result = await listStandards(db);
 
       expect(result).toHaveLength(2);
-      result.forEach(standard => {
+      result.forEach((standard) => {
         expect(standard).toHaveProperty('requirement_count');
         expect(typeof standard.requirement_count).toBe('number');
       });
@@ -81,10 +81,10 @@ describe('listStandards', () => {
     it('should count requirements correctly', async () => {
       const result = await listStandards(db);
 
-      const iec = result.find(s => s.id === 'iec62443-3-3');
+      const iec = result.find((s) => s.id === 'iec62443-3-3');
       expect(iec?.requirement_count).toBe(2);
 
-      const nist = result.find(s => s.id === 'nist-csf');
+      const nist = result.find((s) => s.id === 'nist-csf');
       expect(nist?.requirement_count).toBe(0);
     });
   });
@@ -101,7 +101,7 @@ describe('listStandards', () => {
           'current',
           '2023-01-01',
           'https://www.iec.ch/62443-3-3',
-          'Security for industrial automation'
+          'Security for industrial automation',
         ]
       );
     });
@@ -138,7 +138,7 @@ describe('listStandards', () => {
       );
 
       const result = await listStandards(db);
-      const standard = result.find(s => s.id === 'nist-csf');
+      const standard = result.find((s) => s.id === 'nist-csf');
 
       expect(standard).toBeDefined();
       expect(standard?.id).toBe('nist-csf');
@@ -183,19 +183,14 @@ describe('listStandards', () => {
 
     it('should order standards alphabetically by name', async () => {
       const result = await listStandards(db);
-      const names = result.map(s => s.name);
+      const names = result.map((s) => s.name);
 
-      expect(names).toEqual([
-        'API 1164',
-        'IEC 62443-3-3',
-        'NERC CIP',
-        'NIST CSF'
-      ]);
+      expect(names).toEqual(['API 1164', 'IEC 62443-3-3', 'NERC CIP', 'NIST CSF']);
     });
 
     it('should include standards with different statuses', async () => {
       const result = await listStandards(db);
-      const statuses = result.map(s => s.status);
+      const statuses = result.map((s) => s.status);
 
       expect(statuses).toContain('current');
       expect(statuses).toContain('superseded');
@@ -246,7 +241,7 @@ describe('listStandards', () => {
 
     it('should handle all valid status values', async () => {
       const result = await listStandards(db);
-      const statuses = result.map(s => s.status);
+      const statuses = result.map((s) => s.status);
 
       expect(statuses).toContain('current');
       expect(statuses).toContain('draft');

@@ -28,9 +28,7 @@ export class Iec62443Validator {
 
     if (!valid) {
       const errors = validate.errors || [];
-      const errorMsg = errors
-        .map((err: any) => `${err.instancePath}: ${err.message}`)
-        .join('; ');
+      const errorMsg = errors.map((err: any) => `${err.instancePath}: ${err.message}`).join('; ');
       throw new Error(`Validation failed: ${errorMsg}`);
     }
   }

@@ -98,7 +98,7 @@ describe('E2E Tool Integration Tests', () => {
       expect(result.length).toBe(6);
 
       // Verify all expected standards exist
-      const standardIds = result.map(s => s.id);
+      const standardIds = result.map((s) => s.id);
       expect(standardIds).toContain('iec62443-3-3');
       expect(standardIds).toContain('iec62443-4-2');
       expect(standardIds).toContain('iec62443-3-2');
@@ -111,35 +111,35 @@ describe('E2E Tool Integration Tests', () => {
       const result = await listStandards(db);
 
       // All standards should have requirement_count property
-      result.forEach(standard => {
+      result.forEach((standard) => {
         expect(standard).toHaveProperty('requirement_count');
         expect(typeof standard.requirement_count).toBe('number');
         expect(standard.requirement_count).toBeGreaterThanOrEqual(0);
       });
 
       // Verify specific counts
-      const iec62443_3_3 = result.find(s => s.id === 'iec62443-3-3');
+      const iec62443_3_3 = result.find((s) => s.id === 'iec62443-3-3');
       expect(iec62443_3_3?.requirement_count).toBe(2);
 
-      const iec62443_4_2 = result.find(s => s.id === 'iec62443-4-2');
+      const iec62443_4_2 = result.find((s) => s.id === 'iec62443-4-2');
       expect(iec62443_4_2?.requirement_count).toBe(2);
 
-      const iec62443_3_2 = result.find(s => s.id === 'iec62443-3-2');
+      const iec62443_3_2 = result.find((s) => s.id === 'iec62443-3-2');
       expect(iec62443_3_2?.requirement_count).toBe(0); // Zones/conduits, not requirements
 
-      const nist_800_53 = result.find(s => s.id === 'nist-800-53');
+      const nist_800_53 = result.find((s) => s.id === 'nist-800-53');
       expect(nist_800_53?.requirement_count).toBe(228);
 
-      const nist_800_82 = result.find(s => s.id === 'nist-800-82');
+      const nist_800_82 = result.find((s) => s.id === 'nist-800-82');
       expect(nist_800_82?.requirement_count).toBe(6);
 
-      const mitre_ics = result.find(s => s.id === 'mitre-ics');
+      const mitre_ics = result.find((s) => s.id === 'mitre-ics');
       expect(mitre_ics?.requirement_count).toBe(83); // Techniques count
     });
 
     it('should order standards alphabetically by name', async () => {
       const result = await listStandards(db);
-      const names = result.map(s => s.name);
+      const names = result.map((s) => s.name);
 
       // Verify alphabetical ordering
       for (let i = 1; i < names.length; i++) {
@@ -224,17 +224,17 @@ describe('E2E Tool Integration Tests', () => {
       expect(result?.security_levels.length).toBe(4);
 
       // Verify security level structure
-      const sl1 = result?.security_levels.find(sl => sl.security_level === 1);
+      const sl1 = result?.security_levels.find((sl) => sl.security_level === 1);
       expect(sl1).toBeDefined();
       expect(sl1?.sl_type).toBe('SL-T');
       expect(sl1?.capability_level).toBe(1);
       expect(sl1?.notes).toContain('identification and authentication');
 
       // Verify all security levels 1-4 are present
-      expect(result?.security_levels.some(sl => sl.security_level === 1)).toBe(true);
-      expect(result?.security_levels.some(sl => sl.security_level === 2)).toBe(true);
-      expect(result?.security_levels.some(sl => sl.security_level === 3)).toBe(true);
-      expect(result?.security_levels.some(sl => sl.security_level === 4)).toBe(true);
+      expect(result?.security_levels.some((sl) => sl.security_level === 1)).toBe(true);
+      expect(result?.security_levels.some((sl) => sl.security_level === 2)).toBe(true);
+      expect(result?.security_levels.some((sl) => sl.security_level === 3)).toBe(true);
+      expect(result?.security_levels.some((sl) => sl.security_level === 4)).toBe(true);
     });
 
     it('should handle include_mappings parameter', async () => {
@@ -270,7 +270,7 @@ describe('E2E Tool Integration Tests', () => {
 
     it('should return empty security_levels for NIST requirements', async () => {
       // First check if any NIST requirements exist in the database
-      const nistReq = db.queryOne<{ requirement_id: string, standard_id: string }>(
+      const nistReq = db.queryOne<{ requirement_id: string; standard_id: string }>(
         `SELECT requirement_id, standard_id FROM ot_requirements WHERE standard_id LIKE 'nist%' LIMIT 1`
       );
 

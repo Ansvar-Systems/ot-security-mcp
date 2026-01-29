@@ -41,7 +41,7 @@ async function main() {
         'The control system shall provide the capability to identify and authenticate all human users.',
         'Authentication is essential to ensure only authorized users can access the control system.',
         'host',
-        3
+        3,
       ]
     );
 
@@ -55,7 +55,7 @@ async function main() {
         'The control system shall provide the capability to identify and authenticate all software processes.',
         'Process authentication prevents unauthorized software execution.',
         'application',
-        2
+        2,
       ]
     );
 
@@ -69,7 +69,7 @@ async function main() {
         'The control system shall implement network segmentation between security zones.',
         'Segmentation limits the impact of security incidents.',
         'network',
-        1
+        1,
       ]
     );
     console.log('   ✓ 3 requirements inserted\n');
@@ -93,7 +93,7 @@ async function main() {
     console.log('4. Test 1: Basic search for "authentication"');
     const result1 = await searchRequirements(db, { query: 'authentication' });
     console.log(`   ✓ Found ${result1.length} results`);
-    result1.forEach(r => {
+    result1.forEach((r) => {
       console.log(`     - ${r.requirement_id}: ${r.title}`);
       console.log(`       Standard: ${r.standard_name}`);
       console.log(`       Relevance: ${r.relevance}`);
@@ -105,10 +105,10 @@ async function main() {
     console.log('5. Test 2: Search for "authentication" with component_type="host"');
     const result2 = await searchRequirements(db, {
       query: 'authentication',
-      options: { component_type: 'host' }
+      options: { component_type: 'host' },
     });
     console.log(`   ✓ Found ${result2.length} results`);
-    result2.forEach(r => {
+    result2.forEach((r) => {
       console.log(`     - ${r.requirement_id}: ${r.title} (${r.component_type})`);
       console.log(`       Relevance: ${r.relevance} | Snippet: ${r.snippet.substring(0, 60)}...`);
     });
@@ -118,10 +118,10 @@ async function main() {
     console.log('6. Test 3: Search for requirements with security_level=2');
     const result3 = await searchRequirements(db, {
       query: 'control system',
-      options: { security_level: 2 }
+      options: { security_level: 2 },
     });
     console.log(`   ✓ Found ${result3.length} results`);
-    result3.forEach(r => {
+    result3.forEach((r) => {
       console.log(`     - ${r.requirement_id}: ${r.title}`);
     });
     console.log();
@@ -142,7 +142,6 @@ async function main() {
     console.log('- Empty database handling: Working');
     console.log('- RequirementSearchResult fields (snippet, relevance, standard_name): Working');
     console.log('- Relevance scoring and ordering: Working');
-
   } catch (error) {
     console.error('❌ Test failed:', error);
     process.exit(1);

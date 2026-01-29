@@ -50,11 +50,11 @@ async function verifySetup(): Promise<boolean> {
     'mitre_ics_mitigations',
     'security_levels',
     'zones',
-    'conduits'
+    'conduits',
   ];
 
-  const tableNames = tables.map(t => t.name);
-  const missingTables = requiredTables.filter(t => !tableNames.includes(t));
+  const tableNames = tables.map((t) => t.name);
+  const missingTables = requiredTables.filter((t) => !tableNames.includes(t));
 
   if (missingTables.length > 0) {
     console.log(`❌ Missing tables: ${missingTables.join(', ')}\n`);
@@ -89,11 +89,11 @@ async function verifySetup(): Promise<boolean> {
     const expectedStandards = [
       { id: 'mitre-ics', minCount: 80, name: 'MITRE ATT&CK for ICS' },
       { id: 'nist-800-53', minCount: 200, name: 'NIST SP 800-53 Rev 5' },
-      { id: 'nist-800-82', minCount: 5, name: 'NIST SP 800-82 Rev 3' }
+      { id: 'nist-800-82', minCount: 5, name: 'NIST SP 800-82 Rev 3' },
     ];
 
     for (const standard of standards) {
-      const expected = expectedStandards.find(e => e.id === standard.id);
+      const expected = expectedStandards.find((e) => e.id === standard.id);
       const status = expected && standard.count >= expected.minCount ? '✅' : '⚠️';
       console.log(`   ${status} ${standard.name}: ${standard.count} items`);
 
@@ -105,7 +105,7 @@ async function verifySetup(): Promise<boolean> {
     console.log();
 
     // Check for MITRE
-    const hasMitre = standards.some(s => s.id === 'mitre-ics');
+    const hasMitre = standards.some((s) => s.id === 'mitre-ics');
     if (!hasMitre) {
       console.log('⚠️  MITRE ATT&CK for ICS not ingested');
       console.log('    Run: npm run ingest:mitre\n');
@@ -113,7 +113,7 @@ async function verifySetup(): Promise<boolean> {
     }
 
     // Check for NIST 800-53
-    const hasNist80053 = standards.some(s => s.id === 'nist-800-53');
+    const hasNist80053 = standards.some((s) => s.id === 'nist-800-53');
     if (!hasNist80053) {
       console.log('⚠️  NIST 800-53 not ingested');
       console.log('    Run: npm run ingest:nist-80053\n');
@@ -121,7 +121,7 @@ async function verifySetup(): Promise<boolean> {
     }
 
     // Check for NIST 800-82
-    const hasNist80082 = standards.some(s => s.id === 'nist-800-82');
+    const hasNist80082 = standards.some((s) => s.id === 'nist-800-82');
     if (!hasNist80082) {
       console.log('⚠️  NIST 800-82 not ingested');
       console.log('    Run: npm run ingest:nist-80082\n');
@@ -146,10 +146,10 @@ async function verifySetup(): Promise<boolean> {
 
 // Run verification
 verifySetup()
-  .then(success => {
+  .then((success) => {
     process.exit(success ? 0 : 1);
   })
-  .catch(error => {
+  .catch((error) => {
     console.error('💥 Verification failed:', error);
     process.exit(1);
   });

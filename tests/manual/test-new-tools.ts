@@ -36,7 +36,14 @@ async function main() {
     db.run(
       `INSERT INTO ot_standards (id, name, version, status, published_date, url)
        VALUES (?, ?, ?, ?, ?, ?)`,
-      ['iec62443-3-3', 'IEC 62443-3-3', 'v2.0', 'current', '2023-01-01', 'https://www.iec.ch/62443-3-3']
+      [
+        'iec62443-3-3',
+        'IEC 62443-3-3',
+        'v2.0',
+        'current',
+        '2023-01-01',
+        'https://www.iec.ch/62443-3-3',
+      ]
     );
     db.run(
       `INSERT INTO ot_standards (id, name, version, status)
@@ -46,7 +53,7 @@ async function main() {
 
     const standards = await listStandards(db);
     console.log(`Result: Found ${standards.length} standards`);
-    standards.forEach(s => {
+    standards.forEach((s) => {
       console.log(`  - ${s.name} (${s.id}) - ${s.version || 'no version'}`);
     });
     console.log(`✅ Passed: Returns standards ordered by name\n`);
@@ -68,7 +75,7 @@ async function main() {
         'Exploit Public-Facing Application',
         'Adversaries may attempt to exploit vulnerabilities in Internet-facing applications.',
         JSON.stringify(['Windows', 'Linux', 'Control Server']),
-        JSON.stringify(['Network Traffic', 'Application Logs', 'Web Application Firewall Logs'])
+        JSON.stringify(['Network Traffic', 'Application Logs', 'Web Application Firewall Logs']),
       ]
     );
 
@@ -87,12 +94,20 @@ async function main() {
     db.run(
       `INSERT INTO mitre_ics_mitigations (mitigation_id, name, description)
        VALUES (?, ?, ?)`,
-      ['M0800', 'Application Isolation and Sandboxing', 'Restrict execution of code to a virtual environment.']
+      [
+        'M0800',
+        'Application Isolation and Sandboxing',
+        'Restrict execution of code to a virtual environment.',
+      ]
     );
     db.run(
       `INSERT INTO mitre_ics_mitigations (mitigation_id, name, description)
        VALUES (?, ?, ?)`,
-      ['M0801', 'Update Software', 'Perform regular software updates to mitigate exploitation risk.']
+      [
+        'M0801',
+        'Update Software',
+        'Perform regular software updates to mitigate exploitation risk.',
+      ]
     );
 
     // Link technique to mitigations
@@ -109,10 +124,10 @@ async function main() {
 
     const techniqueWithMitigations = await getMitreTechnique(db, {
       technique_id: 'T0800',
-      options: { include_mitigations: true }
+      options: { include_mitigations: true },
     });
     console.log(`Result: Found ${techniqueWithMitigations?.mitigations.length} mitigations`);
-    techniqueWithMitigations?.mitigations.forEach(m => {
+    techniqueWithMitigations?.mitigations.forEach((m) => {
       console.log(`  - ${m.mitigation_id}: ${m.name}`);
     });
     console.log(`✅ Passed: Returns technique with mitigations\n`);
@@ -120,7 +135,7 @@ async function main() {
     console.log('📊 Test 6: get_mitre_ics_technique exclude mitigations');
     const techniqueWithoutMitigations = await getMitreTechnique(db, {
       technique_id: 'T0800',
-      options: { include_mitigations: false }
+      options: { include_mitigations: false },
     });
     console.log(`Result: Mitigations count = ${techniqueWithoutMitigations?.mitigations.length}`);
     console.log(`✅ Passed: Excludes mitigations when requested\n`);
@@ -145,11 +160,13 @@ async function main() {
       technique_id: 'T0800',
       options: {
         include_mitigations: true,
-        map_to_standards: ['iec62443-3-3']
-      }
+        map_to_standards: ['iec62443-3-3'],
+      },
     });
-    console.log(`Result: Found ${techniqueWithMapping?.mapped_requirements.length} mapped requirements`);
-    techniqueWithMapping?.mapped_requirements.forEach(r => {
+    console.log(
+      `Result: Found ${techniqueWithMapping?.mapped_requirements.length} mapped requirements`
+    );
+    techniqueWithMapping?.mapped_requirements.forEach((r) => {
       console.log(`  - ${r.requirement_id}: ${r.title} (${r.standard_id})`);
     });
     console.log(`✅ Passed: Maps technique to OT requirements\n`);
@@ -165,7 +182,9 @@ async function main() {
       'SELECT COUNT(*) as count FROM mitre_technique_mitigations'
     );
 
-    console.log(`Result: Database contains ${techniqueCount?.count} techniques, ${mitigationCount?.count} mitigations, ${relationshipCount?.count} relationships`);
+    console.log(
+      `Result: Database contains ${techniqueCount?.count} techniques, ${mitigationCount?.count} mitigations, ${relationshipCount?.count} relationships`
+    );
     console.log(`✅ Passed: Database statistics retrieved\n`);
 
     console.log('✅ All tests passed!');
@@ -176,7 +195,6 @@ async function main() {
     console.log('✅ Mitigations: Working correctly');
     console.log('✅ Standard mapping: Working correctly');
     console.log('✅ Real MITRE data: Working correctly');
-
   } finally {
     // Cleanup
     db.close();

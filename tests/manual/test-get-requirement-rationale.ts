@@ -18,7 +18,7 @@ async function testGetRequirementRationale() {
     console.log('='.repeat(60));
     const result1 = await getRequirementRationale(db, {
       requirement_id: 'SR 1.1',
-      standard: 'iec62443-3-3'
+      standard: 'iec62443-3-3',
     });
 
     if (result1) {
@@ -28,19 +28,21 @@ async function testGetRequirementRationale() {
       console.log(`\nRationale:`);
       console.log(result1.rationale || '(No rationale available)');
       console.log(`\nSecurity Levels: ${result1.security_levels.length}`);
-      result1.security_levels.forEach(sl => {
+      result1.security_levels.forEach((sl) => {
         console.log(`  - SL-${sl.security_level} (${sl.sl_type})`);
       });
       console.log(`\nRegulatory Context: ${result1.regulatory_context.length} sectors`);
-      result1.regulatory_context.forEach(rc => {
+      result1.regulatory_context.forEach((rc) => {
         console.log(`  - ${rc.sector} (${rc.jurisdiction}): ${rc.applicability}`);
         if (rc.regulatory_driver) {
           console.log(`    Driver: ${rc.regulatory_driver}`);
         }
       });
       console.log(`\nRelated Standards: ${result1.related_standards.length}`);
-      result1.related_standards.forEach(rs => {
-        console.log(`  - ${rs.standard}:${rs.requirement_id} (${rs.mapping_type}, confidence: ${rs.confidence})`);
+      result1.related_standards.forEach((rs) => {
+        console.log(
+          `  - ${rs.standard}:${rs.requirement_id} (${rs.mapping_type}, confidence: ${rs.confidence})`
+        );
       });
     } else {
       console.log('Requirement not found');
@@ -53,7 +55,7 @@ async function testGetRequirementRationale() {
     console.log('='.repeat(60));
     const result2 = await getRequirementRationale(db, {
       requirement_id: 'AC-2',
-      standard: 'nist-800-53'
+      standard: 'nist-800-53',
     });
 
     if (result2) {
@@ -64,11 +66,11 @@ async function testGetRequirementRationale() {
       console.log(result2.rationale || '(No rationale available)');
       console.log(`\nSecurity Levels: ${result2.security_levels.length}`);
       console.log(`Regulatory Context: ${result2.regulatory_context.length} sectors`);
-      result2.regulatory_context.forEach(rc => {
+      result2.regulatory_context.forEach((rc) => {
         console.log(`  - ${rc.sector} (${rc.jurisdiction}): ${rc.applicability}`);
       });
       console.log(`\nRelated Standards: ${result2.related_standards.length}`);
-      result2.related_standards.slice(0, 5).forEach(rs => {
+      result2.related_standards.slice(0, 5).forEach((rs) => {
         console.log(`  - ${rs.standard}:${rs.requirement_id} (${rs.mapping_type})`);
       });
       if (result2.related_standards.length > 5) {
@@ -85,7 +87,7 @@ async function testGetRequirementRationale() {
     console.log('='.repeat(60));
     const result3 = await getRequirementRationale(db, {
       requirement_id: 'NONEXISTENT',
-      standard: 'fake-standard'
+      standard: 'fake-standard',
     });
 
     if (result3) {
@@ -96,7 +98,6 @@ async function testGetRequirementRationale() {
 
     console.log('\n' + '='.repeat(60) + '\n');
     console.log('All tests completed successfully!');
-
   } catch (error) {
     console.error('Error during testing:', error);
   } finally {

@@ -130,7 +130,7 @@ export async function searchRequirements(
     standards = [],
     security_level,
     component_type,
-    limit = 10 // Default limit as per design doc
+    limit = 10, // Default limit as per design doc
   } = options;
 
   // Enforce max limit of 100
@@ -214,7 +214,7 @@ export async function searchRequirements(
     }
 
     // Transform results to RequirementSearchResult with snippet, relevance, and standard_name
-    const searchResults: RequirementSearchResult[] = results.map(req => {
+    const searchResults: RequirementSearchResult[] = results.map((req) => {
       const snippet = extractSnippet(req, query);
       const relevance = calculateRelevance(req, query);
       const standard_name = standardsMap.get(req.standard_id) || req.standard_id;
@@ -223,7 +223,7 @@ export async function searchRequirements(
         ...req,
         snippet,
         relevance,
-        standard_name
+        standard_name,
       };
     });
 

@@ -94,10 +94,7 @@ export class McpServer {
             return this.handleGetRequirementRationale(args);
 
           default:
-            throw new McpError(
-              ErrorCode.MethodNotFound,
-              `Unknown tool: ${name}`
-            );
+            throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${name}`);
         }
       } catch (error) {
         // Handle errors gracefully
@@ -123,7 +120,7 @@ export class McpServer {
 
     const requirements = await searchRequirements(this.db, {
       query,
-      options
+      options,
     });
 
     return {
@@ -148,8 +145,8 @@ export class McpServer {
       standard,
       options: {
         version,
-        include_mappings: include_mappings ?? true
-      }
+        include_mappings: include_mappings ?? true,
+      },
     });
 
     if (!result) {
@@ -157,13 +154,17 @@ export class McpServer {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              error: 'Requirement not found',
-              requirement_id,
-              standard
-            }, null, 2)
-          }
-        ]
+            text: JSON.stringify(
+              {
+                error: 'Requirement not found',
+                requirement_id,
+                standard,
+              },
+              null,
+              2
+            ),
+          },
+        ],
       };
     }
 
@@ -171,9 +172,9 @@ export class McpServer {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(result, null, 2)
-        }
-      ]
+          text: JSON.stringify(result, null, 2),
+        },
+      ],
     };
   }
 
@@ -187,9 +188,9 @@ export class McpServer {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(result, null, 2)
-        }
-      ]
+          text: JSON.stringify(result, null, 2),
+        },
+      ],
     };
   }
 
@@ -204,11 +205,15 @@ export class McpServer {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              error: 'Invalid arguments - expected an object'
-            }, null, 2)
-          }
-        ]
+            text: JSON.stringify(
+              {
+                error: 'Invalid arguments - expected an object',
+              },
+              null,
+              2
+            ),
+          },
+        ],
       };
     }
 
@@ -223,11 +228,15 @@ export class McpServer {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              error: 'technique_id parameter is required'
-            }, null, 2)
-          }
-        ]
+            text: JSON.stringify(
+              {
+                error: 'technique_id parameter is required',
+              },
+              null,
+              2
+            ),
+          },
+        ],
       };
     }
 
@@ -235,8 +244,8 @@ export class McpServer {
       technique_id,
       options: {
         include_mitigations,
-        map_to_standards
-      }
+        map_to_standards,
+      },
     });
 
     if (!result) {
@@ -244,12 +253,16 @@ export class McpServer {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              error: 'Technique not found',
-              technique_id
-            }, null, 2)
-          }
-        ]
+            text: JSON.stringify(
+              {
+                error: 'Technique not found',
+                technique_id,
+              },
+              null,
+              2
+            ),
+          },
+        ],
       };
     }
 
@@ -257,9 +270,9 @@ export class McpServer {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(result, null, 2)
-        }
-      ]
+          text: JSON.stringify(result, null, 2),
+        },
+      ],
     };
   }
 
@@ -273,16 +286,16 @@ export class McpServer {
     const requirements = await mapSecurityLevelRequirements(this.db, {
       security_level,
       component_type,
-      include_enhancements
+      include_enhancements,
     });
 
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(requirements, null, 2)
-        }
-      ]
+          text: JSON.stringify(requirements, null, 2),
+        },
+      ],
     };
   }
 
@@ -296,16 +309,16 @@ export class McpServer {
     const result = await getZoneConduitGuidance(this.db, {
       purdue_level,
       security_level_target,
-      reference_architecture
+      reference_architecture,
     });
 
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(result, null, 2)
-        }
-      ]
+          text: JSON.stringify(result, null, 2),
+        },
+      ],
     };
   }
 
@@ -320,11 +333,15 @@ export class McpServer {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              error: 'Invalid arguments - expected an object'
-            }, null, 2)
-          }
-        ]
+            text: JSON.stringify(
+              {
+                error: 'Invalid arguments - expected an object',
+              },
+              null,
+              2
+            ),
+          },
+        ],
       };
     }
 
@@ -338,11 +355,15 @@ export class McpServer {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              error: 'requirement_id parameter is required'
-            }, null, 2)
-          }
-        ]
+            text: JSON.stringify(
+              {
+                error: 'requirement_id parameter is required',
+              },
+              null,
+              2
+            ),
+          },
+        ],
       };
     }
 
@@ -351,17 +372,21 @@ export class McpServer {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              error: 'standard parameter is required'
-            }, null, 2)
-          }
-        ]
+            text: JSON.stringify(
+              {
+                error: 'standard parameter is required',
+              },
+              null,
+              2
+            ),
+          },
+        ],
       };
     }
 
     const result = await getRequirementRationale(this.db, {
       requirement_id,
-      standard
+      standard,
     });
 
     if (!result) {
@@ -369,13 +394,17 @@ export class McpServer {
         content: [
           {
             type: 'text',
-            text: JSON.stringify({
-              error: 'Requirement not found',
-              requirement_id,
-              standard
-            }, null, 2)
-          }
-        ]
+            text: JSON.stringify(
+              {
+                error: 'Requirement not found',
+                requirement_id,
+                standard,
+              },
+              null,
+              2
+            ),
+          },
+        ],
       };
     }
 
@@ -383,9 +412,9 @@ export class McpServer {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(result, null, 2)
-        }
-      ]
+          text: JSON.stringify(result, null, 2),
+        },
+      ],
     };
   }
 

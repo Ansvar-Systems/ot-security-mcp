@@ -31,7 +31,7 @@ describe('getZoneConduitGuidance', () => {
         3,
         'Basic control zone with PLCs',
         'IEC 62443-3-2',
-        'PLCs, DCS controllers'
+        'PLCs, DCS controllers',
       ]
     );
 
@@ -44,21 +44,14 @@ describe('getZoneConduitGuidance', () => {
         3,
         'Area supervisory control zone',
         'IEC 62443-3-2',
-        'Supervisory controllers, HMI'
+        'Supervisory controllers, HMI',
       ]
     );
 
     const zone3 = db.run(
       `INSERT INTO zones (name, purdue_level, security_level_target, description, iec_reference, typical_assets)
        VALUES (?, ?, ?, ?, ?, ?)`,
-      [
-        'Level 3 - SCADA DMZ',
-        3,
-        2,
-        'SCADA DMZ zone',
-        'IEC 62443-3-2',
-        'SCADA servers, Historians'
-      ]
+      ['Level 3 - SCADA DMZ', 3, 2, 'SCADA DMZ zone', 'IEC 62443-3-2', 'SCADA servers, Historians']
     );
 
     // Set up test conduits
@@ -71,7 +64,7 @@ describe('getZoneConduitGuidance', () => {
         'Deep packet inspection',
         'Stateful firewall between zones',
         'IEC 62443-3-2',
-        2
+        2,
       ]
     );
 
@@ -84,7 +77,7 @@ describe('getZoneConduitGuidance', () => {
         'Hardware-enforced',
         'One-way data flow for historian',
         'IEC 62443-3-2',
-        3
+        3,
       ]
     );
 
@@ -98,7 +91,7 @@ describe('getZoneConduitGuidance', () => {
         conduit1.lastInsertRowid,
         'Process control commands and data',
         2,
-        1
+        1,
       ]
     );
 
@@ -111,7 +104,7 @@ describe('getZoneConduitGuidance', () => {
         conduit2.lastInsertRowid,
         'Historian data replication',
         3,
-        0
+        0,
       ]
     );
   });
@@ -149,13 +142,13 @@ describe('getZoneConduitGuidance', () => {
     const result = await getZoneConduitGuidance(db, { security_level_target: 3 });
 
     expect(result.zones).toHaveLength(2);
-    expect(result.zones.every(z => z.security_level_target === 3)).toBe(true);
+    expect(result.zones.every((z) => z.security_level_target === 3)).toBe(true);
   });
 
   it('should filter by both Purdue level and security level', async () => {
     const result = await getZoneConduitGuidance(db, {
       purdue_level: 2,
-      security_level_target: 3
+      security_level_target: 3,
     });
 
     expect(result.zones).toHaveLength(1);
@@ -166,11 +159,11 @@ describe('getZoneConduitGuidance', () => {
 
   it('should filter by reference architecture', async () => {
     const result = await getZoneConduitGuidance(db, {
-      reference_architecture: 'IEC 62443-3-2'
+      reference_architecture: 'IEC 62443-3-2',
     });
 
     expect(result.zones).toHaveLength(3);
-    expect(result.zones.every(z => z.iec_reference.includes('IEC 62443-3-2'))).toBe(true);
+    expect(result.zones.every((z) => z.iec_reference.includes('IEC 62443-3-2'))).toBe(true);
   });
 
   it('should include conduit information', async () => {
@@ -199,7 +192,7 @@ describe('getZoneConduitGuidance', () => {
     // Should show flows involving Level 1 zone
     expect(result.flows.length).toBeGreaterThan(0);
     const flowInvolvesLevel1 = result.flows.some(
-      f => f.source_zone_name.includes('Level 1') || f.target_zone_name.includes('Level 1')
+      (f) => f.source_zone_name.includes('Level 1') || f.target_zone_name.includes('Level 1')
     );
     expect(flowInvolvesLevel1).toBe(true);
   });

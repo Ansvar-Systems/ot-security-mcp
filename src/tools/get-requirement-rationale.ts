@@ -9,7 +9,7 @@ import {
   OTStandard,
   SecurityLevel,
   SectorApplicability,
-  OTMapping
+  OTMapping,
 } from '../types/index.js';
 
 /**
@@ -85,10 +85,9 @@ export async function getRequirementRationale(
     }
 
     // Step 2: Get the standard metadata
-    const standardData = db.queryOne<OTStandard>(
-      `SELECT * FROM ot_standards WHERE id = ?`,
-      [standard]
-    );
+    const standardData = db.queryOne<OTStandard>(`SELECT * FROM ot_standards WHERE id = ?`, [
+      standard,
+    ]);
 
     if (!standardData) {
       return null;
@@ -119,16 +118,16 @@ export async function getRequirementRationale(
     );
 
     // Transform mappings into related_standards format
-    const related_standards = mappings.map(mapping => {
+    const related_standards = mappings.map((mapping) => {
       // Determine which side is the "other" standard
-      const isSource = mapping.source_standard === standard &&
-                       mapping.source_requirement === requirement_id;
+      const isSource =
+        mapping.source_standard === standard && mapping.source_requirement === requirement_id;
 
       return {
         standard: isSource ? mapping.target_standard : mapping.source_standard,
         requirement_id: isSource ? mapping.target_requirement : mapping.source_requirement,
         mapping_type: mapping.mapping_type,
-        confidence: mapping.confidence
+        confidence: mapping.confidence,
       };
     });
 
@@ -139,7 +138,7 @@ export async function getRequirementRationale(
       rationale: requirement.rationale,
       security_levels,
       regulatory_context,
-      related_standards
+      related_standards,
     };
 
     return result;

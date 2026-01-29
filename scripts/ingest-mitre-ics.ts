@@ -13,7 +13,8 @@
 
 import { DatabaseClient } from '../src/database/client.js';
 
-const MITRE_ICS_STIX_URL = 'https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/ics-attack/ics-attack.json';
+const MITRE_ICS_STIX_URL =
+  'https://raw.githubusercontent.com/mitre-attack/attack-stix-data/master/ics-attack/ics-attack.json';
 
 /**
  * STIX 2.0 Bundle structure
@@ -105,7 +106,7 @@ export class MitreIngester {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
-        const data = await response.json() as StixBundle;
+        const data = (await response.json()) as StixBundle;
 
         if (data.type !== 'bundle' || !Array.isArray(data.objects)) {
           throw new Error('Invalid STIX bundle format');
@@ -113,20 +114,21 @@ export class MitreIngester {
 
         console.log(`Fetched ${data.objects.length} STIX objects`);
         return data;
-
       } catch (error) {
         const isLastAttempt = attempt === maxRetries;
         const errorMessage = error instanceof Error ? error.message : String(error);
 
         if (isLastAttempt) {
-          throw new Error(`Failed to fetch MITRE data after ${maxRetries + 1} attempts: ${errorMessage}`);
+          throw new Error(
+            `Failed to fetch MITRE data after ${maxRetries + 1} attempts: ${errorMessage}`
+          );
         }
 
         const delay = retryDelays[attempt];
         console.warn(`Attempt ${attempt + 1} failed: ${errorMessage}. Retrying in ${delay}ms...`);
 
         // Wait before retrying
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise((resolve) => setTimeout(resolve, delay));
       }
     }
 
@@ -137,21 +139,25 @@ export class MitreIngester {
   /**
    * Extract external ID from STIX external_references
    */
-  private extractExternalId(externalRefs?: Array<{ source_name: string; external_id?: string }>): string | null {
+  private extractExternalId(
+    externalRefs?: Array<{ source_name: string; external_id?: string }>
+  ): string | null {
     if (!externalRefs) return null;
 
-    const mitreRef = externalRefs.find(ref => ref.source_name === 'mitre-attack');
+    const mitreRef = externalRefs.find((ref) => ref.source_name === 'mitre-attack');
     return mitreRef?.external_id || null;
   }
 
   /**
    * Extract tactic from kill chain phases
    */
-  private extractTactic(killChainPhases?: Array<{ kill_chain_name: string; phase_name: string }>): string | null {
+  private extractTactic(
+    killChainPhases?: Array<{ kill_chain_name: string; phase_name: string }>
+  ): string | null {
     if (!killChainPhases || killChainPhases.length === 0) return null;
 
     // Take the first ICS tactic
-    const icsTactic = killChainPhases.find(phase => phase.kill_chain_name === 'mitre-ics-attack');
+    const icsTactic = killChainPhases.find((phase) => phase.kill_chain_name === 'mitre-ics-attack');
     return icsTactic?.phase_name || killChainPhases[0]?.phase_name || null;
   }
 
@@ -168,7 +174,9 @@ export class MitreIngester {
 
     const tactic = this.extractTactic(stixObj.kill_chain_phases);
     const platforms = stixObj.x_mitre_platforms ? JSON.stringify(stixObj.x_mitre_platforms) : null;
-    const dataSources = stixObj.x_mitre_data_sources ? JSON.stringify(stixObj.x_mitre_data_sources) : null;
+    const dataSources = stixObj.x_mitre_data_sources
+      ? JSON.stringify(stixObj.x_mitre_data_sources)
+      : null;
 
     // Store mapping from STIX ID to technique ID for relationship resolution
     this.stixIdToTechniqueId.set(stixObj.id, techniqueId);
@@ -178,14 +186,7 @@ export class MitreIngester {
       `INSERT OR REPLACE INTO mitre_ics_techniques
        (technique_id, tactic, name, description, platforms, data_sources)
        VALUES (?, ?, ?, ?, ?, ?)`,
-      [
-        techniqueId,
-        tactic,
-        stixObj.name,
-        stixObj.description || null,
-        platforms,
-        dataSources
-      ]
+      [techniqueId, tactic, stixObj.name, stixObj.description || null, platforms, dataSources]
     );
   }
 
@@ -208,11 +209,7 @@ export class MitreIngester {
       `INSERT OR REPLACE INTO mitre_ics_mitigations
        (mitigation_id, name, description)
        VALUES (?, ?, ?)`,
-      [
-        mitigationId,
-        stixObj.name,
-        stixObj.description || null
-      ]
+      [mitigationId, stixObj.name, stixObj.description || null]
     );
   }
 
@@ -221,11 +218,11 @@ export class MitreIngester {
    */
   ingestRelationships(objects: StixObject[]): void {
     const relationships = objects.filter(
-      obj => obj.type === 'relationship'
+      (obj) => obj.type === 'relationship'
     ) as StixRelationship[];
 
     const mitigatesRelationships = relationships.filter(
-      rel => rel.relationship_type === 'mitigates'
+      (rel) => rel.relationship_type === 'mitigates'
     );
 
     console.log(`Processing ${mitigatesRelationships.length} mitigation relationships`);
@@ -276,7 +273,7 @@ export class MitreIngester {
             'current',
             '2024-10-29',
             'https://attack.mitre.org/matrices/ics/',
-            'MITRE ATT&CK for Industrial Control Systems framework'
+            'MITRE ATT&CK for Industrial Control Systems framework',
           ]
         );
 
@@ -287,7 +284,9 @@ export class MitreIngester {
         this.db.run('DELETE FROM mitre_ics_mitigations');
 
         // Ingest techniques
-        const techniques = bundle.objects.filter(obj => obj.type === 'attack-pattern') as StixAttackPattern[];
+        const techniques = bundle.objects.filter(
+          (obj) => obj.type === 'attack-pattern'
+        ) as StixAttackPattern[];
         console.log(`\nIngesting ${techniques.length} techniques...`);
 
         for (const technique of techniques) {
@@ -295,7 +294,9 @@ export class MitreIngester {
         }
 
         // Ingest mitigations
-        const mitigations = bundle.objects.filter(obj => obj.type === 'course-of-action') as StixCourseOfAction[];
+        const mitigations = bundle.objects.filter(
+          (obj) => obj.type === 'course-of-action'
+        ) as StixCourseOfAction[];
         console.log(`Ingesting ${mitigations.length} mitigations...`);
 
         for (const mitigation of mitigations) {
@@ -310,17 +311,18 @@ export class MitreIngester {
       // Report final counts
       console.log('\n=== Ingestion Complete ===');
 
-      const techniqueCount = this.db.queryOne<{ count: number }>(
-        'SELECT COUNT(*) as count FROM mitre_ics_techniques'
-      )?.count || 0;
+      const techniqueCount =
+        this.db.queryOne<{ count: number }>('SELECT COUNT(*) as count FROM mitre_ics_techniques')
+          ?.count || 0;
 
-      const mitigationCount = this.db.queryOne<{ count: number }>(
-        'SELECT COUNT(*) as count FROM mitre_ics_mitigations'
-      )?.count || 0;
+      const mitigationCount =
+        this.db.queryOne<{ count: number }>('SELECT COUNT(*) as count FROM mitre_ics_mitigations')
+          ?.count || 0;
 
-      const relationshipCount = this.db.queryOne<{ count: number }>(
-        'SELECT COUNT(*) as count FROM mitre_technique_mitigations'
-      )?.count || 0;
+      const relationshipCount =
+        this.db.queryOne<{ count: number }>(
+          'SELECT COUNT(*) as count FROM mitre_technique_mitigations'
+        )?.count || 0;
 
       console.log(`Techniques ingested: ${techniqueCount}`);
       console.log(`Mitigations ingested: ${mitigationCount}`);
@@ -338,10 +340,9 @@ export class MitreIngester {
           techniqueCount + mitigationCount,
           duration,
           'MITRE ATT&CK for ICS v16.0',
-          `Techniques: ${techniqueCount}, Mitigations: ${mitigationCount}, Relationships: ${relationshipCount}`
+          `Techniques: ${techniqueCount}, Mitigations: ${mitigationCount}, Relationships: ${relationshipCount}`,
         ]
       );
-
     } catch (error) {
       // Transaction automatically rolled back by better-sqlite3
       const errorMessage = error instanceof Error ? error.message : String(error);
@@ -362,7 +363,7 @@ export class MitreIngester {
             0,
             duration,
             'MITRE ATT&CK for ICS v16.0',
-            `Error: ${errorMessage}`
+            `Error: ${errorMessage}`,
           ]
         );
       } catch (logError) {

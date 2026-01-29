@@ -22,9 +22,7 @@ export interface OTStandardWithCount extends OTStandard {
  * @param db - Database client instance
  * @returns Array of OTStandardWithCount objects, ordered by name
  */
-export async function listStandards(
-  db: DatabaseClient
-): Promise<OTStandardWithCount[]> {
+export async function listStandards(db: DatabaseClient): Promise<OTStandardWithCount[]> {
   try {
     // Query all standards with requirement counts
     // For MITRE ICS, count from mitre_ics_techniques; for others, from ot_requirements

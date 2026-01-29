@@ -23,9 +23,9 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
     if (!existsSync(testDbPath)) {
       throw new Error(
         `Database not found at ${testDbPath}. Run ingestion scripts first:\n` +
-        `  npm run ingest:mitre\n` +
-        `  npm run ingest:nist-80053\n` +
-        `  npm run ingest:nist-80082`
+          `  npm run ingest:mitre\n` +
+          `  npm run ingest:nist-80053\n` +
+          `  npm run ingest:nist-80082`
       );
     }
     db = new DatabaseClient(testDbPath);
@@ -42,7 +42,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
       const count = db.queryOne<{ count: number }>(
         'SELECT COUNT(*) as count FROM mitre_ics_techniques'
       );
-      
+
       expect(count?.count).toBeGreaterThanOrEqual(80);
       expect(count?.count).toBeLessThan(100); // Sanity check for duplicates
     });
@@ -52,11 +52,9 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
         technique_id: string;
         name: string;
         description: string;
-      }>(
-        'SELECT technique_id, name, description FROM mitre_ics_techniques LIMIT 10'
-      );
+      }>('SELECT technique_id, name, description FROM mitre_ics_techniques LIMIT 10');
 
-      techniques.forEach(tech => {
+      techniques.forEach((tech) => {
         // All techniques must have non-empty descriptions
         expect(tech.description).toBeTruthy();
         expect(tech.description.length).toBeGreaterThan(50); // Substantive content
@@ -72,21 +70,21 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
         'execution',
         'persistence',
         'privilege-escalation',
-        'evasion',             // ICS-specific (not defense-evasion)
+        'evasion', // ICS-specific (not defense-evasion)
         'discovery',
         'lateral-movement',
         'collection',
         'command-and-control',
-        'inhibit-response-function',  // ICS-specific
-        'impair-process-control',     // ICS-specific
-        'impact'
+        'inhibit-response-function', // ICS-specific
+        'impair-process-control', // ICS-specific
+        'impact',
       ];
 
       const tactics = db.query<{ tactic: string }>(
         'SELECT DISTINCT tactic FROM mitre_ics_techniques WHERE tactic IS NOT NULL'
       );
 
-      tactics.forEach(row => {
+      tactics.forEach((row) => {
         expect(validTactics).toContain(row.tactic);
       });
 
@@ -98,11 +96,9 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
       const techniques = db.query<{
         technique_id: string;
         platforms: string | null;
-      }>(
-        'SELECT technique_id, platforms FROM mitre_ics_techniques WHERE platforms IS NOT NULL'
-      );
+      }>('SELECT technique_id, platforms FROM mitre_ics_techniques WHERE platforms IS NOT NULL');
 
-      techniques.forEach(tech => {
+      techniques.forEach((tech) => {
         if (tech.platforms) {
           // Should be valid JSON
           expect(() => JSON.parse(tech.platforms!)).not.toThrow();
@@ -117,7 +113,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
       const count = db.queryOne<{ count: number }>(
         'SELECT COUNT(*) as count FROM mitre_ics_mitigations'
       );
-      
+
       expect(count?.count).toBeGreaterThanOrEqual(40);
       expect(count?.count).toBeLessThan(70);
     });
@@ -126,7 +122,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
       const count = db.queryOne<{ count: number }>(
         'SELECT COUNT(*) as count FROM mitre_technique_mitigations'
       );
-      
+
       expect(count?.count).toBeGreaterThanOrEqual(300);
     });
 
@@ -138,7 +134,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
          LEFT JOIN mitre_ics_techniques t ON t.technique_id = tm.technique_id
          WHERE t.technique_id IS NULL`
       );
-      
+
       expect(invalidTechniques.length).toBe(0);
 
       const invalidMitigations = db.query<{ mitigation_id: string }>(
@@ -147,7 +143,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
          LEFT JOIN mitre_ics_mitigations m ON m.mitigation_id = tm.mitigation_id
          WHERE m.mitigation_id IS NULL`
       );
-      
+
       expect(invalidMitigations.length).toBe(0);
     });
   });
@@ -158,7 +154,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
         'SELECT COUNT(*) as count FROM ot_requirements WHERE standard_id = ?',
         ['nist-800-53']
       );
-      
+
       expect(count?.count).toBeGreaterThanOrEqual(200);
       expect(count?.count).toBeLessThan(250);
     });
@@ -176,7 +172,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
         ['nist-800-53']
       );
 
-      controls.forEach(control => {
+      controls.forEach((control) => {
         expect(control.title).toBeTruthy();
         expect(control.title.length).toBeGreaterThan(5);
         expect(control.description).toBeTruthy();
@@ -197,12 +193,12 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
       );
 
       // Should have major control families
-      const families = controlFamilies.map(c => c.family);
+      const families = controlFamilies.map((c) => c.family);
       expect(families).toContain('AC'); // Access Control
       expect(families).toContain('AU'); // Audit and Accountability
       expect(families).toContain('IA'); // Identification and Authentication
       expect(families).toContain('SC'); // System and Communications Protection
-      
+
       // Should have at least 10 control families
       expect(families.length).toBeGreaterThanOrEqual(10);
     });
@@ -219,7 +215,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
          HAVING COUNT(*) > 1`,
         ['nist-800-53']
       );
-      
+
       expect(duplicates.length).toBe(0);
     });
   });
@@ -230,7 +226,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
         'SELECT COUNT(*) as count FROM ot_requirements WHERE standard_id = ?',
         ['nist-800-82']
       );
-      
+
       expect(count?.count).toBeGreaterThanOrEqual(5);
     });
 
@@ -247,15 +243,16 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
       );
 
       // All should have substantive descriptions
-      guidance.forEach(item => {
+      guidance.forEach((item) => {
         expect(item.title).toBeTruthy();
         expect(item.description).toBeTruthy();
         expect(item.description.length).toBeGreaterThan(50);
       });
 
       // At least some should mention OT/ICS/SCADA concepts
-      const otKeywords = /\b(OT|ICS|SCADA|PLC|DCS|industrial|control system|operational technology)\b/i;
-      const withOtKeywords = guidance.filter(item => otKeywords.test(item.description));
+      const otKeywords =
+        /\b(OT|ICS|SCADA|PLC|DCS|industrial|control system|operational technology)\b/i;
+      const withOtKeywords = guidance.filter((item) => otKeywords.test(item.description));
 
       // At least 50% should mention OT-specific terms
       expect(withOtKeywords.length).toBeGreaterThanOrEqual(guidance.length * 0.5);
@@ -267,7 +264,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
          WHERE source_standard = ? AND target_standard = ?`,
         ['nist-800-82', 'nist-800-53']
       );
-      
+
       expect(count?.count).toBeGreaterThanOrEqual(10);
     });
 
@@ -281,7 +278,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
         ['nist-800-82']
       );
 
-      mappings.forEach(mapping => {
+      mappings.forEach((mapping) => {
         expect(mapping.confidence).toBeGreaterThanOrEqual(0.0);
         expect(mapping.confidence).toBeLessThanOrEqual(1.0);
       });
@@ -294,7 +291,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
         `SELECT COUNT(*) as count FROM ot_requirements
          WHERE standard_id LIKE 'iec62443%'`
       );
-      
+
       // Templates should have some entries
       expect(count?.count).toBeGreaterThanOrEqual(0);
     });
@@ -303,11 +300,9 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
       const securityLevels = db.query<{
         security_level: number;
         sl_type: string;
-      }>(
-        'SELECT DISTINCT security_level, sl_type FROM security_levels'
-      );
+      }>('SELECT DISTINCT security_level, sl_type FROM security_levels');
 
-      securityLevels.forEach(sl => {
+      securityLevels.forEach((sl) => {
         expect(sl.security_level).toBeGreaterThanOrEqual(1);
         expect(sl.security_level).toBeLessThanOrEqual(4);
         expect(['SL-T', 'SL-C', 'SL-A']).toContain(sl.sl_type);
@@ -324,7 +319,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
       // At minimum: MITRE, NIST 800-53, NIST 800-82
       expect(standards.length).toBeGreaterThanOrEqual(3);
 
-      const standardIds = standards.map(s => s.id);
+      const standardIds = standards.map((s) => s.id);
 
       // Core public standards (always present)
       expect(standardIds).toContain('mitre-ics');
@@ -349,7 +344,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
          FROM ot_standards s`
       );
 
-      standards.forEach(std => {
+      standards.forEach((std) => {
         if (std.id === 'mitre-ics') {
           expect(std.requirement_count).toBeGreaterThanOrEqual(80);
         } else if (std.id === 'nist-800-53') {
@@ -367,7 +362,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
          LEFT JOIN ot_requirements r ON r.id = sl.requirement_db_id
          WHERE r.id IS NULL`
       );
-      
+
       expect(orphans.length).toBe(0);
     });
 
@@ -380,7 +375,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
            AND r.standard_id = m.source_standard
          WHERE r.id IS NULL`
       );
-      
+
       // Some mappings may reference requirements not in database (e.g., IEC if not ingested)
       // But at least NIST 800-82 → 800-53 mappings should all be valid
       expect(invalidSources.length).toBeLessThan(5); // Allow small number of missing references
@@ -392,7 +387,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
       const ftsCount = db.queryOne<{ count: number }>(
         'SELECT COUNT(*) as count FROM ot_requirements_fts'
       );
-      
+
       expect(ftsCount?.count).toBeGreaterThan(0);
     });
 
@@ -404,10 +399,10 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
         'audit',
         'encryption',
         'backup',
-        'control'
+        'control',
       ];
 
-      testQueries.forEach(query => {
+      testQueries.forEach((query) => {
         const results = db.query<{ requirement_id: string }>(
           `SELECT requirement_id FROM ot_requirements_fts
            WHERE ot_requirements_fts MATCH ?
@@ -444,7 +439,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
       const start = Date.now();
       db.query('SELECT * FROM ot_standards');
       const duration = Date.now() - start;
-      
+
       expect(duration).toBeLessThan(50);
     });
 
@@ -456,7 +451,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
          LIMIT 50`
       );
       const duration = Date.now() - start;
-      
+
       expect(duration).toBeLessThan(100);
     });
 
@@ -471,7 +466,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
          LIMIT 50`
       );
       const duration = Date.now() - start;
-      
+
       expect(duration).toBeLessThan(200);
     });
   });
@@ -482,7 +477,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
         `SELECT requirement_id FROM ot_requirements
          WHERE title IS NULL OR TRIM(title) = ''`
       );
-      
+
       expect(empty.length).toBe(0);
     });
 
@@ -491,7 +486,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
         `SELECT requirement_id FROM ot_requirements
          WHERE description IS NULL OR TRIM(description) = ''`
       );
-      
+
       expect(empty.length).toBe(0);
     });
 
@@ -500,7 +495,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
         `SELECT technique_id FROM mitre_ics_techniques
          WHERE name IS NULL OR TRIM(name) = ''`
       );
-      
+
       expect(empty.length).toBe(0);
     });
 
@@ -508,10 +503,8 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
       const ingestionLogs = db.query<{
         operation: string;
         timestamp: string;
-      }>(
-        'SELECT operation, timestamp FROM ingestion_log ORDER BY timestamp DESC LIMIT 10'
-      );
-      
+      }>('SELECT operation, timestamp FROM ingestion_log ORDER BY timestamp DESC LIMIT 10');
+
       // Should have at least some ingestion logs
       expect(ingestionLogs.length).toBeGreaterThan(0);
     });

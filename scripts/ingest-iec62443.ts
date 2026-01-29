@@ -82,16 +82,13 @@ export class Iec62443Ingester {
     this.validator.validate(data);
 
     // Ensure standard exists
-    this.db.run(`
+    this.db.run(
+      `
       INSERT OR IGNORE INTO ot_standards (id, name, version, published_date, status)
       VALUES (?, ?, ?, ?, ?)
-    `, [
-      'iec62443-3-3',
-      data.meta.title,
-      data.meta.version,
-      data.meta.published_date,
-      'current'
-    ]);
+    `,
+      ['iec62443-3-3', data.meta.title, data.meta.version, data.meta.published_date, 'current']
+    );
 
     // Ingest requirements
     for (const req of data.requirements || []) {
@@ -109,16 +106,13 @@ export class Iec62443Ingester {
     this.validator.validate(data);
 
     // Ensure standard exists
-    this.db.run(`
+    this.db.run(
+      `
       INSERT OR IGNORE INTO ot_standards (id, name, version, published_date, status)
       VALUES (?, ?, ?, ?, ?)
-    `, [
-      'iec62443-4-2',
-      data.meta.title,
-      data.meta.version,
-      data.meta.published_date,
-      'current'
-    ]);
+    `,
+      ['iec62443-4-2', data.meta.title, data.meta.version, data.meta.published_date, 'current']
+    );
 
     // Ingest requirements
     for (const req of data.requirements || []) {
@@ -136,102 +130,112 @@ export class Iec62443Ingester {
     this.validator.validate(data);
 
     // Ensure standard exists
-    this.db.run(`
+    this.db.run(
+      `
       INSERT OR IGNORE INTO ot_standards (id, name, version, published_date, status)
       VALUES (?, ?, ?, ?, ?)
-    `, [
-      'iec62443-3-2',
-      data.meta.title,
-      data.meta.version,
-      data.meta.published_date,
-      'current'
-    ]);
+    `,
+      ['iec62443-3-2', data.meta.title, data.meta.version, data.meta.published_date, 'current']
+    );
 
     // Ingest zones
     for (const zone of data.zones || []) {
-      this.db.run(`
+      this.db.run(
+        `
         INSERT OR REPLACE INTO zones (
           name, purdue_level, security_level_target, description, typical_assets, iec_reference
         ) VALUES (?, ?, ?, ?, ?, ?)
-      `, [
-        zone.name,
-        zone.purdue_level,
-        zone.security_level_target,
-        zone.description,
-        zone.typical_assets || null,
-        'IEC 62443-3-2'
-      ]);
+      `,
+        [
+          zone.name,
+          zone.purdue_level,
+          zone.security_level_target,
+          zone.description,
+          zone.typical_assets || null,
+          'IEC 62443-3-2',
+        ]
+      );
     }
 
     // Ingest conduits
     for (const conduit of data.conduits || []) {
-      this.db.run(`
+      this.db.run(
+        `
         INSERT OR REPLACE INTO conduits (
           name, conduit_type, description, minimum_security_level, iec_reference
         ) VALUES (?, ?, ?, ?, ?)
-      `, [
-        conduit.name,
-        conduit.conduit_type,
-        conduit.description,
-        conduit.minimum_security_level || null,
-        'IEC 62443-3-2'
-      ]);
+      `,
+        [
+          conduit.name,
+          conduit.conduit_type,
+          conduit.description,
+          conduit.minimum_security_level || null,
+          'IEC 62443-3-2',
+        ]
+      );
     }
 
     // Ingest flows (after conduits ingestion)
     for (const flow of data.flows || []) {
       // Get zone IDs by name
-      const sourceZone = this.db.queryOne<{ id: number }>(
-        'SELECT id FROM zones WHERE name = ?',
-        [flow.source_zone_name]
-      );
-      const targetZone = this.db.queryOne<{ id: number }>(
-        'SELECT id FROM zones WHERE name = ?',
-        [flow.target_zone_name]
-      );
-      const conduit = this.db.queryOne<{ id: number }>(
-        'SELECT id FROM conduits WHERE name = ?',
-        [flow.conduit_name]
-      );
+      const sourceZone = this.db.queryOne<{ id: number }>('SELECT id FROM zones WHERE name = ?', [
+        flow.source_zone_name,
+      ]);
+      const targetZone = this.db.queryOne<{ id: number }>('SELECT id FROM zones WHERE name = ?', [
+        flow.target_zone_name,
+      ]);
+      const conduit = this.db.queryOne<{ id: number }>('SELECT id FROM conduits WHERE name = ?', [
+        flow.conduit_name,
+      ]);
 
       if (!sourceZone || !targetZone || !conduit) {
-        console.warn(`Skipping flow: missing zone or conduit (${flow.source_zone_name} → ${flow.target_zone_name})`);
+        console.warn(
+          `Skipping flow: missing zone or conduit (${flow.source_zone_name} → ${flow.target_zone_name})`
+        );
         continue;
       }
 
-      this.db.run(`
+      this.db.run(
+        `
         INSERT OR REPLACE INTO zone_conduit_flows (
           source_zone_id, target_zone_id, conduit_id,
           data_flow_description, security_level_requirement, bidirectional
         ) VALUES (?, ?, ?, ?, ?, ?)
-      `, [
-        sourceZone.id,
-        targetZone.id,
-        conduit.id,
-        flow.data_flow_description,
-        flow.security_level_requirement || null,
-        flow.bidirectional ? 1 : 0
-      ]);
+      `,
+        [
+          sourceZone.id,
+          targetZone.id,
+          conduit.id,
+          flow.data_flow_description,
+          flow.security_level_requirement || null,
+          flow.bidirectional ? 1 : 0,
+        ]
+      );
     }
 
     // Ingest reference architectures
     for (const arch of data.reference_architectures || []) {
-      this.db.run(`
+      this.db.run(
+        `
         INSERT OR REPLACE INTO reference_architectures (
           name, description, diagram_url, applicable_zones,
           iec_reference, industry_applicability
         ) VALUES (?, ?, ?, ?, ?, ?)
-      `, [
-        arch.name,
-        arch.description,
-        arch.diagram_url || null,
-        arch.applicable_zones || null,
-        'IEC 62443-3-2',
-        arch.industry_applicability || null
-      ]);
+      `,
+        [
+          arch.name,
+          arch.description,
+          arch.diagram_url || null,
+          arch.applicable_zones || null,
+          'IEC 62443-3-2',
+          arch.industry_applicability || null,
+        ]
+      );
     }
 
-    console.log(`Ingested ${data.zones?.length || 0} zones, ${data.conduits?.length || 0} conduits, ${data.flows?.length || 0} flows, ${data.reference_architectures?.length || 0} reference architectures from IEC 62443-3-2`);
+    console.log(
+      `Ingested ${data.zones?.length || 0} zones, ${data.conduits?.length || 0} conduits, ${data.flows?.length || 0} flows, ${data.reference_architectures?.length || 0} reference architectures from IEC 62443-3-2`
+    );
   }
 
   /**
@@ -239,7 +243,8 @@ export class Iec62443Ingester {
    */
   private ingestRequirement(standardId: string, req: Requirement): void {
     // Insert requirement
-    const result = this.db.run(`
+    const result = this.db.run(
+      `
       INSERT OR REPLACE INTO ot_requirements (
         standard_id,
         requirement_id,
@@ -249,26 +254,32 @@ export class Iec62443Ingester {
         rationale,
         component_type
       ) VALUES (?, ?, ?, ?, ?, ?, ?)
-    `, [
-      standardId,
-      req.requirement_id,
-      req.parent_requirement_id,
-      req.title,
-      req.description,
-      req.rationale,
-      req.component_type
-    ]);
+    `,
+      [
+        standardId,
+        req.requirement_id,
+        req.parent_requirement_id,
+        req.title,
+        req.description,
+        req.rationale,
+        req.component_type,
+      ]
+    );
 
     const requirementDbId = result.lastInsertRowid;
 
     // Delete existing security levels for this requirement (in case of re-ingestion)
-    this.db.run(`
+    this.db.run(
+      `
       DELETE FROM security_levels WHERE requirement_db_id = ?
-    `, [requirementDbId]);
+    `,
+      [requirementDbId]
+    );
 
     // Insert security levels
     for (const sl of req.security_levels) {
-      this.db.run(`
+      this.db.run(
+        `
         INSERT INTO security_levels (
           requirement_db_id,
           security_level,
@@ -276,13 +287,9 @@ export class Iec62443Ingester {
           capability_level,
           notes
         ) VALUES (?, ?, ?, ?, ?)
-      `, [
-        requirementDbId,
-        sl.security_level,
-        sl.sl_type,
-        sl.capability_level,
-        sl.notes || null
-      ]);
+      `,
+        [requirementDbId, sl.security_level, sl.sl_type, sl.capability_level, sl.notes || null]
+      );
     }
   }
 

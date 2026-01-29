@@ -97,7 +97,7 @@ export async function mapSecurityLevelRequirements(
       rationale: req.rationale,
       component_type: req.component_type,
       parent_requirement_id: req.parent_requirement_id,
-      security_levels: levels
+      security_levels: levels,
     });
   }
 

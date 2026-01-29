@@ -38,7 +38,7 @@ describe('DatabaseClient', () => {
         `SELECT name FROM sqlite_master WHERE type='table' ORDER BY name`
       );
 
-      const tableNames = tables.map(t => t.name);
+      const tableNames = tables.map((t) => t.name);
 
       expect(tableNames).toContain('ot_standards');
       expect(tableNames).toContain('ot_requirements');
@@ -57,16 +57,12 @@ describe('DatabaseClient', () => {
     });
 
     it('should enable foreign keys', () => {
-      const result = db.queryOne<{ foreign_keys: number }>(
-        'PRAGMA foreign_keys'
-      );
+      const result = db.queryOne<{ foreign_keys: number }>('PRAGMA foreign_keys');
       expect(result?.foreign_keys).toBe(1);
     });
 
     it('should use WAL mode', () => {
-      const result = db.queryOne<{ journal_mode: string }>(
-        'PRAGMA journal_mode'
-      );
+      const result = db.queryOne<{ journal_mode: string }>('PRAGMA journal_mode');
       expect(result?.journal_mode).toBe('wal');
     });
   });
@@ -76,7 +72,15 @@ describe('DatabaseClient', () => {
       db.run(
         `INSERT INTO ot_standards (id, name, version, published_date, url, status, notes)
          VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        ['iec62443-3-3', 'IEC 62443-3-3', 'v2.0', '2023-01-01', 'https://example.com', 'current', 'Test standard']
+        [
+          'iec62443-3-3',
+          'IEC 62443-3-3',
+          'v2.0',
+          '2023-01-01',
+          'https://example.com',
+          'current',
+          'Test standard',
+        ]
       );
 
       const standards = db.query<{ id: string; name: string }>(
@@ -101,7 +105,14 @@ describe('DatabaseClient', () => {
       db.run(
         `INSERT INTO ot_requirements (standard_id, requirement_id, title, description, component_type, purdue_level)
          VALUES (?, ?, ?, ?, ?, ?)`,
-        ['iec62443-3-3', 'SR 1.1', 'Human user identification', 'The control system shall provide the capability to identify and authenticate all human users.', 'host', 3]
+        [
+          'iec62443-3-3',
+          'SR 1.1',
+          'Human user identification',
+          'The control system shall provide the capability to identify and authenticate all human users.',
+          'host',
+          3,
+        ]
       );
 
       const requirements = db.query<{ requirement_id: string; title: string }>(
@@ -121,10 +132,7 @@ describe('DatabaseClient', () => {
         ['test-standard', 'Test Standard', 'v1.0', 'draft']
       );
 
-      db.run(
-        `UPDATE ot_standards SET status = ? WHERE id = ?`,
-        ['current', 'test-standard']
-      );
+      db.run(`UPDATE ot_standards SET status = ? WHERE id = ?`, ['current', 'test-standard']);
 
       const result = db.queryOne<{ status: string }>(
         'SELECT status FROM ot_standards WHERE id = ?',
@@ -463,10 +471,9 @@ describe('DatabaseClient', () => {
     });
 
     it('should return undefined when no data exists', () => {
-      const result = db.queryOne<{ id: string }>(
-        'SELECT id FROM ot_standards WHERE id = ?',
-        ['nonexistent']
-      );
+      const result = db.queryOne<{ id: string }>('SELECT id FROM ot_standards WHERE id = ?', [
+        'nonexistent',
+      ]);
 
       expect(result).toBeUndefined();
     });
@@ -478,16 +485,16 @@ describe('DatabaseClient', () => {
         `SELECT name FROM sqlite_master WHERE type='index' AND name LIKE 'idx_%' ORDER BY name`
       );
 
-      const indexNames = indexes.map(i => i.name);
+      const indexNames = indexes.map((i) => i.name);
 
       // Check for requirement search indexes
-      expect(indexNames.some(name => name.includes('requirement'))).toBe(true);
+      expect(indexNames.some((name) => name.includes('requirement'))).toBe(true);
 
       // Check for mapping indexes
-      expect(indexNames.some(name => name.includes('mapping'))).toBe(true);
+      expect(indexNames.some((name) => name.includes('mapping'))).toBe(true);
 
       // Check for MITRE tactic index
-      expect(indexNames.some(name => name.includes('tactic'))).toBe(true);
+      expect(indexNames.some((name) => name.includes('tactic'))).toBe(true);
     });
   });
 
@@ -526,9 +533,18 @@ describe('DatabaseClient', () => {
     });
 
     it('should create zone_conduit_flows with foreign keys', () => {
-      const zone1Id = db.run(`INSERT INTO zones (name, purdue_level) VALUES (?, ?)`, ['Zone 1', 2]).lastInsertRowid;
-      const zone2Id = db.run(`INSERT INTO zones (name, purdue_level) VALUES (?, ?)`, ['Zone 2', 3]).lastInsertRowid;
-      const conduitId = db.run(`INSERT INTO conduits (name, conduit_type) VALUES (?, ?)`, ['Firewall', 'filtered']).lastInsertRowid;
+      const zone1Id = db.run(`INSERT INTO zones (name, purdue_level) VALUES (?, ?)`, [
+        'Zone 1',
+        2,
+      ]).lastInsertRowid;
+      const zone2Id = db.run(`INSERT INTO zones (name, purdue_level) VALUES (?, ?)`, [
+        'Zone 2',
+        3,
+      ]).lastInsertRowid;
+      const conduitId = db.run(`INSERT INTO conduits (name, conduit_type) VALUES (?, ?)`, [
+        'Firewall',
+        'filtered',
+      ]).lastInsertRowid;
 
       db.run(
         `INSERT INTO zone_conduit_flows (source_zone_id, target_zone_id, conduit_id, data_flow_description)
@@ -536,7 +552,9 @@ describe('DatabaseClient', () => {
         [zone1Id, zone2Id, conduitId, 'Process data to SCADA']
       );
 
-      const flow = db.queryOne<any>('SELECT * FROM zone_conduit_flows WHERE source_zone_id = ?', [zone1Id]);
+      const flow = db.queryOne<any>('SELECT * FROM zone_conduit_flows WHERE source_zone_id = ?', [
+        zone1Id,
+      ]);
       expect(flow).toBeDefined();
     });
   });

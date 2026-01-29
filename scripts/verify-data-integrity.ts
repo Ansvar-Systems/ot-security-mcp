@@ -354,11 +354,7 @@ class DataIntegrityVerifier {
           'SELECT COUNT(*) as count FROM mitre_ics_techniques'
         );
         if (!techniqueCount) {
-          this.addIssue(
-            'requirement_counts',
-            'ERROR',
-            'Failed to query MITRE ICS technique count'
-          );
+          this.addIssue('requirement_counts', 'ERROR', 'Failed to query MITRE ICS technique count');
           continue;
         }
         const actualCount = techniqueCount.count;
@@ -483,8 +479,8 @@ class DataIntegrityVerifier {
       // Report results
       console.log('\n=== Verification Results ===');
 
-      const errors = this.issues.filter(i => i.severity === 'ERROR');
-      const warnings = this.issues.filter(i => i.severity === 'WARNING');
+      const errors = this.issues.filter((i) => i.severity === 'ERROR');
+      const warnings = this.issues.filter((i) => i.severity === 'WARNING');
 
       if (errors.length === 0 && warnings.length === 0) {
         console.log('\n✓ All integrity checks passed!');
@@ -493,7 +489,7 @@ class DataIntegrityVerifier {
 
       if (errors.length > 0) {
         console.error(`\n❌ Found ${errors.length} ERROR(S):`);
-        errors.forEach(issue => {
+        errors.forEach((issue) => {
           console.error(`  [${issue.category}] ${issue.message}`);
           if (issue.details) {
             console.error(`    Details:`, JSON.stringify(issue.details, null, 2));
@@ -503,7 +499,7 @@ class DataIntegrityVerifier {
 
       if (warnings.length > 0) {
         console.warn(`\n⚠️  Found ${warnings.length} WARNING(S):`);
-        warnings.forEach(issue => {
+        warnings.forEach((issue) => {
           console.warn(`  [${issue.category}] ${issue.message}`);
           if (issue.details) {
             console.warn(`    Details:`, JSON.stringify(issue.details, null, 2));

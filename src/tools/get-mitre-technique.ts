@@ -8,7 +8,7 @@ import {
   MitreTechniqueDetail,
   MitreTechniqueOptions,
   MitreMitigation,
-  OTRequirement
+  OTRequirement,
 } from '../types/index.js';
 
 /**
@@ -37,10 +37,7 @@ export async function getMitreTechnique(
   const { technique_id, options = {} } = params;
 
   // Extract options with defaults
-  const {
-    include_mitigations = true,
-    map_to_standards = []
-  } = options;
+  const { include_mitigations = true, map_to_standards = [] } = options;
 
   // Validate required parameters
   if (!technique_id || technique_id.trim() === '') {
@@ -96,7 +93,7 @@ export async function getMitreTechnique(
       name: rawTechnique.name,
       description: rawTechnique.description,
       platforms,
-      data_sources
+      data_sources,
     };
 
     // Step 2: Get mitigations (if requested)
@@ -131,7 +128,7 @@ export async function getMitreTechnique(
     const result: MitreTechniqueDetail = {
       ...technique,
       mitigations,
-      mapped_requirements
+      mapped_requirements,
     };
 
     return result;

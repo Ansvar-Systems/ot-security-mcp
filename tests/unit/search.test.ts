@@ -47,7 +47,7 @@ describe('searchRequirements', () => {
     it('should handle special SQL characters safely', async () => {
       // SQL injection attempt should be handled safely
       const result = await searchRequirements(db, {
-        query: "'; DROP TABLE ot_requirements; --"
+        query: "'; DROP TABLE ot_requirements; --",
       });
       expect(result).toEqual([]);
 
@@ -79,7 +79,7 @@ describe('searchRequirements', () => {
           'The control system shall provide the capability to identify and authenticate all human users.',
           'Authentication is essential to ensure only authorized users can access the control system.',
           'host',
-          3
+          3,
         ]
       );
 
@@ -93,7 +93,7 @@ describe('searchRequirements', () => {
           'The control system shall provide the capability to identify and authenticate all software processes.',
           'Process authentication prevents unauthorized software execution.',
           'application',
-          2
+          2,
         ]
       );
 
@@ -107,7 +107,7 @@ describe('searchRequirements', () => {
           'The control system shall implement network segmentation between security zones.',
           'Segmentation limits the impact of security incidents.',
           'network',
-          1
+          1,
         ]
       );
     });
@@ -115,32 +115,32 @@ describe('searchRequirements', () => {
     it('should return matching requirements when query matches title', async () => {
       const result = await searchRequirements(db, { query: 'identification' });
       expect(result.length).toBeGreaterThan(0);
-      expect(result.some(r => r.requirement_id === 'SR 1.1')).toBe(true);
-      expect(result.some(r => r.requirement_id === 'SR 1.2')).toBe(true);
+      expect(result.some((r) => r.requirement_id === 'SR 1.1')).toBe(true);
+      expect(result.some((r) => r.requirement_id === 'SR 1.2')).toBe(true);
     });
 
     it('should return matching requirements when query matches description', async () => {
       const result = await searchRequirements(db, { query: 'software processes' });
       expect(result.length).toBeGreaterThan(0);
-      expect(result.some(r => r.requirement_id === 'SR 1.2')).toBe(true);
+      expect(result.some((r) => r.requirement_id === 'SR 1.2')).toBe(true);
     });
 
     it('should return matching requirements when query matches rationale', async () => {
       const result = await searchRequirements(db, { query: 'authorized users' });
       expect(result.length).toBeGreaterThan(0);
-      expect(result.some(r => r.requirement_id === 'SR 1.1')).toBe(true);
+      expect(result.some((r) => r.requirement_id === 'SR 1.1')).toBe(true);
     });
 
     it('should be case-insensitive', async () => {
       const result = await searchRequirements(db, { query: 'AUTHENTICATION' });
       expect(result.length).toBeGreaterThan(0);
-      expect(result.some(r => r.requirement_id === 'SR 1.1')).toBe(true);
+      expect(result.some((r) => r.requirement_id === 'SR 1.1')).toBe(true);
     });
 
     it('should filter by component_type', async () => {
       const result = await searchRequirements(db, {
         query: 'identification',
-        options: { component_type: 'host' }
+        options: { component_type: 'host' },
       });
       expect(result).toHaveLength(1);
       expect(result[0]?.requirement_id).toBe('SR 1.1');
@@ -163,23 +163,23 @@ describe('searchRequirements', () => {
           'AC-1',
           'Access Control Policy',
           'Develop and document access control policies.',
-          'host'
+          'host',
         ]
       );
 
       const result = await searchRequirements(db, {
         query: 'access',
-        options: { standards: ['nist-800-82'] }
+        options: { standards: ['nist-800-82'] },
       });
 
       expect(result.length).toBeGreaterThan(0);
-      expect(result.every(r => r.standard_id === 'nist-800-82')).toBe(true);
+      expect(result.every((r) => r.standard_id === 'nist-800-82')).toBe(true);
     });
 
     it('should respect limit parameter', async () => {
       const result = await searchRequirements(db, {
         query: 'control system',
-        options: { limit: 1 }
+        options: { limit: 1 },
       });
       expect(result.length).toBeLessThanOrEqual(1);
     });
@@ -220,25 +220,13 @@ describe('searchRequirements', () => {
       const req1Result = db.run(
         `INSERT INTO ot_requirements (standard_id, requirement_id, title, description, component_type)
          VALUES (?, ?, ?, ?, ?)`,
-        [
-          'iec62443-3-3',
-          'SR 1.1',
-          'Authentication',
-          'User authentication requirement',
-          'host'
-        ]
+        ['iec62443-3-3', 'SR 1.1', 'Authentication', 'User authentication requirement', 'host']
       );
 
       const req2Result = db.run(
         `INSERT INTO ot_requirements (standard_id, requirement_id, title, description, component_type)
          VALUES (?, ?, ?, ?, ?)`,
-        [
-          'iec62443-3-3',
-          'SR 1.2',
-          'Authorization',
-          'User authorization requirement',
-          'host'
-        ]
+        ['iec62443-3-3', 'SR 1.2', 'Authorization', 'User authorization requirement', 'host']
       );
 
       // Add security levels
@@ -258,12 +246,12 @@ describe('searchRequirements', () => {
     it('should filter by security_level', async () => {
       const result = await searchRequirements(db, {
         query: 'authentication',
-        options: { security_level: 2 }
+        options: { security_level: 2 },
       });
 
       expect(result.length).toBeGreaterThan(0);
-      expect(result.some(r => r.requirement_id === 'SR 1.1')).toBe(true);
-      expect(result.some(r => r.requirement_id === 'SR 1.2')).toBe(false);
+      expect(result.some((r) => r.requirement_id === 'SR 1.1')).toBe(true);
+      expect(result.some((r) => r.requirement_id === 'SR 1.2')).toBe(false);
     });
 
     it('should return multiple requirements with same security level', async () => {
@@ -276,7 +264,7 @@ describe('searchRequirements', () => {
           'SR 2.1',
           'Network authentication',
           'Network device authentication requirement',
-          'network'
+          'network',
         ]
       );
 
@@ -288,20 +276,22 @@ describe('searchRequirements', () => {
 
       const result = await searchRequirements(db, {
         query: 'authentication',
-        options: { security_level: 2 }
+        options: { security_level: 2 },
       });
 
       expect(result.length).toBeGreaterThanOrEqual(2);
-      expect(result.every(r => {
-        // Verify each result has a security level of 2
-        const sl = db.queryOne<{ security_level: number }>(
-          `SELECT sl.security_level
+      expect(
+        result.every((r) => {
+          // Verify each result has a security level of 2
+          const sl = db.queryOne<{ security_level: number }>(
+            `SELECT sl.security_level
            FROM security_levels sl
            WHERE sl.requirement_db_id = ?`,
-          [r.id]
-        );
-        return sl?.security_level === 2;
-      })).toBe(true);
+            [r.id]
+          );
+          return sl?.security_level === 2;
+        })
+      ).toBe(true);
     });
   });
 
@@ -322,7 +312,7 @@ describe('searchRequirements', () => {
           'SR 1.1',
           'Host authentication',
           'Host-based authentication requirement',
-          'host'
+          'host',
         ]
       );
 
@@ -340,7 +330,7 @@ describe('searchRequirements', () => {
           'SR 1.2',
           'Network authentication',
           'Network-based authentication requirement',
-          'network'
+          'network',
         ]
       );
 
@@ -358,8 +348,8 @@ describe('searchRequirements', () => {
           standards: ['iec62443-3-3'],
           security_level: 2,
           component_type: 'host',
-          limit: 5
-        }
+          limit: 5,
+        },
       });
 
       expect(result).toHaveLength(1);
@@ -372,7 +362,7 @@ describe('searchRequirements', () => {
     it('should handle invalid component_type gracefully', async () => {
       const result = await searchRequirements(db, {
         query: 'authentication',
-        options: { component_type: 'invalid' as any }
+        options: { component_type: 'invalid' as any },
       });
 
       // Should return empty array since no requirements match
@@ -382,7 +372,7 @@ describe('searchRequirements', () => {
     it('should handle invalid security_level gracefully', async () => {
       const result = await searchRequirements(db, {
         query: 'authentication',
-        options: { security_level: 99 as any }
+        options: { security_level: 99 as any },
       });
 
       // Should return empty array since no requirements match
@@ -392,7 +382,7 @@ describe('searchRequirements', () => {
     it('should handle empty standards array', async () => {
       const result = await searchRequirements(db, {
         query: 'authentication',
-        options: { standards: [] }
+        options: { standards: [] },
       });
 
       // Empty standards array should match all standards
@@ -420,7 +410,7 @@ describe('searchRequirements', () => {
           'The control system shall provide the capability to identify and authenticate all human users.',
           'Authentication is essential to ensure only authorized users can access the control system.',
           'host',
-          3
+          3,
         ]
       );
 
@@ -434,7 +424,7 @@ describe('searchRequirements', () => {
           'The control system shall provide authentication for all software processes and services running on the system.',
           'Process authentication prevents unauthorized software execution.',
           'application',
-          2
+          2,
         ]
       );
 
@@ -448,7 +438,7 @@ describe('searchRequirements', () => {
           'The control system shall implement network segmentation between security zones.',
           'Segmentation limits the impact of security incidents. Strong authentication mechanisms must be used between zones.',
           'network',
-          1
+          1,
         ]
       );
     });
@@ -480,14 +470,14 @@ describe('searchRequirements', () => {
 
     it('should extract snippet from title when match occurs in title', async () => {
       const result = await searchRequirements(db, { query: 'authentication' });
-      const titleMatch = result.find(r => r.requirement_id === 'SR 1.1');
+      const titleMatch = result.find((r) => r.requirement_id === 'SR 1.1');
       expect(titleMatch).toBeDefined();
       expect(titleMatch?.snippet).toBe('Human user authentication');
     });
 
     it('should extract snippet from description with context around match', async () => {
       const result = await searchRequirements(db, { query: 'authentication' });
-      const descMatch = result.find(r => r.requirement_id === 'SR 1.2');
+      const descMatch = result.find((r) => r.requirement_id === 'SR 1.2');
       expect(descMatch).toBeDefined();
       expect(descMatch?.snippet).toContain('authentication');
       // Should have context around the match
@@ -496,7 +486,7 @@ describe('searchRequirements', () => {
 
     it('should extract snippet from rationale with context around match', async () => {
       const result = await searchRequirements(db, { query: 'authentication' });
-      const rationaleMatch = result.find(r => r.requirement_id === 'SR 2.1');
+      const rationaleMatch = result.find((r) => r.requirement_id === 'SR 2.1');
       expect(rationaleMatch).toBeDefined();
       expect(rationaleMatch?.snippet).toContain('authentication');
       // Should have context around the match
@@ -505,21 +495,21 @@ describe('searchRequirements', () => {
 
     it('should assign relevance score 1.0 for title match', async () => {
       const result = await searchRequirements(db, { query: 'authentication' });
-      const titleMatch = result.find(r => r.requirement_id === 'SR 1.1');
+      const titleMatch = result.find((r) => r.requirement_id === 'SR 1.1');
       expect(titleMatch).toBeDefined();
       expect(titleMatch?.relevance).toBe(1.0);
     });
 
     it('should assign relevance score 0.7 for description match', async () => {
       const result = await searchRequirements(db, { query: 'processes and services' });
-      const descMatch = result.find(r => r.requirement_id === 'SR 1.2');
+      const descMatch = result.find((r) => r.requirement_id === 'SR 1.2');
       expect(descMatch).toBeDefined();
       expect(descMatch?.relevance).toBe(0.7);
     });
 
     it('should assign relevance score 0.5 for rationale match', async () => {
       const result = await searchRequirements(db, { query: 'security incidents' });
-      const rationaleMatch = result.find(r => r.requirement_id === 'SR 2.1');
+      const rationaleMatch = result.find((r) => r.requirement_id === 'SR 2.1');
       expect(rationaleMatch).toBeDefined();
       expect(rationaleMatch?.relevance).toBe(0.5);
     });

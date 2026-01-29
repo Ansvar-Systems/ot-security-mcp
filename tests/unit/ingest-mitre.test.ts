@@ -46,17 +46,17 @@ describe('MitreIngester', () => {
           {
             source_name: 'mitre-attack',
             external_id: 'T0800',
-            url: 'https://attack.mitre.org/techniques/T0800'
-          }
+            url: 'https://attack.mitre.org/techniques/T0800',
+          },
         ],
         kill_chain_phases: [
           {
             kill_chain_name: 'mitre-ics-attack',
-            phase_name: 'initial-access'
-          }
+            phase_name: 'initial-access',
+          },
         ],
         x_mitre_platforms: ['Windows', 'Linux'],
-        x_mitre_data_sources: ['Network Traffic', 'Application Logs']
+        x_mitre_data_sources: ['Network Traffic', 'Application Logs'],
       };
 
       ingester.ingestTechnique(stixAttackPattern as any);
@@ -68,10 +68,7 @@ describe('MitreIngester', () => {
         description: string;
         platforms: string;
         data_sources: string;
-      }>(
-        'SELECT * FROM mitre_ics_techniques WHERE technique_id = ?',
-        ['T0800']
-      );
+      }>('SELECT * FROM mitre_ics_techniques WHERE technique_id = ?', ['T0800']);
 
       expect(result).toBeDefined();
       expect(result?.technique_id).toBe('T0800');
@@ -91,15 +88,15 @@ describe('MitreIngester', () => {
         external_references: [
           {
             source_name: 'mitre-attack',
-            external_id: 'T0801'
-          }
+            external_id: 'T0801',
+          },
         ],
         kill_chain_phases: [
           {
             kill_chain_name: 'mitre-ics-attack',
-            phase_name: 'execution'
-          }
-        ]
+            phase_name: 'execution',
+          },
+        ],
       };
 
       ingester.ingestTechnique(stixAttackPattern as any);
@@ -125,14 +122,14 @@ describe('MitreIngester', () => {
         id: 'attack-pattern--no-id',
         name: 'Technique Without ID',
         description: 'Should be skipped',
-        kill_chain_phases: []
+        kill_chain_phases: [],
       };
 
       ingester.ingestTechnique(stixAttackPattern as any);
 
-      const count = db.queryOne<{ count: number }>(
-        'SELECT COUNT(*) as count FROM mitre_ics_techniques'
-      )?.count || 0;
+      const count =
+        db.queryOne<{ count: number }>('SELECT COUNT(*) as count FROM mitre_ics_techniques')
+          ?.count || 0;
 
       expect(count).toBe(0);
     });
@@ -146,19 +143,19 @@ describe('MitreIngester', () => {
         external_references: [
           {
             source_name: 'mitre-attack',
-            external_id: 'T0802'
-          }
+            external_id: 'T0802',
+          },
         ],
         kill_chain_phases: [
           {
             kill_chain_name: 'mitre-ics-attack',
-            phase_name: 'persistence'
+            phase_name: 'persistence',
           },
           {
             kill_chain_name: 'mitre-ics-attack',
-            phase_name: 'privilege-escalation'
-          }
-        ]
+            phase_name: 'privilege-escalation',
+          },
+        ],
       };
 
       ingester.ingestTechnique(stixAttackPattern as any);
@@ -184,9 +181,9 @@ describe('MitreIngester', () => {
           {
             source_name: 'mitre-attack',
             external_id: 'M0800',
-            url: 'https://attack.mitre.org/mitigations/M0800'
-          }
-        ]
+            url: 'https://attack.mitre.org/mitigations/M0800',
+          },
+        ],
       };
 
       ingester.ingestMitigation(stixMitigation as any);
@@ -195,10 +192,7 @@ describe('MitreIngester', () => {
         mitigation_id: string;
         name: string;
         description: string;
-      }>(
-        'SELECT * FROM mitre_ics_mitigations WHERE mitigation_id = ?',
-        ['M0800']
-      );
+      }>('SELECT * FROM mitre_ics_mitigations WHERE mitigation_id = ?', ['M0800']);
 
       expect(result).toBeDefined();
       expect(result?.mitigation_id).toBe('M0800');
@@ -211,14 +205,14 @@ describe('MitreIngester', () => {
         type: 'course-of-action',
         id: 'course-of-action--no-id',
         name: 'Mitigation Without ID',
-        description: 'Should be skipped'
+        description: 'Should be skipped',
       };
 
       ingester.ingestMitigation(stixMitigation as any);
 
-      const count = db.queryOne<{ count: number }>(
-        'SELECT COUNT(*) as count FROM mitre_ics_mitigations'
-      )?.count || 0;
+      const count =
+        db.queryOne<{ count: number }>('SELECT COUNT(*) as count FROM mitre_ics_mitigations')
+          ?.count || 0;
 
       expect(count).toBe(0);
     });
@@ -232,12 +226,8 @@ describe('MitreIngester', () => {
         id: 'attack-pattern--tech-1',
         name: 'Test Technique',
         description: 'Test',
-        external_references: [
-          { source_name: 'mitre-attack', external_id: 'T0900' }
-        ],
-        kill_chain_phases: [
-          { kill_chain_name: 'mitre-ics-attack', phase_name: 'execution' }
-        ]
+        external_references: [{ source_name: 'mitre-attack', external_id: 'T0900' }],
+        kill_chain_phases: [{ kill_chain_name: 'mitre-ics-attack', phase_name: 'execution' }],
       };
 
       // Then ingest a mitigation
@@ -246,9 +236,7 @@ describe('MitreIngester', () => {
         id: 'course-of-action--mit-1',
         name: 'Test Mitigation',
         description: 'Test mitigation',
-        external_references: [
-          { source_name: 'mitre-attack', external_id: 'M0900' }
-        ]
+        external_references: [{ source_name: 'mitre-attack', external_id: 'M0900' }],
       };
 
       // Create a relationship
@@ -257,7 +245,7 @@ describe('MitreIngester', () => {
         id: 'relationship--1',
         relationship_type: 'mitigates',
         source_ref: 'course-of-action--mit-1',
-        target_ref: 'attack-pattern--tech-1'
+        target_ref: 'attack-pattern--tech-1',
       };
 
       ingester.ingestTechnique(technique as any);
@@ -267,10 +255,10 @@ describe('MitreIngester', () => {
       const result = db.queryOne<{
         technique_id: string;
         mitigation_id: string;
-      }>(
-        'SELECT * FROM mitre_technique_mitigations WHERE technique_id = ? AND mitigation_id = ?',
-        ['T0900', 'M0900']
-      );
+      }>('SELECT * FROM mitre_technique_mitigations WHERE technique_id = ? AND mitigation_id = ?', [
+        'T0900',
+        'M0900',
+      ]);
 
       expect(result).toBeDefined();
       expect(result?.technique_id).toBe('T0900');
@@ -283,14 +271,14 @@ describe('MitreIngester', () => {
         id: 'relationship--orphan',
         relationship_type: 'mitigates',
         source_ref: 'course-of-action--nonexistent',
-        target_ref: 'attack-pattern--nonexistent'
+        target_ref: 'attack-pattern--nonexistent',
       };
 
       ingester.ingestRelationships([relationship] as any);
 
-      const count = db.queryOne<{ count: number }>(
-        'SELECT COUNT(*) as count FROM mitre_technique_mitigations'
-      )?.count || 0;
+      const count =
+        db.queryOne<{ count: number }>('SELECT COUNT(*) as count FROM mitre_technique_mitigations')
+          ?.count || 0;
 
       expect(count).toBe(0);
     });
@@ -301,21 +289,15 @@ describe('MitreIngester', () => {
         type: 'attack-pattern',
         id: 'attack-pattern--tech-2',
         name: 'Test Technique 2',
-        external_references: [
-          { source_name: 'mitre-attack', external_id: 'T0901' }
-        ],
-        kill_chain_phases: [
-          { kill_chain_name: 'mitre-ics-attack', phase_name: 'execution' }
-        ]
+        external_references: [{ source_name: 'mitre-attack', external_id: 'T0901' }],
+        kill_chain_phases: [{ kill_chain_name: 'mitre-ics-attack', phase_name: 'execution' }],
       };
 
       const mitigation = {
         type: 'course-of-action',
         id: 'course-of-action--mit-2',
         name: 'Test Mitigation 2',
-        external_references: [
-          { source_name: 'mitre-attack', external_id: 'M0901' }
-        ]
+        external_references: [{ source_name: 'mitre-attack', external_id: 'M0901' }],
       };
 
       // Create a non-mitigates relationship
@@ -324,16 +306,16 @@ describe('MitreIngester', () => {
         id: 'relationship--uses',
         relationship_type: 'uses',
         source_ref: 'course-of-action--mit-2',
-        target_ref: 'attack-pattern--tech-2'
+        target_ref: 'attack-pattern--tech-2',
       };
 
       ingester.ingestTechnique(technique as any);
       ingester.ingestMitigation(mitigation as any);
       ingester.ingestRelationships([technique, mitigation, relationship] as any);
 
-      const count = db.queryOne<{ count: number }>(
-        'SELECT COUNT(*) as count FROM mitre_technique_mitigations'
-      )?.count || 0;
+      const count =
+        db.queryOne<{ count: number }>('SELECT COUNT(*) as count FROM mitre_technique_mitigations')
+          ?.count || 0;
 
       expect(count).toBe(0);
     });
@@ -347,12 +329,8 @@ describe('MitreIngester', () => {
         id: 'attack-pattern--replace-test',
         name: 'Old Name',
         description: 'Old description',
-        external_references: [
-          { source_name: 'mitre-attack', external_id: 'T0999' }
-        ],
-        kill_chain_phases: [
-          { kill_chain_name: 'mitre-ics-attack', phase_name: 'initial-access' }
-        ]
+        external_references: [{ source_name: 'mitre-attack', external_id: 'T0999' }],
+        kill_chain_phases: [{ kill_chain_name: 'mitre-ics-attack', phase_name: 'initial-access' }],
       };
 
       ingester.ingestTechnique(technique1 as any);
@@ -369,12 +347,8 @@ describe('MitreIngester', () => {
         id: 'attack-pattern--replace-test',
         name: 'New Name',
         description: 'New description',
-        external_references: [
-          { source_name: 'mitre-attack', external_id: 'T0999' }
-        ],
-        kill_chain_phases: [
-          { kill_chain_name: 'mitre-ics-attack', phase_name: 'execution' }
-        ]
+        external_references: [{ source_name: 'mitre-attack', external_id: 'T0999' }],
+        kill_chain_phases: [{ kill_chain_name: 'mitre-ics-attack', phase_name: 'execution' }],
       };
 
       ingester.ingestTechnique(technique2 as any);
@@ -386,10 +360,11 @@ describe('MitreIngester', () => {
       expect(result?.name).toBe('New Name');
 
       // Should still have only one record
-      const count = db.queryOne<{ count: number }>(
-        'SELECT COUNT(*) as count FROM mitre_ics_techniques WHERE technique_id = ?',
-        ['T0999']
-      )?.count || 0;
+      const count =
+        db.queryOne<{ count: number }>(
+          'SELECT COUNT(*) as count FROM mitre_ics_techniques WHERE technique_id = ?',
+          ['T0999']
+        )?.count || 0;
       expect(count).toBe(1);
     });
   });
@@ -401,13 +376,9 @@ describe('MitreIngester', () => {
         id: 'attack-pattern--json-test',
         name: 'JSON Test',
         description: 'Testing JSON storage',
-        external_references: [
-          { source_name: 'mitre-attack', external_id: 'T1000' }
-        ],
-        kill_chain_phases: [
-          { kill_chain_name: 'mitre-ics-attack', phase_name: 'execution' }
-        ],
-        x_mitre_platforms: ['Windows', 'Linux', 'Control Server']
+        external_references: [{ source_name: 'mitre-attack', external_id: 'T1000' }],
+        kill_chain_phases: [{ kill_chain_name: 'mitre-ics-attack', phase_name: 'execution' }],
+        x_mitre_platforms: ['Windows', 'Linux', 'Control Server'],
       };
 
       ingester.ingestTechnique(technique as any);
@@ -434,13 +405,9 @@ describe('MitreIngester', () => {
         id: 'attack-pattern--json-test-2',
         name: 'JSON Test 2',
         description: 'Testing JSON storage',
-        external_references: [
-          { source_name: 'mitre-attack', external_id: 'T1001' }
-        ],
-        kill_chain_phases: [
-          { kill_chain_name: 'mitre-ics-attack', phase_name: 'execution' }
-        ],
-        x_mitre_data_sources: ['Network Traffic', 'Process Monitoring', 'File Monitoring']
+        external_references: [{ source_name: 'mitre-attack', external_id: 'T1001' }],
+        kill_chain_phases: [{ kill_chain_name: 'mitre-ics-attack', phase_name: 'execution' }],
+        x_mitre_data_sources: ['Network Traffic', 'Process Monitoring', 'File Monitoring'],
       };
 
       ingester.ingestTechnique(technique as any);
