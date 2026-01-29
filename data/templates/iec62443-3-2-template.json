@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "part": "3-2",
+    "title": "IEC 62443-3-2 Security Risk Assessment for System Design",
+    "version": "v1.0",
+    "published_date": "2020-06-01"
+  },
+  "zones": [
+    {
+      "name": "Level 3 - SCADA DMZ",
+      "purdue_level": 3,
+      "security_level_target": 2,
+      "description": "Demilitarized zone (DMZ) hosting SCADA servers, historians, and engineering workstations. Provides controlled access between enterprise network and control system operations.",
+      "typical_assets": "HMI servers, Historian databases, Engineering workstations, Application servers, Asset management systems"
+    },
+    {
+      "name": "Level 2 - Area Supervisory Control",
+      "purdue_level": 2,
+      "security_level_target": 3,
+      "description": "Area supervisory control containing manufacturing operations management and area control systems. Direct supervision of Level 1 controllers.",
+      "typical_assets": "Supervisory controllers, Area HMI, DCS servers, Local historians, MES interfaces"
+    },
+    {
+      "name": "Level 1 - Basic Control",
+      "purdue_level": 1,
+      "security_level_target": 3,
+      "description": "Basic control zone containing PLCs, DCS controllers, and other devices performing direct process control functions.",
+      "typical_assets": "PLCs, DCS controllers, RTUs, Local I/O modules, Smart instruments"
+    },
+    {
+      "name": "Level 0 - Physical Process",
+      "purdue_level": 0,
+      "security_level_target": 2,
+      "description": "Physical process zone containing sensors, actuators, and field devices directly interacting with the physical process.",
+      "typical_assets": "Sensors, Actuators, Field instruments, Smart transmitters, Motor drives"
+    }
+  ],
+  "conduits": [
+    {
+      "name": "Firewall - Level 2 to Level 3",
+      "conduit_type": "filtered_bidirectional",
+      "description": "Stateful industrial firewall with deep packet inspection (DPI) and protocol validation. Enforces allowlist of permitted communications between supervisory control and SCADA DMZ.",
+      "minimum_security_level": 2
+    },
+    {
+      "name": "Data Diode - Level 1 to Level 3",
+      "conduit_type": "unidirectional",
+      "description": "Hardware-enforced unidirectional data flow from process control network to DMZ. Used for one-way historian data replication and monitoring without exposing control systems to return traffic.",
+      "minimum_security_level": 3
+    },
+    {
+      "name": "Internal Zone Connection - Level 1 Controllers",
+      "conduit_type": "open_bidirectional",
+      "description": "Switched network within Level 1 zone connecting PLCs and controllers. Security enforced at zone boundary rather than internally. Should be monitored for anomalous behavior.",
+      "minimum_security_level": 1
+    }
+  ]
+}

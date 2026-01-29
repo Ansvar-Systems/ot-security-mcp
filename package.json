@@ -26,10 +26,13 @@
     "ingest:mitre": "tsx scripts/ingest-mitre-ics.ts",
     "ingest:nist-80053": "tsx scripts/ingest-nist-80053.ts",
     "ingest:nist-80082": "tsx scripts/ingest-nist-80082.ts",
+    "validate:iec62443": "tsx scripts/validate-iec62443.ts",
     "check-updates": "tsx scripts/check-updates.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.25.3",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
     "better-sqlite3": "^12.6.2"
   },
   "devDependencies": {
