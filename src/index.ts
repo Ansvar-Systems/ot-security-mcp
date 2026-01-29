@@ -21,6 +21,7 @@ import { listStandards } from './tools/list-standards.js';
 import { getMitreTechnique } from './tools/get-mitre-technique.js';
 import { mapSecurityLevelRequirements } from './tools/map-security-level-requirements.js';
 import { getZoneConduitGuidance } from './tools/get-zone-conduit-guidance.js';
+import { getRequirementRationale } from './tools/get-requirement-rationale.js';
 
 /**
  * MCP Server class for OT Security standards and frameworks
@@ -88,6 +89,9 @@ export class McpServer {
 
           case 'get_zone_conduit_guidance':
             return this.handleGetZoneConduitGuidance(args);
+
+          case 'get_requirement_rationale':
+            return this.handleGetRequirementRationale(args);
 
           default:
             throw new McpError(
@@ -294,6 +298,86 @@ export class McpServer {
       security_level_target,
       reference_architecture
     });
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(result, null, 2)
+        }
+      ]
+    };
+  }
+
+  /**
+   * Handle get_requirement_rationale tool
+   * @param args - Tool arguments containing requirement_id and standard
+   */
+  private async handleGetRequirementRationale(args: unknown) {
+    // Validate arguments
+    if (typeof args !== 'object' || args === null) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify({
+              error: 'Invalid arguments - expected an object'
+            }, null, 2)
+          }
+        ]
+      };
+    }
+
+    const { requirement_id, standard } = args as {
+      requirement_id?: string;
+      standard?: string;
+    };
+
+    if (!requirement_id) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify({
+              error: 'requirement_id parameter is required'
+            }, null, 2)
+          }
+        ]
+      };
+    }
+
+    if (!standard) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify({
+              error: 'standard parameter is required'
+            }, null, 2)
+          }
+        ]
+      };
+    }
+
+    const result = await getRequirementRationale(this.db, {
+      requirement_id,
+      standard
+    });
+
+    if (!result) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify({
+              error: 'Requirement not found',
+              requirement_id,
+              standard
+            }, null, 2)
+          }
+        ]
+      };
+    }
 
     return {
       content: [
