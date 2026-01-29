@@ -1,0 +1,50 @@
+{
+  "name": "@ansvar/ot-security-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for OT (Operational Technology) security standards and frameworks",
+  "type": "module",
+  "author": "Ansvar Systems <hello@ansvar.eu>",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "ingest:mitre": "tsx scripts/ingest-mitre-ics.ts",
+    "check-updates": "tsx scripts/check-updates.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.25.3",
+    "better-sqlite3": "^12.6.2"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^25.0.10",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "ot-security",
+    "operational-technology",
+    "ics",
+    "scada",
+    "mitre-ics",
+    "security-standards"
+  ]
+}
