@@ -91,11 +91,15 @@ describe('E2E Tool Integration Tests', () => {
   });
 
   describe('list_ot_standards Tool', () => {
-    it('should return empty array in Stage 1 (no standards ingested)', async () => {
+    it('should return IEC 62443 standards in Stage 2', async () => {
       const result = await listStandards(db);
 
       expect(Array.isArray(result)).toBe(true);
-      expect(result).toHaveLength(0);
+      expect(result.length).toBeGreaterThan(0);
+
+      // Should have IEC 62443 standards
+      const iecStandards = result.filter(s => s.id.startsWith('iec62443'));
+      expect(iecStandards.length).toBeGreaterThan(0);
     });
 
     it('should handle tool call without errors', async () => {
@@ -105,14 +109,21 @@ describe('E2E Tool Integration Tests', () => {
   });
 
   describe('search_ot_requirements Tool', () => {
-    it('should return empty array in Stage 1 (no requirements ingested)', async () => {
+    it('should find IEC 62443 authentication requirements in Stage 2', async () => {
       const result = await searchRequirements(db, {
         query: 'authentication',
         options: {},
       });
 
       expect(Array.isArray(result)).toBe(true);
-      expect(result).toHaveLength(0);
+      expect(result.length).toBeGreaterThan(0);
+
+      // Should have search result properties
+      if (result[0]) {
+        expect(result[0]).toHaveProperty('snippet');
+        expect(result[0]).toHaveProperty('relevance');
+        expect(result[0]).toHaveProperty('standard_name');
+      }
     });
 
     it('should handle optional parameters without errors', async () => {
@@ -141,14 +152,44 @@ describe('E2E Tool Integration Tests', () => {
   });
 
   describe('get_ot_requirement Tool', () => {
-    it('should return null for non-existent requirement in Stage 1', async () => {
+    it('should retrieve IEC 62443-3-3 SR 1.1 requirement in Stage 2', async () => {
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
         standard: 'iec62443-3-3',
         options: {},
       });
 
-      expect(result).toBeNull();
+      expect(result).toBeDefined();
+      expect(result?.requirement_id).toBe('SR 1.1');
+      expect(result?.standard_id).toBe('iec62443-3-3');
+    });
+
+    it('should include security_levels for IEC 62443-3-3 SR 1.1', async () => {
+      const result = await getRequirement(db, {
+        requirement_id: 'SR 1.1',
+        standard: 'iec62443-3-3',
+        options: {},
+      });
+
+      expect(result).toBeDefined();
+      expect(result?.security_levels).toBeDefined();
+      expect(Array.isArray(result?.security_levels)).toBe(true);
+
+      // SR 1.1 has 4 security levels (SL-1 through SL-4)
+      expect(result?.security_levels.length).toBe(4);
+
+      // Verify security level structure
+      const sl1 = result?.security_levels.find(sl => sl.security_level === 1);
+      expect(sl1).toBeDefined();
+      expect(sl1?.sl_type).toBe('SL-T');
+      expect(sl1?.capability_level).toBe(1);
+      expect(sl1?.notes).toContain('identification and authentication');
+
+      // Verify all security levels 1-4 are present
+      expect(result?.security_levels.some(sl => sl.security_level === 1)).toBe(true);
+      expect(result?.security_levels.some(sl => sl.security_level === 2)).toBe(true);
+      expect(result?.security_levels.some(sl => sl.security_level === 3)).toBe(true);
+      expect(result?.security_levels.some(sl => sl.security_level === 4)).toBe(true);
     });
 
     it('should handle include_mappings parameter', async () => {
@@ -160,8 +201,13 @@ describe('E2E Tool Integration Tests', () => {
         },
       });
 
-      // Should still return null for non-existent requirement
-      expect(result).toBeNull();
+      // Should return the requirement
+      expect(result).toBeDefined();
+      expect(result?.requirement_id).toBe('SR 1.1');
+
+      // Security levels should still be included regardless of mappings flag
+      expect(result?.security_levels).toBeDefined();
+      expect(Array.isArray(result?.security_levels)).toBe(true);
     });
 
     it('should handle version parameter', async () => {
@@ -173,7 +219,29 @@ describe('E2E Tool Integration Tests', () => {
         },
       });
 
-      expect(result).toBeNull();
+      // Should return requirement (version filtering not implemented yet)
+      expect(result).toBeDefined();
+    });
+
+    it('should return empty security_levels for NIST requirements', async () => {
+      // First check if any NIST requirements exist in the database
+      const nistReq = db.queryOne<{ requirement_id: string, standard_id: string }>(
+        `SELECT requirement_id, standard_id FROM ot_requirements WHERE standard_id LIKE 'nist%' LIMIT 1`
+      );
+
+      if (nistReq) {
+        const result = await getRequirement(db, {
+          requirement_id: nistReq.requirement_id,
+          standard: nistReq.standard_id,
+          options: {},
+        });
+
+        expect(result).toBeDefined();
+        expect(result?.security_levels).toBeDefined();
+        expect(Array.isArray(result?.security_levels)).toBe(true);
+        // NIST requirements don't have security levels in IEC 62443 sense
+        expect(result?.security_levels.length).toBe(0);
+      }
     });
   });
 
