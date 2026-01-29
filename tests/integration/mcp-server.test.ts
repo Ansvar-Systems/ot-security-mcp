@@ -78,17 +78,18 @@ describe('McpServer', () => {
   });
 
   describe('Tool Registry', () => {
-    it('should return 4 Stage 1 tools', () => {
+    it('should return 5 tools (Stage 1 + Stage 2)', () => {
       const tools = registerTools();
 
       expect(tools).toBeDefined();
-      expect(tools).toHaveLength(4);
+      expect(tools).toHaveLength(5);
 
       const toolNames = tools.map(t => t.name);
       expect(toolNames).toContain('search_ot_requirements');
       expect(toolNames).toContain('get_ot_requirement');
       expect(toolNames).toContain('list_ot_standards');
       expect(toolNames).toContain('get_mitre_ics_technique');
+      expect(toolNames).toContain('map_security_level_requirements');
     });
 
     it('should have valid JSON schemas for all tools', () => {

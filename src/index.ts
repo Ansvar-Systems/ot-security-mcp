@@ -19,6 +19,7 @@ import { searchRequirements } from './tools/search.js';
 import { getRequirement } from './tools/get-requirement.js';
 import { listStandards } from './tools/list-standards.js';
 import { getMitreTechnique } from './tools/get-mitre-technique.js';
+import { mapSecurityLevelRequirements } from './tools/map-security-level-requirements.js';
 
 /**
  * MCP Server class for OT Security standards and frameworks
@@ -80,6 +81,9 @@ export class McpServer {
 
           case 'get_mitre_ics_technique':
             return this.handleGetMitreTechnique(args);
+
+          case 'map_security_level_requirements':
+            return this.handleMapSecurityLevelRequirements(args);
 
           default:
             throw new McpError(
@@ -246,6 +250,29 @@ export class McpServer {
         {
           type: 'text',
           text: JSON.stringify(result, null, 2)
+        }
+      ]
+    };
+  }
+
+  /**
+   * Handle map_security_level_requirements tool
+   * @param args - Tool arguments containing security_level and optional filters
+   */
+  private async handleMapSecurityLevelRequirements(args: unknown) {
+    const { security_level, component_type, include_enhancements } = args as any;
+
+    const requirements = await mapSecurityLevelRequirements(this.db, {
+      security_level,
+      component_type,
+      include_enhancements
+    });
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(requirements, null, 2)
         }
       ]
     };
