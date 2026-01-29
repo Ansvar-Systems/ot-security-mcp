@@ -32,6 +32,33 @@ CREATE TABLE IF NOT EXISTS ot_requirements (
   UNIQUE (standard_id, requirement_id)
 );
 
+-- Full-text search index for requirements (FTS5)
+CREATE VIRTUAL TABLE IF NOT EXISTS ot_requirements_fts USING fts5(
+  requirement_id,
+  title,
+  description,
+  content='ot_requirements',
+  content_rowid='id'
+);
+
+-- Triggers to keep FTS index synchronized with ot_requirements
+CREATE TRIGGER IF NOT EXISTS ot_requirements_fts_insert AFTER INSERT ON ot_requirements BEGIN
+  INSERT INTO ot_requirements_fts(rowid, requirement_id, title, description)
+  VALUES (new.id, new.requirement_id, new.title, new.description);
+END;
+
+CREATE TRIGGER IF NOT EXISTS ot_requirements_fts_delete AFTER DELETE ON ot_requirements BEGIN
+  INSERT INTO ot_requirements_fts(ot_requirements_fts, rowid, requirement_id, title, description)
+  VALUES ('delete', old.id, old.requirement_id, old.title, old.description);
+END;
+
+CREATE TRIGGER IF NOT EXISTS ot_requirements_fts_update AFTER UPDATE ON ot_requirements BEGIN
+  INSERT INTO ot_requirements_fts(ot_requirements_fts, rowid, requirement_id, title, description)
+  VALUES ('delete', old.id, old.requirement_id, old.title, old.description);
+  INSERT INTO ot_requirements_fts(rowid, requirement_id, title, description)
+  VALUES (new.id, new.requirement_id, new.title, new.description);
+END;
+
 -- IEC 62443 security level mappings
 CREATE TABLE IF NOT EXISTS security_levels (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -175,6 +202,29 @@ CREATE TABLE IF NOT EXISTS sector_applicability (
 );
 
 -- =============================================================================
+-- System Metadata and Audit Trail
+-- =============================================================================
+
+-- Database metadata (schema version, last updated, etc.)
+CREATE TABLE IF NOT EXISTS metadata (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL,
+  updated_at TEXT DEFAULT (datetime('now'))
+);
+
+-- Ingestion audit log (tracks data ingestion operations)
+CREATE TABLE IF NOT EXISTS ingestion_log (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  operation TEXT NOT NULL,           -- 'ingest:mitre', 'ingest:nist-80053', etc.
+  status TEXT NOT NULL,              -- 'success', 'failed', 'partial'
+  record_count INTEGER,              -- Number of records ingested
+  timestamp TEXT DEFAULT (datetime('now')),
+  duration_ms INTEGER,               -- Time taken in milliseconds
+  notes TEXT,                        -- Error messages or additional info
+  data_version TEXT                  -- Version of source data (e.g., 'MITRE v16.0')
+);
+
+-- =============================================================================
 -- Indexes for Performance
 -- =============================================================================
 
@@ -244,3 +294,10 @@ CREATE INDEX IF NOT EXISTS idx_zones_purdue ON zones(purdue_level);
 CREATE INDEX IF NOT EXISTS idx_zones_sl_target ON zones(security_level_target);
 CREATE INDEX IF NOT EXISTS idx_flows_source ON zone_conduit_flows(source_zone_id);
 CREATE INDEX IF NOT EXISTS idx_flows_target ON zone_conduit_flows(target_zone_id);
+
+-- Indexes for ingestion log (most recent operations first)
+CREATE INDEX IF NOT EXISTS idx_ingestion_log_timestamp
+  ON ingestion_log(timestamp DESC);
+
+CREATE INDEX IF NOT EXISTS idx_ingestion_log_operation
+  ON ingestion_log(operation);
