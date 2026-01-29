@@ -54,5 +54,39 @@
       "description": "Switched network within Level 1 zone connecting PLCs and controllers. Security enforced at zone boundary rather than internally. Should be monitored for anomalous behavior.",
       "minimum_security_level": 1
     }
+  ],
+  "flows": [
+    {
+      "source_zone_name": "Level 2 - Area Supervisory Control",
+      "target_zone_name": "Level 3 - SCADA DMZ",
+      "conduit_name": "Firewall - Level 2 to Level 3",
+      "data_flow_description": "Process data, alarms, and commands between Level 2 controllers and Level 3 SCADA systems",
+      "security_level_requirement": 2,
+      "bidirectional": true
+    },
+    {
+      "source_zone_name": "Level 1 - Basic Control",
+      "target_zone_name": "Level 3 - SCADA DMZ",
+      "conduit_name": "Data Diode - Level 1 to Level 3",
+      "data_flow_description": "One-way historian data replication from process controllers to SCADA DMZ for monitoring and analysis",
+      "security_level_requirement": 3,
+      "bidirectional": false
+    }
+  ],
+  "reference_architectures": [
+    {
+      "name": "Purdue Model",
+      "description": "Standard ICS network segmentation model with 6 levels (0-5) defining separation between enterprise IT and operational technology",
+      "diagram_url": "https://www.isa.org/standards/isa-iec-62443",
+      "applicable_zones": "All zones (Level 0 through Level 5)",
+      "industry_applicability": "Manufacturing, Process Control, Energy, Water Treatment"
+    },
+    {
+      "name": "ISA-95 Enterprise-Control System Integration",
+      "description": "Standard for integrating enterprise and control systems with focus on data flow and functional hierarchy",
+      "diagram_url": "https://www.isa.org/standards/isa95",
+      "applicable_zones": "Levels 3-5 (plant operations to enterprise)",
+      "industry_applicability": "Manufacturing, Batch Processing, Discrete Manufacturing"
+    }
   ]
 }

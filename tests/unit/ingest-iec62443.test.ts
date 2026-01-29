@@ -221,4 +221,92 @@ describe('Iec62443Ingester', () => {
       expect(() => ingester.ingestPart33(invalidData as any)).toThrow();
     });
   });
+
+  describe('Flows and Reference Architectures', () => {
+    it('should ingest zone-to-zone flows via conduits', () => {
+      const data = {
+        meta: {
+          part: '3-2',
+          title: 'IEC 62443-3-2',
+          version: 'v1.0',
+          published_date: '2020-06-01'
+        },
+        zones: [
+          {
+            name: 'Zone A',
+            purdue_level: 2,
+            security_level_target: 2,
+            description: 'Control zone'
+          },
+          {
+            name: 'Zone B',
+            purdue_level: 3,
+            security_level_target: 2,
+            description: 'SCADA zone'
+          }
+        ],
+        conduits: [
+          {
+            name: 'Firewall AB',
+            conduit_type: 'filtered_bidirectional',
+            description: 'Firewall between A and B'
+          }
+        ],
+        flows: [
+          {
+            source_zone_name: 'Zone A',
+            target_zone_name: 'Zone B',
+            conduit_name: 'Firewall AB',
+            data_flow_description: 'Process data flow',
+            security_level_requirement: 2,
+            bidirectional: true
+          }
+        ],
+        reference_architectures: []
+      };
+
+      ingester.ingestPart32(data);
+
+      // Verify flow was created with proper foreign keys
+      const flow = db.queryOne<any>(
+        `SELECT * FROM zone_conduit_flows WHERE data_flow_description = ?`,
+        ['Process data flow']
+      );
+      expect(flow).toBeDefined();
+      expect(flow.bidirectional).toBe(1); // SQLite stores boolean as 0/1
+      expect(flow.security_level_requirement).toBe(2);
+    });
+
+    it('should ingest reference architectures', () => {
+      const data = {
+        meta: {
+          part: '3-2',
+          title: 'IEC 62443-3-2',
+          version: 'v1.0',
+          published_date: '2020-06-01'
+        },
+        zones: [],
+        conduits: [],
+        flows: [],
+        reference_architectures: [
+          {
+            name: 'Purdue Model',
+            description: 'Standard ICS segmentation',
+            diagram_url: 'https://example.com/purdue',
+            applicable_zones: 'Levels 0-5',
+            industry_applicability: 'Manufacturing'
+          }
+        ]
+      };
+
+      ingester.ingestPart32(data);
+
+      const arch = db.queryOne<any>(
+        'SELECT * FROM reference_architectures WHERE name = ?',
+        ['Purdue Model']
+      );
+      expect(arch).toBeDefined();
+      expect(arch.industry_applicability).toBe('Manufacturing');
+    });
+  });
 });

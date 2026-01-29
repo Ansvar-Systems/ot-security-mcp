@@ -79,6 +79,14 @@
         "conduits": {
           "type": "array",
           "items": { "$ref": "#/definitions/conduit" }
+        },
+        "flows": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/flow" }
+        },
+        "reference_architectures": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/reference_architecture" }
         }
       },
       "required": ["zones", "conduits"]
@@ -201,6 +209,64 @@
           "minimum": 1,
           "maximum": 4,
           "description": "Minimum security level required"
+        }
+      }
+    },
+    "flow": {
+      "type": "object",
+      "required": ["source_zone_name", "target_zone_name", "conduit_name", "data_flow_description"],
+      "properties": {
+        "source_zone_name": {
+          "type": "string",
+          "description": "Name of source zone"
+        },
+        "target_zone_name": {
+          "type": "string",
+          "description": "Name of target zone"
+        },
+        "conduit_name": {
+          "type": "string",
+          "description": "Name of conduit connecting zones"
+        },
+        "data_flow_description": {
+          "type": "string",
+          "description": "Description of data flow"
+        },
+        "security_level_requirement": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4,
+          "description": "Security level required for this flow"
+        },
+        "bidirectional": {
+          "type": "boolean",
+          "description": "Whether flow is bidirectional"
+        }
+      }
+    },
+    "reference_architecture": {
+      "type": "object",
+      "required": ["name", "description"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Architecture name (e.g., ISA95, Purdue Model)"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of architecture"
+        },
+        "diagram_url": {
+          "type": "string",
+          "description": "URL to architecture diagram"
+        },
+        "applicable_zones": {
+          "type": "string",
+          "description": "Zones this architecture applies to"
+        },
+        "industry_applicability": {
+          "type": "string",
+          "description": "Industries where this architecture is commonly used"
         }
       }
     }
