@@ -10,6 +10,7 @@ export { searchRequirements } from './search.js';
 export { getRequirement } from './get-requirement.js';
 export { listStandards } from './list-standards.js';
 export { getMitreTechnique } from './get-mitre-technique.js';
+export { mapSecurityLevelRequirements } from './map-security-level-requirements.js';
 
 /**
  * Register all Stage 1 tools for the MCP server
@@ -116,6 +117,32 @@ export function registerTools(): Tool[] {
           },
         },
         required: ['technique_id'],
+      },
+    },
+    {
+      name: 'map_security_level_requirements',
+      description: 'Map IEC 62443 requirements to a specific security level (1-4). Returns all requirements that apply to the specified security level, optionally filtered by component type.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          security_level: {
+            type: 'number',
+            description: 'Target security level (1-4)',
+            minimum: 1,
+            maximum: 4,
+          },
+          component_type: {
+            type: 'string',
+            description: 'Optional component type filter (host, network, embedded, app)',
+            enum: ['host', 'network', 'embedded', 'app'],
+          },
+          include_enhancements: {
+            type: 'boolean',
+            description: 'Include requirement enhancements (REs). Default: true',
+            default: true,
+          },
+        },
+        required: ['security_level'],
       },
     },
   ];
