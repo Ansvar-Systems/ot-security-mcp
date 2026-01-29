@@ -28,14 +28,16 @@ export function registerTools(): Tool[] {
         properties: {
           query: {
             type: 'string',
-            description: 'Search query for finding requirements (searches in title, description, and rationale)',
+            description:
+              'Search query for finding requirements (searches in title, description, and rationale)',
           },
           standards: {
             type: 'array',
             items: {
               type: 'string',
             },
-            description: 'Optional: Filter by specific standards (e.g., ["iec62443-3-3", "nist-800-82"])',
+            description:
+              'Optional: Filter by specific standards (e.g., ["iec62443-3-3", "nist-800-82"])',
           },
           security_level: {
             type: 'number',
@@ -80,7 +82,8 @@ export function registerTools(): Tool[] {
           include_mappings: {
             type: 'boolean',
             default: true,
-            description: 'Optional: Include cross-standard mappings in the response (default: true)',
+            description:
+              'Optional: Include cross-standard mappings in the response (default: true)',
           },
         },
         required: ['requirement_id', 'standard'],
@@ -123,7 +126,8 @@ export function registerTools(): Tool[] {
     },
     {
       name: 'map_security_level_requirements',
-      description: 'Map IEC 62443 requirements to a specific security level (1-4). Returns all requirements that apply to the specified security level, optionally filtered by component type.',
+      description:
+        'Map IEC 62443 requirements to a specific security level (1-4). Returns all requirements that apply to the specified security level, optionally filtered by component type.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -149,7 +153,8 @@ export function registerTools(): Tool[] {
     },
     {
       name: 'get_zone_conduit_guidance',
-      description: 'Get IEC 62443 zone and conduit guidance for network segmentation. Query zones by Purdue level (0-5), security level target (1-4), and reference architecture. Returns comprehensive network segmentation guidance including zones, conduits, and data flows for OT environments.',
+      description:
+        'Get IEC 62443 zone and conduit guidance for network segmentation. Query zones by Purdue level (0-5), security level target (1-4), and reference architecture. Returns comprehensive network segmentation guidance including zones, conduits, and data flows for OT environments.',
       inputSchema: {
         type: 'object',
         properties: {
@@ -167,7 +172,8 @@ export function registerTools(): Tool[] {
           },
           reference_architecture: {
             type: 'string',
-            description: 'Optional: Filter by reference architecture (e.g., "Purdue Model", "IEC 62443-3-2", "ISA-95")',
+            description:
+              'Optional: Filter by reference architecture (e.g., "Purdue Model", "IEC 62443-3-2", "ISA-95")',
           },
         },
         required: [],
@@ -175,7 +181,8 @@ export function registerTools(): Tool[] {
     },
     {
       name: 'get_requirement_rationale',
-      description: 'Get detailed rationale for a specific OT security requirement. Returns comprehensive context including why the requirement exists, security levels (for IEC 62443), regulatory drivers, sector applicability, and related requirements from other standards. Essential for understanding the business and security justification for implementing requirements.',
+      description:
+        'Get detailed rationale for a specific OT security requirement. Returns comprehensive context including why the requirement exists, security levels (for IEC 62443), regulatory drivers, sector applicability, and related requirements from other standards. Essential for understanding the business and security justification for implementing requirements.',
       inputSchema: {
         type: 'object',
         properties: {

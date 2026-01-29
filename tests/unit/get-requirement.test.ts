@@ -37,7 +37,7 @@ describe('getRequirement', () => {
     it('should return null when requirement not found', async () => {
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
       expect(result).toBeNull();
     });
@@ -45,7 +45,7 @@ describe('getRequirement', () => {
     it('should return null when standard does not exist', async () => {
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
-        standard: 'nonexistent-standard'
+        standard: 'nonexistent-standard',
       });
       expect(result).toBeNull();
     });
@@ -60,7 +60,7 @@ describe('getRequirement', () => {
 
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
       expect(result).toBeNull();
     });
@@ -79,7 +79,7 @@ describe('getRequirement', () => {
           'current',
           '2023-01-01',
           'https://www.iec.ch/62443-3-3',
-          'Test standard'
+          'Test standard',
         ]
       );
 
@@ -95,7 +95,7 @@ describe('getRequirement', () => {
           'The control system shall provide the capability to identify and authenticate all human users.',
           'Authentication is essential to ensure only authorized users can access the control system.',
           'host',
-          3
+          3,
         ]
       );
     });
@@ -103,7 +103,7 @@ describe('getRequirement', () => {
     it('should return RequirementDetail when requirement exists', async () => {
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       expect(result).not.toBeNull();
@@ -114,7 +114,7 @@ describe('getRequirement', () => {
     it('should include all OTRequirement fields', async () => {
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       expect(result).not.toBeNull();
@@ -132,7 +132,7 @@ describe('getRequirement', () => {
     it('should include standard metadata', async () => {
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       expect(result).not.toBeNull();
@@ -150,7 +150,7 @@ describe('getRequirement', () => {
     it('should include empty security_levels array when no levels exist', async () => {
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       expect(result).not.toBeNull();
@@ -162,7 +162,7 @@ describe('getRequirement', () => {
     it('should include empty mappings array when no mappings exist', async () => {
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       expect(result).not.toBeNull();
@@ -185,13 +185,7 @@ describe('getRequirement', () => {
       const reqResult = db.run(
         `INSERT INTO ot_requirements (standard_id, requirement_id, title, description, component_type)
          VALUES (?, ?, ?, ?, ?)`,
-        [
-          'iec62443-3-3',
-          'SR 1.1',
-          'Authentication',
-          'User authentication requirement',
-          'host'
-        ]
+        ['iec62443-3-3', 'SR 1.1', 'Authentication', 'User authentication requirement', 'host']
       );
 
       // Insert security levels
@@ -211,7 +205,7 @@ describe('getRequirement', () => {
     it('should include security_levels array when levels exist', async () => {
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       expect(result).not.toBeNull();
@@ -221,7 +215,7 @@ describe('getRequirement', () => {
     it('should include all security level fields', async () => {
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       expect(result).not.toBeNull();
@@ -237,11 +231,11 @@ describe('getRequirement', () => {
     it('should include correct security level values', async () => {
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       expect(result).not.toBeNull();
-      const sl2 = result?.security_levels.find(sl => sl.security_level === 2);
+      const sl2 = result?.security_levels.find((sl) => sl.security_level === 2);
       expect(sl2).toBeDefined();
       expect(sl2?.sl_type).toBe('SL-T');
       expect(sl2?.capability_level).toBe(1);
@@ -268,13 +262,7 @@ describe('getRequirement', () => {
       db.run(
         `INSERT INTO ot_requirements (standard_id, requirement_id, title, description, component_type)
          VALUES (?, ?, ?, ?, ?)`,
-        [
-          'iec62443-3-3',
-          'SR 1.1',
-          'Authentication',
-          'User authentication requirement',
-          'host'
-        ]
+        ['iec62443-3-3', 'SR 1.1', 'Authentication', 'User authentication requirement', 'host']
       );
 
       // Insert mappings (bidirectional)
@@ -289,7 +277,7 @@ describe('getRequirement', () => {
           'exact_match',
           1.0,
           'Direct mapping',
-          '2024-01-01'
+          '2024-01-01',
         ]
       );
 
@@ -304,7 +292,7 @@ describe('getRequirement', () => {
           'partial_match',
           0.8,
           'Partial overlap',
-          '2024-01-01'
+          '2024-01-01',
         ]
       );
     });
@@ -312,7 +300,7 @@ describe('getRequirement', () => {
     it('should include mappings by default', async () => {
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       expect(result).not.toBeNull();
@@ -323,7 +311,7 @@ describe('getRequirement', () => {
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
         standard: 'iec62443-3-3',
-        options: { include_mappings: true }
+        options: { include_mappings: true },
       });
 
       expect(result).not.toBeNull();
@@ -334,7 +322,7 @@ describe('getRequirement', () => {
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
         standard: 'iec62443-3-3',
-        options: { include_mappings: false }
+        options: { include_mappings: false },
       });
 
       expect(result).not.toBeNull();
@@ -344,7 +332,7 @@ describe('getRequirement', () => {
     it('should include all mapping fields', async () => {
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       expect(result).not.toBeNull();
@@ -363,7 +351,7 @@ describe('getRequirement', () => {
     it('should include bidirectional mappings (source and target)', async () => {
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       expect(result).not.toBeNull();
@@ -371,7 +359,7 @@ describe('getRequirement', () => {
 
       // Find source mapping
       const sourceMapping = result?.mappings.find(
-        m => m.source_standard === 'iec62443-3-3' && m.source_requirement === 'SR 1.1'
+        (m) => m.source_standard === 'iec62443-3-3' && m.source_requirement === 'SR 1.1'
       );
       expect(sourceMapping).toBeDefined();
       expect(sourceMapping?.target_standard).toBe('nist-800-82');
@@ -379,7 +367,7 @@ describe('getRequirement', () => {
 
       // Find target mapping
       const targetMapping = result?.mappings.find(
-        m => m.target_standard === 'iec62443-3-3' && m.target_requirement === 'SR 1.1'
+        (m) => m.target_standard === 'iec62443-3-3' && m.target_requirement === 'SR 1.1'
       );
       expect(targetMapping).toBeDefined();
       expect(targetMapping?.source_standard).toBe('nist-800-82');
@@ -400,13 +388,7 @@ describe('getRequirement', () => {
       db.run(
         `INSERT INTO ot_requirements (standard_id, requirement_id, title, description, component_type)
          VALUES (?, ?, ?, ?, ?)`,
-        [
-          'iec62443-3-3',
-          'SR 1.1',
-          'Authentication',
-          'User authentication requirement',
-          'host'
-        ]
+        ['iec62443-3-3', 'SR 1.1', 'Authentication', 'User authentication requirement', 'host']
       );
     });
 
@@ -415,7 +397,7 @@ describe('getRequirement', () => {
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
         standard: 'iec62443-3-3',
-        options: { version: 'v2.0' }
+        options: { version: 'v2.0' },
       });
 
       expect(result).not.toBeNull();
@@ -427,7 +409,7 @@ describe('getRequirement', () => {
     it('should handle empty requirement_id', async () => {
       const result = await getRequirement(db, {
         requirement_id: '',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
       expect(result).toBeNull();
     });
@@ -435,7 +417,7 @@ describe('getRequirement', () => {
     it('should handle empty standard', async () => {
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
-        standard: ''
+        standard: '',
       });
       expect(result).toBeNull();
     });
@@ -444,7 +426,7 @@ describe('getRequirement', () => {
       // SQL injection attempt should be handled safely
       const result = await getRequirement(db, {
         requirement_id: "SR 1.1'; DROP TABLE ot_requirements; --",
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
       expect(result).toBeNull();
 
@@ -469,7 +451,7 @@ describe('getRequirement', () => {
           'current',
           '2023-01-01',
           'https://www.iec.ch/62443-3-3',
-          'Test standard'
+          'Test standard',
         ]
       );
 
@@ -488,7 +470,7 @@ describe('getRequirement', () => {
           'SR 1',
           'Identification and Authentication Control',
           'Parent requirement',
-          'host'
+          'host',
         ]
       );
 
@@ -503,7 +485,7 @@ describe('getRequirement', () => {
           'The control system shall provide the capability to identify and authenticate all human users.',
           'Authentication is essential to ensure only authorized users can access the control system.',
           'host',
-          3
+          3,
         ]
       );
 
@@ -532,7 +514,7 @@ describe('getRequirement', () => {
           'exact_match',
           1.0,
           'Direct mapping',
-          '2024-01-01'
+          '2024-01-01',
         ]
       );
 
@@ -547,7 +529,7 @@ describe('getRequirement', () => {
           'partial_match',
           0.8,
           'Partial overlap',
-          '2024-01-01'
+          '2024-01-01',
         ]
       );
     });
@@ -555,7 +537,7 @@ describe('getRequirement', () => {
     it('should return complete RequirementDetail with all related data', async () => {
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       expect(result).not.toBeNull();
@@ -574,13 +556,13 @@ describe('getRequirement', () => {
 
       // Check security levels
       expect(result?.security_levels).toHaveLength(2);
-      expect(result?.security_levels.some(sl => sl.security_level === 2)).toBe(true);
-      expect(result?.security_levels.some(sl => sl.security_level === 3)).toBe(true);
+      expect(result?.security_levels.some((sl) => sl.security_level === 2)).toBe(true);
+      expect(result?.security_levels.some((sl) => sl.security_level === 3)).toBe(true);
 
       // Check mappings
       expect(result?.mappings).toHaveLength(2);
-      expect(result?.mappings.some(m => m.target_requirement === 'IA-2')).toBe(true);
-      expect(result?.mappings.some(m => m.source_requirement === 'IA-3')).toBe(true);
+      expect(result?.mappings.some((m) => m.target_requirement === 'IA-2')).toBe(true);
+      expect(result?.mappings.some((m) => m.source_requirement === 'IA-3')).toBe(true);
     });
   });
 });

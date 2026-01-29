@@ -1,0 +1,16 @@
+# Code Owners for OT Security MCP
+
+# Default owners for everything
+*       @Ansvar-Systems
+
+# CI/CD and security workflows
+/.github/workflows/  @Ansvar-Systems
+/SECURITY.md        @Ansvar-Systems
+
+# Database schema and security standards
+/src/database/schema.sql  @Ansvar-Systems
+/data/                    @Ansvar-Systems
+
+# Documentation
+/docs/  @Ansvar-Systems
+/*.md   @Ansvar-Systems

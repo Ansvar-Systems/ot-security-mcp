@@ -37,20 +37,42 @@ describe('DatabaseClient - Integration Test', () => {
     db.run(
       `INSERT INTO ot_standards (id, name, version, published_date, url, status, notes)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      ['iec62443-3-3', 'IEC 62443-3-3', 'v2.0', '2023-01-01', 'https://www.isa.org/standards/iec-62443', 'current', 'Security Level Requirements']
+      [
+        'iec62443-3-3',
+        'IEC 62443-3-3',
+        'v2.0',
+        '2023-01-01',
+        'https://www.isa.org/standards/iec-62443',
+        'current',
+        'Security Level Requirements',
+      ]
     );
 
     // Insert requirements with different security levels
     const sr11Result = db.run(
       `INSERT INTO ot_requirements (standard_id, requirement_id, title, description, component_type, purdue_level)
        VALUES (?, ?, ?, ?, ?, ?)`,
-      ['iec62443-3-3', 'SR 1.1', 'Human user identification', 'The control system shall provide the capability to identify and authenticate all human users.', 'host', 3]
+      [
+        'iec62443-3-3',
+        'SR 1.1',
+        'Human user identification',
+        'The control system shall provide the capability to identify and authenticate all human users.',
+        'host',
+        3,
+      ]
     );
 
     const sr12Result = db.run(
       `INSERT INTO ot_requirements (standard_id, requirement_id, title, description, component_type, purdue_level)
        VALUES (?, ?, ?, ?, ?, ?)`,
-      ['iec62443-3-3', 'SR 1.2', 'Software process and device identification', 'The control system shall provide the capability to identify and authenticate all software processes and devices.', 'embedded', 2]
+      [
+        'iec62443-3-3',
+        'SR 1.2',
+        'Software process and device identification',
+        'The control system shall provide the capability to identify and authenticate all software processes and devices.',
+        'embedded',
+        2,
+      ]
     );
 
     // Add security levels for each requirement
@@ -82,20 +104,39 @@ describe('DatabaseClient - Integration Test', () => {
     db.run(
       `INSERT INTO ot_mappings (source_standard, source_requirement, target_standard, target_requirement, mapping_type, confidence, notes)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      ['iec62443-3-3', 'SR 1.1', 'nist-800-82', 'IA-2', 'exact_match', 0.95, 'Both address user identification and authentication']
+      [
+        'iec62443-3-3',
+        'SR 1.1',
+        'nist-800-82',
+        'IA-2',
+        'exact_match',
+        0.95,
+        'Both address user identification and authentication',
+      ]
     );
 
     // Add MITRE ATT&CK data
     db.run(
       `INSERT INTO mitre_ics_techniques (technique_id, tactic, name, description, platforms, data_sources)
        VALUES (?, ?, ?, ?, ?, ?)`,
-      ['T0800', 'Initial Access', 'Exploit Public-Facing Application', 'Adversaries may attempt to exploit weaknesses in Internet-facing applications.', '["Windows", "Linux"]', '["Application logs", "Network traffic"]']
+      [
+        'T0800',
+        'Initial Access',
+        'Exploit Public-Facing Application',
+        'Adversaries may attempt to exploit weaknesses in Internet-facing applications.',
+        '["Windows", "Linux"]',
+        '["Application logs", "Network traffic"]',
+      ]
     );
 
     db.run(
       `INSERT INTO mitre_ics_mitigations (mitigation_id, name, description)
        VALUES (?, ?, ?)`,
-      ['M0800', 'Application Isolation and Sandboxing', 'Restrict execution to isolated environments']
+      [
+        'M0800',
+        'Application Isolation and Sandboxing',
+        'Restrict execution to isolated environments',
+      ]
     );
 
     db.run(
@@ -108,14 +149,29 @@ describe('DatabaseClient - Integration Test', () => {
     db.run(
       `INSERT INTO zones_conduits (zone_name, purdue_level, security_level_target, conduit_type, guidance_text, iec_reference)
        VALUES (?, ?, ?, ?, ?, ?)`,
-      ['DMZ Zone', 3, 2, 'Firewall', 'Use application-level firewall between enterprise and control systems', 'IEC 62443-3-2']
+      [
+        'DMZ Zone',
+        3,
+        2,
+        'Firewall',
+        'Use application-level firewall between enterprise and control systems',
+        'IEC 62443-3-2',
+      ]
     );
 
     // Add sector applicability
     db.run(
       `INSERT INTO sector_applicability (sector, jurisdiction, standard, applicability, threshold, regulatory_driver, effective_date)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      ['Energy', 'EU', 'IEC 62443-3-3', 'mandatory', 'High impact entities', 'NIS2 Directive', '2024-10-17']
+      [
+        'Energy',
+        'EU',
+        'IEC 62443-3-3',
+        'mandatory',
+        'High impact entities',
+        'NIS2 Directive',
+        '2024-10-17',
+      ]
     );
 
     // Now query the data to verify the workflow
@@ -139,9 +195,11 @@ describe('DatabaseClient - Integration Test', () => {
     );
     expect(securityLevels).toHaveLength(3);
 
-    const mappings = db.query<{ source_requirement: string; target_requirement: string; confidence: number }>(
-      'SELECT source_requirement, target_requirement, confidence FROM ot_mappings'
-    );
+    const mappings = db.query<{
+      source_requirement: string;
+      target_requirement: string;
+      confidence: number;
+    }>('SELECT source_requirement, target_requirement, confidence FROM ot_mappings');
     expect(mappings).toHaveLength(1);
     expect(mappings[0]?.source_requirement).toBe('SR 1.1');
     expect(mappings[0]?.target_requirement).toBe('IA-2');

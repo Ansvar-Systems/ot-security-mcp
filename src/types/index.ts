@@ -37,7 +37,13 @@ export type SecurityLevelValue = 1 | 2 | 3 | 4;
 /**
  * Mapping relationship types
  */
-export type MappingType = 'exact_match' | 'partial' | 'related' | 'supersedes' | 'broader' | 'narrower';
+export type MappingType =
+  | 'exact_match'
+  | 'partial'
+  | 'related'
+  | 'supersedes'
+  | 'broader'
+  | 'narrower';
 
 /**
  * Sector applicability levels

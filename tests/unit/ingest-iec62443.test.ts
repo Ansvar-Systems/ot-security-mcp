@@ -26,7 +26,7 @@ describe('Iec62443Ingester', () => {
           part: '3-3',
           title: 'IEC 62443-3-3',
           version: 'v2.0',
-          published_date: '2023-10-01'
+          published_date: '2023-10-01',
         },
         requirements: [
           {
@@ -38,27 +38,25 @@ describe('Iec62443Ingester', () => {
             component_type: 'host',
             security_levels: [
               { security_level: 2, sl_type: 'SL-T', capability_level: 1 },
-              { security_level: 3, sl_type: 'SL-C', capability_level: 2 }
-            ]
-          }
-        ]
+              { security_level: 3, sl_type: 'SL-C', capability_level: 2 },
+            ],
+          },
+        ],
       };
 
       ingester.ingestPart33(data);
 
       // Check requirement inserted
-      const req = db.queryOne<any>(
-        'SELECT * FROM ot_requirements WHERE requirement_id = ?',
-        ['SR 1.1']
-      );
+      const req = db.queryOne<any>('SELECT * FROM ot_requirements WHERE requirement_id = ?', [
+        'SR 1.1',
+      ]);
       expect(req).toBeDefined();
       expect(req.title).toBe('Human user identification');
 
       // Check security levels inserted
-      const levels = db.query<any>(
-        'SELECT * FROM security_levels WHERE requirement_db_id = ?',
-        [req.id]
-      );
+      const levels = db.query<any>('SELECT * FROM security_levels WHERE requirement_db_id = ?', [
+        req.id,
+      ]);
       expect(levels).toHaveLength(2);
       expect(levels[0].security_level).toBe(2);
       expect(levels[1].security_level).toBe(3);
@@ -70,7 +68,7 @@ describe('Iec62443Ingester', () => {
           part: '3-3',
           title: 'IEC 62443-3-3',
           version: 'v2.0',
-          published_date: '2023-10-01'
+          published_date: '2023-10-01',
         },
         requirements: [
           {
@@ -80,9 +78,7 @@ describe('Iec62443Ingester', () => {
             description: 'Base description',
             rationale: 'Base rationale',
             component_type: 'host',
-            security_levels: [
-              { security_level: 1, sl_type: 'SL-T', capability_level: 1 }
-            ]
+            security_levels: [{ security_level: 1, sl_type: 'SL-T', capability_level: 1 }],
           },
           {
             requirement_id: 'SR 1.1 RE 1',
@@ -91,19 +87,16 @@ describe('Iec62443Ingester', () => {
             description: 'Enhanced capability',
             rationale: 'Provides additional security',
             component_type: 'host',
-            security_levels: [
-              { security_level: 3, sl_type: 'SL-T', capability_level: 2 }
-            ]
-          }
-        ]
+            security_levels: [{ security_level: 3, sl_type: 'SL-T', capability_level: 2 }],
+          },
+        ],
       };
 
       ingester.ingestPart33(data);
 
-      const base = db.queryOne<any>(
-        'SELECT * FROM ot_requirements WHERE requirement_id = ?',
-        ['SR 1.1']
-      );
+      const base = db.queryOne<any>('SELECT * FROM ot_requirements WHERE requirement_id = ?', [
+        'SR 1.1',
+      ]);
       const enhancement = db.queryOne<any>(
         'SELECT * FROM ot_requirements WHERE requirement_id = ?',
         ['SR 1.1 RE 1']
@@ -122,7 +115,7 @@ describe('Iec62443Ingester', () => {
           part: '4-2',
           title: 'IEC 62443-4-2',
           version: 'v2.0',
-          published_date: '2023-10-01'
+          published_date: '2023-10-01',
         },
         requirements: [
           {
@@ -132,19 +125,16 @@ describe('Iec62443Ingester', () => {
             description: 'Component shall enforce...',
             rationale: 'Prevents unauthorized access',
             component_type: 'embedded',
-            security_levels: [
-              { security_level: 2, sl_type: 'SL-C', capability_level: 1 }
-            ]
-          }
-        ]
+            security_levels: [{ security_level: 2, sl_type: 'SL-C', capability_level: 1 }],
+          },
+        ],
       };
 
       ingester.ingestPart42(data);
 
-      const req = db.queryOne<any>(
-        'SELECT * FROM ot_requirements WHERE requirement_id = ?',
-        ['CR 2.1']
-      );
+      const req = db.queryOne<any>('SELECT * FROM ot_requirements WHERE requirement_id = ?', [
+        'CR 2.1',
+      ]);
       expect(req).toBeDefined();
       expect(req.standard_id).toBe('iec62443-4-2');
     });
@@ -157,7 +147,7 @@ describe('Iec62443Ingester', () => {
           part: '3-2',
           title: 'IEC 62443-3-2',
           version: 'v1.0',
-          published_date: '2020-06-01'
+          published_date: '2020-06-01',
         },
         zones: [
           {
@@ -165,18 +155,15 @@ describe('Iec62443Ingester', () => {
             purdue_level: 3,
             security_level_target: 2,
             description: 'DMZ for SCADA',
-            typical_assets: 'HMI, Historian'
-          }
+            typical_assets: 'HMI, Historian',
+          },
         ],
-        conduits: []
+        conduits: [],
       };
 
       ingester.ingestPart32(data);
 
-      const zone = db.queryOne<any>(
-        'SELECT * FROM zones WHERE name = ?',
-        ['Level 3 - SCADA DMZ']
-      );
+      const zone = db.queryOne<any>('SELECT * FROM zones WHERE name = ?', ['Level 3 - SCADA DMZ']);
       expect(zone).toBeDefined();
       expect(zone.purdue_level).toBe(3);
     });
@@ -187,7 +174,7 @@ describe('Iec62443Ingester', () => {
           part: '3-2',
           title: 'IEC 62443-3-2',
           version: 'v1.0',
-          published_date: '2020-06-01'
+          published_date: '2020-06-01',
         },
         zones: [],
         conduits: [
@@ -195,17 +182,14 @@ describe('Iec62443Ingester', () => {
             name: 'Firewall',
             conduit_type: 'filtered_bidirectional',
             description: 'Stateful firewall',
-            minimum_security_level: 2
-          }
-        ]
+            minimum_security_level: 2,
+          },
+        ],
       };
 
       ingester.ingestPart32(data);
 
-      const conduit = db.queryOne<any>(
-        'SELECT * FROM conduits WHERE name = ?',
-        ['Firewall']
-      );
+      const conduit = db.queryOne<any>('SELECT * FROM conduits WHERE name = ?', ['Firewall']);
       expect(conduit).toBeDefined();
       expect(conduit.conduit_type).toBe('filtered_bidirectional');
     });
@@ -215,7 +199,7 @@ describe('Iec62443Ingester', () => {
     it('should validate before ingestion', () => {
       const invalidData = {
         meta: { part: '3-3' }, // Missing required fields
-        requirements: []
+        requirements: [],
       };
 
       expect(() => ingester.ingestPart33(invalidData as any)).toThrow();
@@ -229,28 +213,28 @@ describe('Iec62443Ingester', () => {
           part: '3-2',
           title: 'IEC 62443-3-2',
           version: 'v1.0',
-          published_date: '2020-06-01'
+          published_date: '2020-06-01',
         },
         zones: [
           {
             name: 'Zone A',
             purdue_level: 2,
             security_level_target: 2,
-            description: 'Control zone'
+            description: 'Control zone',
           },
           {
             name: 'Zone B',
             purdue_level: 3,
             security_level_target: 2,
-            description: 'SCADA zone'
-          }
+            description: 'SCADA zone',
+          },
         ],
         conduits: [
           {
             name: 'Firewall AB',
             conduit_type: 'filtered_bidirectional',
-            description: 'Firewall between A and B'
-          }
+            description: 'Firewall between A and B',
+          },
         ],
         flows: [
           {
@@ -259,10 +243,10 @@ describe('Iec62443Ingester', () => {
             conduit_name: 'Firewall AB',
             data_flow_description: 'Process data flow',
             security_level_requirement: 2,
-            bidirectional: true
-          }
+            bidirectional: true,
+          },
         ],
-        reference_architectures: []
+        reference_architectures: [],
       };
 
       ingester.ingestPart32(data);
@@ -283,7 +267,7 @@ describe('Iec62443Ingester', () => {
           part: '3-2',
           title: 'IEC 62443-3-2',
           version: 'v1.0',
-          published_date: '2020-06-01'
+          published_date: '2020-06-01',
         },
         zones: [],
         conduits: [],
@@ -294,17 +278,16 @@ describe('Iec62443Ingester', () => {
             description: 'Standard ICS segmentation',
             diagram_url: 'https://example.com/purdue',
             applicable_zones: 'Levels 0-5',
-            industry_applicability: 'Manufacturing'
-          }
-        ]
+            industry_applicability: 'Manufacturing',
+          },
+        ],
       };
 
       ingester.ingestPart32(data);
 
-      const arch = db.queryOne<any>(
-        'SELECT * FROM reference_architectures WHERE name = ?',
-        ['Purdue Model']
-      );
+      const arch = db.queryOne<any>('SELECT * FROM reference_architectures WHERE name = ?', [
+        'Purdue Model',
+      ]);
       expect(arch).toBeDefined();
       expect(arch.industry_applicability).toBe('Manufacturing');
     });

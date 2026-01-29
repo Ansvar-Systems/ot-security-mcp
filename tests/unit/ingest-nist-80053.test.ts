@@ -41,7 +41,7 @@ describe('Nist80053Ingester', () => {
         catalog: {
           metadata: {
             title: 'NIST SP 800-53 Rev 5',
-            version: 'Rev 5'
+            version: 'Rev 5',
           },
           groups: [
             {
@@ -56,14 +56,14 @@ describe('Nist80053Ingester', () => {
                     {
                       id: 'ac-1_smt',
                       name: 'statement',
-                      prose: 'Develop, document, and disseminate access control policies...'
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                      prose: 'Develop, document, and disseminate access control policies...',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
       const controls = ingester.parseOscalCatalog(mockOscal);
@@ -79,7 +79,7 @@ describe('Nist80053Ingester', () => {
         catalog: {
           metadata: {
             title: 'NIST SP 800-53 Rev 5',
-            version: 'Rev 5'
+            version: 'Rev 5',
           },
           groups: [
             {
@@ -90,19 +90,21 @@ describe('Nist80053Ingester', () => {
                   id: 'au-1',
                   title: 'Policy and Procedures',
                   props: [{ name: 'label', value: 'AU-1' }],
-                  parts: []
-                }
-              ]
-            }
-          ]
-        }
+                  parts: [],
+                },
+              ],
+            },
+          ],
+        },
       };
 
       const controls = ingester.parseOscalCatalog(mockOscal);
       expect(controls).toHaveLength(1);
       expect(controls[0].control_id).toBe('AU-1');
       // When no statement parts exist, a fallback message is provided
-      expect(controls[0].description).toBe('Policy and Procedures. See NIST SP 800-53 Rev 5 for complete guidance.');
+      expect(controls[0].description).toBe(
+        'Policy and Procedures. See NIST SP 800-53 Rev 5 for complete guidance.'
+      );
     });
 
     it('should extract control ID from props label', () => {
@@ -110,7 +112,7 @@ describe('Nist80053Ingester', () => {
         catalog: {
           metadata: {
             title: 'NIST SP 800-53 Rev 5',
-            version: 'Rev 5'
+            version: 'Rev 5',
           },
           groups: [
             {
@@ -125,14 +127,14 @@ describe('Nist80053Ingester', () => {
                     {
                       id: 'cm-2_smt',
                       name: 'statement',
-                      prose: 'Develop, document, and maintain baseline configurations...'
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                      prose: 'Develop, document, and maintain baseline configurations...',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       };
 
       const controls = ingester.parseOscalCatalog(mockOscal);
@@ -144,16 +146,16 @@ describe('Nist80053Ingester', () => {
   describe('OT-Relevant Control Filtering', () => {
     it('should filter to OT-relevant control families', () => {
       const controls = [
-        { control_id: 'AC-1', family: 'AC', title: 'Test', description: 'Test' },    // OT-relevant
-        { control_id: 'AT-1', family: 'AT', title: 'Test', description: 'Test' },    // Not OT-relevant (Awareness Training)
-        { control_id: 'IA-2', family: 'IA', title: 'Test', description: 'Test' },    // OT-relevant
-        { control_id: 'PS-1', family: 'PS', title: 'Test', description: 'Test' },    // Not OT-relevant (Personnel Security)
-        { control_id: 'SC-7', family: 'SC', title: 'Test', description: 'Test' }     // OT-relevant
+        { control_id: 'AC-1', family: 'AC', title: 'Test', description: 'Test' }, // OT-relevant
+        { control_id: 'AT-1', family: 'AT', title: 'Test', description: 'Test' }, // Not OT-relevant (Awareness Training)
+        { control_id: 'IA-2', family: 'IA', title: 'Test', description: 'Test' }, // OT-relevant
+        { control_id: 'PS-1', family: 'PS', title: 'Test', description: 'Test' }, // Not OT-relevant (Personnel Security)
+        { control_id: 'SC-7', family: 'SC', title: 'Test', description: 'Test' }, // OT-relevant
       ];
 
       const filtered = ingester.filterOtRelevantControls(controls);
       expect(filtered).toHaveLength(3);
-      expect(filtered.map(c => c.control_id)).toEqual(['AC-1', 'IA-2', 'SC-7']);
+      expect(filtered.map((c) => c.control_id)).toEqual(['AC-1', 'IA-2', 'SC-7']);
     });
 
     it('should include all 12 OT-relevant families', () => {
@@ -162,12 +164,12 @@ describe('Nist80053Ingester', () => {
         control_id: `${family}-${idx + 1}`,
         family,
         title: 'Test',
-        description: 'Test'
+        description: 'Test',
       }));
 
       const filtered = ingester.filterOtRelevantControls(controls);
       expect(filtered).toHaveLength(12);
-      expect(filtered.map(c => c.family).sort()).toEqual(allFamilies.sort());
+      expect(filtered.map((c) => c.family).sort()).toEqual(allFamilies.sort());
     });
   });
 
@@ -184,8 +186,8 @@ describe('Nist80053Ingester', () => {
           control_id: 'AC-2',
           title: 'Account Management',
           description: 'Manage information system accounts...',
-          family: 'AC'
-        }
+          family: 'AC',
+        },
       ];
 
       ingester.ingestControls(mockControls);
@@ -196,10 +198,10 @@ describe('Nist80053Ingester', () => {
         title: string;
         description: string;
         component_type: string;
-      }>(
-        'SELECT * FROM ot_requirements WHERE standard_id = ? AND requirement_id = ?',
-        ['nist-800-53', 'AC-2']
-      );
+      }>('SELECT * FROM ot_requirements WHERE standard_id = ? AND requirement_id = ?', [
+        'nist-800-53',
+        'AC-2',
+      ]);
 
       expect(control).toBeDefined();
       expect(control?.standard_id).toBe('nist-800-53');
@@ -221,8 +223,8 @@ describe('Nist80053Ingester', () => {
           control_id: 'IA-5',
           title: 'Old Title',
           description: 'Old description',
-          family: 'IA'
-        }
+          family: 'IA',
+        },
       ];
 
       ingester.ingestControls(control1);
@@ -239,8 +241,8 @@ describe('Nist80053Ingester', () => {
           control_id: 'IA-5',
           title: 'Authenticator Management',
           description: 'Manage system authenticators...',
-          family: 'IA'
-        }
+          family: 'IA',
+        },
       ];
 
       ingester.ingestControls(control2);
@@ -252,10 +254,11 @@ describe('Nist80053Ingester', () => {
       expect(result?.title).toBe('Authenticator Management');
 
       // Should still have only one record
-      const count = db.queryOne<{ count: number }>(
-        'SELECT COUNT(*) as count FROM ot_requirements WHERE standard_id = ? AND requirement_id = ?',
-        ['nist-800-53', 'IA-5']
-      )?.count || 0;
+      const count =
+        db.queryOne<{ count: number }>(
+          'SELECT COUNT(*) as count FROM ot_requirements WHERE standard_id = ? AND requirement_id = ?',
+          ['nist-800-53', 'IA-5']
+        )?.count || 0;
       expect(count).toBe(1);
     });
 
@@ -271,28 +274,29 @@ describe('Nist80053Ingester', () => {
           control_id: 'SC-7',
           title: 'Boundary Protection',
           description: 'Monitor and control communications...',
-          family: 'SC'
+          family: 'SC',
         },
         {
           control_id: 'SC-8',
           title: 'Transmission Confidentiality and Integrity',
           description: 'Protect information during transmission...',
-          family: 'SC'
+          family: 'SC',
         },
         {
           control_id: 'SC-12',
           title: 'Cryptographic Key Establishment and Management',
           description: 'Establish and manage cryptographic keys...',
-          family: 'SC'
-        }
+          family: 'SC',
+        },
       ];
 
       ingester.ingestControls(mockControls);
 
-      const count = db.queryOne<{ count: number }>(
-        'SELECT COUNT(*) as count FROM ot_requirements WHERE standard_id = ?',
-        ['nist-800-53']
-      )?.count || 0;
+      const count =
+        db.queryOne<{ count: number }>(
+          'SELECT COUNT(*) as count FROM ot_requirements WHERE standard_id = ?',
+          ['nist-800-53']
+        )?.count || 0;
 
       expect(count).toBe(3);
     });

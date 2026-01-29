@@ -36,14 +36,14 @@ describe('getMitreTechnique', () => {
   describe('Empty Database', () => {
     it('should return null when technique not found', async () => {
       const result = await getMitreTechnique(db, {
-        technique_id: 'T0800'
+        technique_id: 'T0800',
       });
       expect(result).toBeNull();
     });
 
     it('should return null when technique_id is empty', async () => {
       const result = await getMitreTechnique(db, {
-        technique_id: ''
+        technique_id: '',
       });
       expect(result).toBeNull();
     });
@@ -61,14 +61,14 @@ describe('getMitreTechnique', () => {
           'Exploit Public-Facing Application',
           'Adversaries may exploit vulnerabilities in public-facing applications to gain initial access.',
           JSON.stringify(['Windows', 'Linux', 'Control Server']),
-          JSON.stringify(['Network Traffic', 'Application Logs'])
+          JSON.stringify(['Network Traffic', 'Application Logs']),
         ]
       );
     });
 
     it('should return technique with all fields', async () => {
       const result = await getMitreTechnique(db, {
-        technique_id: 'T0800'
+        technique_id: 'T0800',
       });
 
       expect(result).toBeDefined();
@@ -80,7 +80,7 @@ describe('getMitreTechnique', () => {
 
     it('should parse platforms JSON array correctly', async () => {
       const result = await getMitreTechnique(db, {
-        technique_id: 'T0800'
+        technique_id: 'T0800',
       });
 
       expect(result?.platforms).toEqual(['Windows', 'Linux', 'Control Server']);
@@ -89,7 +89,7 @@ describe('getMitreTechnique', () => {
 
     it('should parse data_sources JSON array correctly', async () => {
       const result = await getMitreTechnique(db, {
-        technique_id: 'T0800'
+        technique_id: 'T0800',
       });
 
       expect(result?.data_sources).toEqual(['Network Traffic', 'Application Logs']);
@@ -98,7 +98,7 @@ describe('getMitreTechnique', () => {
 
     it('should include mitigations array by default', async () => {
       const result = await getMitreTechnique(db, {
-        technique_id: 'T0800'
+        technique_id: 'T0800',
       });
 
       expect(result).toHaveProperty('mitigations');
@@ -107,7 +107,7 @@ describe('getMitreTechnique', () => {
 
     it('should include mapped_requirements array', async () => {
       const result = await getMitreTechnique(db, {
-        technique_id: 'T0800'
+        technique_id: 'T0800',
       });
 
       expect(result).toHaveProperty('mapped_requirements');
@@ -127,7 +127,7 @@ describe('getMitreTechnique', () => {
 
     it('should handle null platforms', async () => {
       const result = await getMitreTechnique(db, {
-        technique_id: 'T0801'
+        technique_id: 'T0801',
       });
 
       expect(result?.platforms).toBeNull();
@@ -135,7 +135,7 @@ describe('getMitreTechnique', () => {
 
     it('should handle null data_sources', async () => {
       const result = await getMitreTechnique(db, {
-        technique_id: 'T0801'
+        technique_id: 'T0801',
       });
 
       expect(result?.data_sources).toBeNull();
@@ -143,7 +143,7 @@ describe('getMitreTechnique', () => {
 
     it('should handle null description', async () => {
       const result = await getMitreTechnique(db, {
-        technique_id: 'T0801'
+        technique_id: 'T0801',
       });
 
       expect(result?.description).toBeNull();
@@ -162,7 +162,7 @@ describe('getMitreTechnique', () => {
           'Modify Program',
           'Adversaries may modify industrial control logic.',
           JSON.stringify(['Engineering Workstation']),
-          JSON.stringify(['File Monitoring'])
+          JSON.stringify(['File Monitoring']),
         ]
       );
 
@@ -173,18 +173,14 @@ describe('getMitreTechnique', () => {
         [
           'M0800',
           'Application Whitelisting',
-          'Use application whitelisting to prevent execution of unauthorized programs.'
+          'Use application whitelisting to prevent execution of unauthorized programs.',
         ]
       );
 
       db.run(
         `INSERT INTO mitre_ics_mitigations (mitigation_id, name, description)
          VALUES (?, ?, ?)`,
-        [
-          'M0801',
-          'Code Signing',
-          'Enforce code signing for all control logic.'
-        ]
+        ['M0801', 'Code Signing', 'Enforce code signing for all control logic.']
       );
 
       // Link technique to mitigations
@@ -203,20 +199,20 @@ describe('getMitreTechnique', () => {
 
     it('should include mitigations when include_mitigations is true (default)', async () => {
       const result = await getMitreTechnique(db, {
-        technique_id: 'T0802'
+        technique_id: 'T0802',
       });
 
       expect(result?.mitigations).toHaveLength(2);
-      expect(result?.mitigations.map(m => m.mitigation_id)).toContain('M0800');
-      expect(result?.mitigations.map(m => m.mitigation_id)).toContain('M0801');
+      expect(result?.mitigations.map((m) => m.mitigation_id)).toContain('M0800');
+      expect(result?.mitigations.map((m) => m.mitigation_id)).toContain('M0801');
     });
 
     it('should include mitigations when explicitly set to true', async () => {
       const result = await getMitreTechnique(db, {
         technique_id: 'T0802',
         options: {
-          include_mitigations: true
-        }
+          include_mitigations: true,
+        },
       });
 
       expect(result?.mitigations).toHaveLength(2);
@@ -226,8 +222,8 @@ describe('getMitreTechnique', () => {
       const result = await getMitreTechnique(db, {
         technique_id: 'T0802',
         options: {
-          include_mitigations: false
-        }
+          include_mitigations: false,
+        },
       });
 
       expect(result?.mitigations).toHaveLength(0);
@@ -236,10 +232,10 @@ describe('getMitreTechnique', () => {
 
     it('should return mitigation details with all fields', async () => {
       const result = await getMitreTechnique(db, {
-        technique_id: 'T0802'
+        technique_id: 'T0802',
       });
 
-      const mitigation = result?.mitigations.find(m => m.mitigation_id === 'M0800');
+      const mitigation = result?.mitigations.find((m) => m.mitigation_id === 'M0800');
       expect(mitigation).toBeDefined();
       expect(mitigation?.name).toBe('Application Whitelisting');
       expect(mitigation?.description).toContain('whitelisting');
@@ -254,7 +250,7 @@ describe('getMitreTechnique', () => {
       );
 
       const result = await getMitreTechnique(db, {
-        technique_id: 'T0803'
+        technique_id: 'T0803',
       });
 
       expect(result?.mitigations).toEqual([]);
@@ -301,7 +297,7 @@ describe('getMitreTechnique', () => {
 
     it('should return empty mapped_requirements when map_to_standards not provided', async () => {
       const result = await getMitreTechnique(db, {
-        technique_id: 'T0804'
+        technique_id: 'T0804',
       });
 
       expect(result?.mapped_requirements).toEqual([]);
@@ -311,8 +307,8 @@ describe('getMitreTechnique', () => {
       const result = await getMitreTechnique(db, {
         technique_id: 'T0804',
         options: {
-          map_to_standards: ['iec62443-3-3']
-        }
+          map_to_standards: ['iec62443-3-3'],
+        },
       });
 
       expect(result?.mapped_requirements).toHaveLength(1);
@@ -324,8 +320,8 @@ describe('getMitreTechnique', () => {
       const result = await getMitreTechnique(db, {
         technique_id: 'T0804',
         options: {
-          map_to_standards: ['nist-csf']
-        }
+          map_to_standards: ['nist-csf'],
+        },
       });
 
       expect(result?.mapped_requirements).toEqual([]);
@@ -361,12 +357,12 @@ describe('getMitreTechnique', () => {
       const result = await getMitreTechnique(db, {
         technique_id: 'T0804',
         options: {
-          map_to_standards: ['iec62443-3-3', 'nist-csf']
-        }
+          map_to_standards: ['iec62443-3-3', 'nist-csf'],
+        },
       });
 
       expect(result?.mapped_requirements).toHaveLength(2);
-      const reqIds = result?.mapped_requirements.map(r => r.requirement_id);
+      const reqIds = result?.mapped_requirements.map((r) => r.requirement_id);
       expect(reqIds).toContain('SR 1.1');
       expect(reqIds).toContain('ID.AM-1');
     });
@@ -388,8 +384,8 @@ describe('getMitreTechnique', () => {
       const result = await getMitreTechnique(db, {
         technique_id: 'T0804',
         options: {
-          map_to_standards: ['iec62443-3-3']
-        }
+          map_to_standards: ['iec62443-3-3'],
+        },
       });
 
       // Should return only one requirement despite two mitigations
@@ -401,7 +397,7 @@ describe('getMitreTechnique', () => {
   describe('Error Handling', () => {
     it('should return null for invalid technique_id format', async () => {
       const result = await getMitreTechnique(db, {
-        technique_id: 'INVALID'
+        technique_id: 'INVALID',
       });
 
       expect(result).toBeNull();
@@ -412,7 +408,7 @@ describe('getMitreTechnique', () => {
       db.close();
 
       const result = await getMitreTechnique(db, {
-        technique_id: 'T0800'
+        technique_id: 'T0800',
       });
 
       expect(result).toBeNull();
@@ -427,7 +423,7 @@ describe('getMitreTechnique', () => {
       );
 
       const result = await getMitreTechnique(db, {
-        technique_id: 'T0805'
+        technique_id: 'T0805',
       });
 
       // Should handle gracefully - either return null or parse error
@@ -447,7 +443,7 @@ describe('getMitreTechnique', () => {
           'Drive-by Compromise',
           'Adversaries may gain access through drive-by compromise.',
           JSON.stringify(['Human-Machine Interface']),
-          JSON.stringify(['Web Proxy', 'Network Traffic'])
+          JSON.stringify(['Web Proxy', 'Network Traffic']),
         ]
       );
 
@@ -484,8 +480,8 @@ describe('getMitreTechnique', () => {
         technique_id: 'T0806',
         options: {
           include_mitigations: true,
-          map_to_standards: ['iec62443-3-3']
-        }
+          map_to_standards: ['iec62443-3-3'],
+        },
       });
 
       expect(result).toBeDefined();

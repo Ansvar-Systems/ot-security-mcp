@@ -1,0 +1,51 @@
+# Development files
+tests/
+scripts/
+docs/
+.github/
+.husky/
+
+# Configuration files
+.eslintrc.json
+.prettierrc.json
+.prettierignore
+tsconfig.json
+vitest.config.ts
+commitlint.config.js
+.lintstagedrc.json
+
+# Test and coverage
+coverage/
+*.test.ts
+*.spec.ts
+
+# Build artifacts
+src/
+node_modules/
+
+# Data files (users will generate their own)
+data/*.db
+data/*.sqlite
+!data/templates/
+!data/*.json
+
+# Documentation
+*.md
+!README.md
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# Temporary files
+*.log
+*.tmp
+.DS_Store
+
+# Security test files
+test-queries.ts
+verify-production-ready.ts

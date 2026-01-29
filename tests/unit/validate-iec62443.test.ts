@@ -13,7 +13,7 @@ describe('Iec62443Validator', () => {
           part: '3-3',
           title: 'IEC 62443-3-3 Security Level Requirements',
           version: 'v2.0',
-          published_date: '2023-10-01'
+          published_date: '2023-10-01',
         },
         requirements: [
           {
@@ -25,10 +25,10 @@ describe('Iec62443Validator', () => {
             component_type: 'host',
             security_levels: [
               { security_level: 2, sl_type: 'SL-T', capability_level: 1 },
-              { security_level: 3, sl_type: 'SL-C', capability_level: 2 }
-            ]
-          }
-        ]
+              { security_level: 3, sl_type: 'SL-C', capability_level: 2 },
+            ],
+          },
+        ],
       };
 
       expect(() => validator.validate(valid33)).not.toThrow();
@@ -38,11 +38,13 @@ describe('Iec62443Validator', () => {
       const invalid = {
         meta: { part: '3-3' }, // Missing title, version
         requirements: [
-          { requirement_id: 'SR 1.1' } // Missing description
-        ]
+          { requirement_id: 'SR 1.1' }, // Missing description
+        ],
       };
 
-      expect(() => validator.validate(invalid)).toThrow(/missing required field|must have required property/i);
+      expect(() => validator.validate(invalid)).toThrow(
+        /missing required field|must have required property/i
+      );
     });
 
     it('should validate requirement enhancements (REs)', () => {
@@ -56,7 +58,7 @@ describe('Iec62443Validator', () => {
             description: 'Base description',
             rationale: 'Base rationale',
             component_type: 'host',
-            security_levels: [{ security_level: 1, sl_type: 'SL-T', capability_level: 1 }]
+            security_levels: [{ security_level: 1, sl_type: 'SL-T', capability_level: 1 }],
           },
           {
             requirement_id: 'SR 1.1 RE 1',
@@ -65,9 +67,9 @@ describe('Iec62443Validator', () => {
             description: 'Enhanced capability',
             rationale: 'Provides additional security',
             component_type: 'host',
-            security_levels: [{ security_level: 3, sl_type: 'SL-T', capability_level: 2 }]
-          }
-        ]
+            security_levels: [{ security_level: 3, sl_type: 'SL-T', capability_level: 2 }],
+          },
+        ],
       };
 
       expect(() => validator.validate(validRE)).not.toThrow();
@@ -81,7 +83,7 @@ describe('Iec62443Validator', () => {
           part: '4-2',
           title: 'IEC 62443-4-2 Component Security Requirements',
           version: 'v2.0',
-          published_date: '2023-10-01'
+          published_date: '2023-10-01',
         },
         requirements: [
           {
@@ -91,11 +93,9 @@ describe('Iec62443Validator', () => {
             description: 'The control component shall provide...',
             rationale: 'Component-level authentication...',
             component_type: 'embedded',
-            security_levels: [
-              { security_level: 1, sl_type: 'SL-C', capability_level: 1 }
-            ]
-          }
-        ]
+            security_levels: [{ security_level: 1, sl_type: 'SL-C', capability_level: 1 }],
+          },
+        ],
       };
 
       expect(() => validator.validate(valid42)).not.toThrow();
@@ -109,7 +109,7 @@ describe('Iec62443Validator', () => {
           part: '3-2',
           title: 'IEC 62443-3-2 Security Risk Assessment',
           version: 'v1.0',
-          published_date: '2020-06-01'
+          published_date: '2020-06-01',
         },
         zones: [
           {
@@ -117,17 +117,17 @@ describe('Iec62443Validator', () => {
             purdue_level: 3,
             security_level_target: 2,
             description: 'Demilitarized zone for SCADA servers',
-            typical_assets: 'HMI, Historian, Engineering Workstations'
-          }
+            typical_assets: 'HMI, Historian, Engineering Workstations',
+          },
         ],
         conduits: [
           {
             name: 'Firewall - Level 2 to Level 3',
             conduit_type: 'filtered_bidirectional',
             description: 'Stateful firewall with DPI',
-            minimum_security_level: 2
-          }
-        ]
+            minimum_security_level: 2,
+          },
+        ],
       };
 
       expect(() => validator.validate(valid32)).not.toThrow();

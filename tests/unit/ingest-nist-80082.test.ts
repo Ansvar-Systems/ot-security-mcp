@@ -24,7 +24,7 @@ describe('Nist80082Ingester', () => {
       meta: {
         title: 'NIST SP 800-82 Rev 3',
         version: 'Rev 3',
-        published_date: '2023-11-01'
+        published_date: '2023-11-01',
       },
       guidance: [
         {
@@ -33,9 +33,9 @@ describe('Nist80082Ingester', () => {
           title: 'Risk Assessment for ICS',
           description: 'Organizations should conduct risk assessments...',
           ics_context: 'ICS environments have unique risk factors...',
-          related_800_53_controls: ['RA-3', 'RA-5']
-        }
-      ]
+          related_800_53_controls: ['RA-3', 'RA-5'],
+        },
+      ],
     };
 
     expect(() => ingester.validateGuidanceStructure(validGuidance)).not.toThrow();
@@ -44,8 +44,8 @@ describe('Nist80082Ingester', () => {
   it('should reject invalid guidance structure', () => {
     const invalidGuidance = {
       guidance: [
-        { id: 'G-1' } // Missing required fields
-      ]
+        { id: 'G-1' }, // Missing required fields
+      ],
     };
 
     expect(() => ingester.validateGuidanceStructure(invalidGuidance)).toThrow();
@@ -56,7 +56,7 @@ describe('Nist80082Ingester', () => {
       meta: {
         title: 'NIST SP 800-82 Rev 3',
         version: 'Rev 3',
-        published_date: '2023-11-01'
+        published_date: '2023-11-01',
       },
       guidance: [
         {
@@ -65,9 +65,9 @@ describe('Nist80082Ingester', () => {
           title: 'Network Segmentation',
           description: 'Implement zones and conduits...',
           ics_context: 'Critical for ICS environments',
-          related_800_53_controls: ['SC-7', 'AC-4']
-        }
-      ]
+          related_800_53_controls: ['SC-7', 'AC-4'],
+        },
+      ],
     };
 
     const items = ingester.parseGuidance(mockGuidance);
@@ -89,8 +89,8 @@ describe('Nist80082Ingester', () => {
         title: 'Vulnerability Management',
         description: 'Establish vulnerability management process...',
         rationale: 'ICS systems often cannot be patched immediately',
-        related_controls: ['SI-2', 'RA-5']
-      }
+        related_controls: ['SI-2', 'RA-5'],
+      },
     ];
 
     ingester.ingestGuidance(mockItems);
@@ -118,8 +118,8 @@ describe('Nist80082Ingester', () => {
         title: 'Risk Assessment',
         description: 'Conduct ICS-specific risk assessments',
         rationale: 'ICS risk factors differ from IT',
-        related_controls: ['RA-3']
-      }
+        related_controls: ['RA-3'],
+      },
     ];
 
     ingester.ingestGuidance(mockItems);
@@ -144,13 +144,15 @@ describe('Nist80082Ingester', () => {
     db.run(`INSERT INTO ot_standards (id, name, version, status)
             VALUES ('nist-800-53', 'NIST SP 800-53', 'Rev 5', 'current')`);
 
-    const mockItems = [{
-      requirement_id: 'G-TEST',
-      title: 'Test Guidance',
-      description: 'Test description',
-      rationale: 'Test rationale',
-      related_controls: ['RA-3', 'RA-5']
-    }];
+    const mockItems = [
+      {
+        requirement_id: 'G-TEST',
+        title: 'Test Guidance',
+        description: 'Test description',
+        rationale: 'Test rationale',
+        related_controls: ['RA-3', 'RA-5'],
+      },
+    ];
 
     // First ingestion
     ingester.ingestGuidance(mockItems);

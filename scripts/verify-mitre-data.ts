@@ -10,17 +10,15 @@ const db = new DatabaseClient();
 console.log('\n=== MITRE ATT&CK ICS Data Verification ===\n');
 
 // Count totals
-const techniqueCount = db.queryOne<{ count: number }>(
-  'SELECT COUNT(*) as count FROM mitre_ics_techniques'
-)?.count || 0;
+const techniqueCount =
+  db.queryOne<{ count: number }>('SELECT COUNT(*) as count FROM mitre_ics_techniques')?.count || 0;
 
-const mitigationCount = db.queryOne<{ count: number }>(
-  'SELECT COUNT(*) as count FROM mitre_ics_mitigations'
-)?.count || 0;
+const mitigationCount =
+  db.queryOne<{ count: number }>('SELECT COUNT(*) as count FROM mitre_ics_mitigations')?.count || 0;
 
-const relationshipCount = db.queryOne<{ count: number }>(
-  'SELECT COUNT(*) as count FROM mitre_technique_mitigations'
-)?.count || 0;
+const relationshipCount =
+  db.queryOne<{ count: number }>('SELECT COUNT(*) as count FROM mitre_technique_mitigations')
+    ?.count || 0;
 
 console.log(`Total Techniques: ${techniqueCount}`);
 console.log(`Total Mitigations: ${mitigationCount}`);

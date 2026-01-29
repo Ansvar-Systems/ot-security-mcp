@@ -28,7 +28,7 @@ async function main() {
   console.log('Test 1: Empty database (should return null)');
   const result1 = await getRequirement(db, {
     requirement_id: 'SR 1.1',
-    standard: 'iec62443-3-3'
+    standard: 'iec62443-3-3',
   });
   console.log('Result:', result1);
   console.log('Expected: null');
@@ -49,7 +49,7 @@ async function main() {
       'current',
       '2023-01-01',
       'https://www.iec.ch/62443-3-3',
-      'Industrial communication networks - Network and system security'
+      'Industrial communication networks - Network and system security',
     ]
   );
 
@@ -65,7 +65,7 @@ async function main() {
       'The control system shall provide the capability to identify and authenticate all human users.',
       'Authentication is essential to ensure only authorized users can access the control system. This helps prevent unauthorized access and maintains accountability.',
       'host',
-      3
+      3,
     ]
   );
 
@@ -101,13 +101,13 @@ async function main() {
       'exact_match',
       1.0,
       'Direct mapping to NIST identification and authentication control',
-      '2024-01-01'
+      '2024-01-01',
     ]
   );
 
   const result2 = await getRequirement(db, {
     requirement_id: 'SR 1.1',
-    standard: 'iec62443-3-3'
+    standard: 'iec62443-3-3',
   });
 
   console.log('Result:');
@@ -115,7 +115,10 @@ async function main() {
   console.log();
   console.log('Validation:');
   console.log('  - Has requirement_id:', result2?.requirement_id === 'SR 1.1' ? '✓' : '✗');
-  console.log('  - Has standard metadata:', result2?.standard?.name === 'IEC 62443-3-3' ? '✓' : '✗');
+  console.log(
+    '  - Has standard metadata:',
+    result2?.standard?.name === 'IEC 62443-3-3' ? '✓' : '✗'
+  );
   console.log('  - Has security_levels:', result2?.security_levels?.length === 2 ? '✓' : '✗');
   console.log('  - Has mappings:', result2?.mappings?.length === 1 ? '✓' : '✗');
   console.log();
@@ -125,7 +128,7 @@ async function main() {
   const result3 = await getRequirement(db, {
     requirement_id: 'SR 1.1',
     standard: 'iec62443-3-3',
-    options: { include_mappings: false }
+    options: { include_mappings: false },
   });
 
   console.log('Mappings count:', result3?.mappings?.length);

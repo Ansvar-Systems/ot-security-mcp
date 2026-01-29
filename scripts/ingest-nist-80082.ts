@@ -68,7 +68,7 @@ export class Nist80082Ingester {
         title: item.title,
         description: item.description,
         rationale: item.ics_context,
-        related_controls: item.related_800_53_controls || []
+        related_controls: item.related_800_53_controls || [],
       });
     }
 
@@ -84,7 +84,8 @@ export class Nist80082Ingester {
 
     for (const item of items) {
       // Insert guidance as requirement
-      this.db.run(`
+      this.db.run(
+        `
         INSERT OR REPLACE INTO ot_requirements (
           standard_id,
           requirement_id,
@@ -93,20 +94,23 @@ export class Nist80082Ingester {
           rationale,
           component_type
         ) VALUES (?, ?, ?, ?, ?, ?)
-      `, [
-        'nist-800-82',
-        item.requirement_id,
-        item.title,
-        item.description,
-        item.rationale,
-        'guidance'
-      ]);
+      `,
+        [
+          'nist-800-82',
+          item.requirement_id,
+          item.title,
+          item.description,
+          item.rationale,
+          'guidance',
+        ]
+      );
 
       // Create mappings to 800-53 controls
       for (const controlId of item.related_controls) {
         if (controlId === 'ALL_FAMILIES') continue; // Skip meta-control
 
-        this.db.run(`
+        this.db.run(
+          `
           INSERT OR REPLACE INTO ot_mappings (
             source_standard,
             source_requirement,
@@ -117,15 +121,17 @@ export class Nist80082Ingester {
             notes,
             created_date
           ) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))
-        `, [
-          'nist-800-82',
-          item.requirement_id,
-          'nist-800-53',
-          controlId,
-          'related',
-          0.9,
-          'Guidance from NIST 800-82 for this control'
-        ]);
+        `,
+          [
+            'nist-800-82',
+            item.requirement_id,
+            'nist-800-53',
+            controlId,
+            'related',
+            0.9,
+            'Guidance from NIST 800-82 for this control',
+          ]
+        );
       }
     }
 
@@ -140,18 +146,21 @@ export class Nist80082Ingester {
 
     try {
       // Ensure standard exists
-      this.db.run(`
+      this.db.run(
+        `
         INSERT OR IGNORE INTO ot_standards (id, name, version, published_date, url, status, notes)
         VALUES (?, ?, ?, ?, ?, ?, ?)
-      `, [
-        'nist-800-82',
-        'NIST SP 800-82: Guide to Operational Technology Security',
-        'Rev 3',
-        '2023-11-01',
-        'https://csrc.nist.gov/publications/detail/sp/800-82/rev-3/final',
-        'current',
-        'OT-specific security guidance and ICS overlay for NIST 800-53'
-      ]);
+      `,
+        [
+          'nist-800-82',
+          'NIST SP 800-82: Guide to Operational Technology Security',
+          'Rev 3',
+          '2023-11-01',
+          'https://csrc.nist.gov/publications/detail/sp/800-82/rev-3/final',
+          'current',
+          'OT-specific security guidance and ICS overlay for NIST 800-53',
+        ]
+      );
 
       // Load guidance JSON
       const jsonPath = resolve('data/nist-80082-guidance.json');
@@ -186,7 +195,6 @@ export class Nist80082Ingester {
       console.log(`NIST 800-82 guidance items: ${requirementCount?.count || 0}`);
       console.log(`Mappings to NIST 800-53: ${mappingCount?.count || 0}`);
       console.log('==========================\n');
-
     } catch (error) {
       console.error('\n=== Ingestion Failed ===');
       console.error('Error:', error);
@@ -202,7 +210,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
   const ingester = new Nist80082Ingester(db);
 
-  ingester.ingestAll()
+  ingester
+    .ingestAll()
     .then(() => {
       db.close();
       process.exit(0);

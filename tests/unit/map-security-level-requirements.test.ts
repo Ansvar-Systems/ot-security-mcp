@@ -85,7 +85,7 @@ describe('mapSecurityLevelRequirements', () => {
     const result = await mapSecurityLevelRequirements(db, { security_level: 2 });
 
     expect(result).toHaveLength(2); // SR 1.1, SR 2.1
-    expect(result.map(r => r.requirement_id).sort()).toEqual(['SR 1.1', 'SR 2.1']);
+    expect(result.map((r) => r.requirement_id).sort()).toEqual(['SR 1.1', 'SR 2.1']);
   });
 
   it('should return requirements for SL-3', async () => {
@@ -98,7 +98,7 @@ describe('mapSecurityLevelRequirements', () => {
   it('should return requirements for SL-4 including enhancements', async () => {
     const result = await mapSecurityLevelRequirements(db, {
       security_level: 4,
-      include_enhancements: true
+      include_enhancements: true,
     });
 
     expect(result).toHaveLength(1); // SR 1.1 RE 1
@@ -108,7 +108,7 @@ describe('mapSecurityLevelRequirements', () => {
   it('should exclude enhancements when include_enhancements is false', async () => {
     const result = await mapSecurityLevelRequirements(db, {
       security_level: 4,
-      include_enhancements: false
+      include_enhancements: false,
     });
 
     expect(result).toHaveLength(0); // No base requirements at SL-4
@@ -117,7 +117,7 @@ describe('mapSecurityLevelRequirements', () => {
   it('should filter by component type', async () => {
     const result = await mapSecurityLevelRequirements(db, {
       security_level: 2,
-      component_type: 'network'
+      component_type: 'network',
     });
 
     expect(result).toHaveLength(1); // SR 2.1
@@ -127,13 +127,13 @@ describe('mapSecurityLevelRequirements', () => {
   it('should return security levels with each requirement', async () => {
     const result = await mapSecurityLevelRequirements(db, { security_level: 2 });
 
-    const sr11 = result.find(r => r.requirement_id === 'SR 1.1');
+    const sr11 = result.find((r) => r.requirement_id === 'SR 1.1');
     expect(sr11?.security_levels).toBeDefined();
     expect(sr11?.security_levels.length).toBeGreaterThan(0);
     expect(sr11?.security_levels).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ security_level: 2 }),
-        expect.objectContaining({ security_level: 3 })
+        expect.objectContaining({ security_level: 3 }),
       ])
     );
   });

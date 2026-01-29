@@ -2,22 +2,51 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
+
+permissions:
+  contents: read
+  pull-requests: read
+  security-events: write
 
 jobs:
+  lint:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Check formatting
+        run: npm run format:check
+        continue-on-error: true
+
   test:
+    name: Test (Node ${{ matrix.node-version }})
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [18.x, 20.x, 22.x]
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
@@ -29,29 +58,111 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Run tests
-        run: npm test
+      - name: Run tests with coverage
+        run: npm run test:coverage
 
-      - name: Ingest MITRE data
-        run: npm run ingest:mitre
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        if: matrix.node-version == '20.x'
+        with:
+          file: ./coverage/coverage-final.json
+          flags: unittests
+          fail_ci_if_error: false
 
-      - name: Verify MITRE data integrity
+      - name: Ingest test data
         run: |
-          # Check that data was ingested successfully
-          if [ ! -f "data/ot-security.sqlite" ]; then
-            echo "Error: Database not created"
-            exit 1
-          fi
+          npm run ingest:mitre
+          npm run ingest:iec62443 data/templates/iec62443-3-3-template.json
+          npm run ingest:iec62443 data/templates/iec62443-4-2-template.json
+          npm run ingest:iec62443 data/templates/iec62443-3-2-template.json
 
-          # Run a simple query to verify data exists
-          npx tsx -e "
-          import Database from 'better-sqlite3';
-          const db = new Database('data/ot-security.sqlite');
-          const techniques = db.prepare('SELECT COUNT(*) as count FROM mitre_techniques').get();
-          const mitigations = db.prepare('SELECT COUNT(*) as count FROM mitre_mitigations').get();
-          console.log('Techniques:', techniques.count);
-          console.log('Mitigations:', mitigations.count);
-          if (techniques.count === 0 || mitigations.count === 0) {
-            process.exit(1);
-          }
-          "
+      - name: Verify data integrity
+        run: npm run verify:integrity
+
+  security:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+
+      - name: SAST - Semgrep
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+            p/secrets
+            p/typescript
+            p/nodejs
+        continue-on-error: true
+
+  type-check:
+    name: TypeScript Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+  build-verification:
+    name: Build Verification
+    runs-on: ubuntu-latest
+    needs: [lint, test, type-check]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify build artifacts
+        run: |
+          test -f dist/index.js || exit 1
+          test -f dist/index.d.ts || exit 1
+          test -f dist/database/schema.sql || exit 1
+          echo "✓ All build artifacts present"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: dist/
+          retention-days: 7
+
+  all-checks-pass:
+    name: All Checks Passing
+    runs-on: ubuntu-latest
+    needs: [lint, test, security, type-check, build-verification]
+    steps:
+      - name: All checks passed
+        run: echo "✅ All CI checks passed successfully"

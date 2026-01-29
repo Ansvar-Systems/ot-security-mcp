@@ -81,11 +81,11 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
       expect(results.length).toBeGreaterThan(0);
 
       // Verify results include multiple standards
-      const standardIds = new Set(results.map(r => r.standard_id));
+      const standardIds = new Set(results.map((r) => r.standard_id));
       expect(standardIds.size).toBeGreaterThan(0);
 
       // Each result should have proper structure
-      results.forEach(result => {
+      results.forEach((result) => {
         expect(result).toHaveProperty('requirement_id');
         expect(result).toHaveProperty('standard_id');
         expect(result).toHaveProperty('snippet');
@@ -122,7 +122,7 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
         // Step 3: Verify mapping to NIST 800-53 exists (if mapped)
         if (detailedReq?.related_standards && detailedReq.related_standards.length > 0) {
           const nist53Mapping = detailedReq.related_standards.find(
-            r => r.standard_id === 'nist-800-53'
+            (r) => r.standard_id === 'nist-800-53'
           );
           if (nist53Mapping) {
             expect(nist53Mapping.requirement_id).toBeDefined();
@@ -144,11 +144,11 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
       expect(sl2Requirements.length).toBeGreaterThan(0);
 
       // All requirements should have security_level 2
-      sl2Requirements.forEach(req => {
+      sl2Requirements.forEach((req) => {
         expect(req.security_levels).toBeDefined();
         expect(Array.isArray(req.security_levels)).toBe(true);
 
-        const hasSL2 = req.security_levels.some(sl => sl.security_level === 2);
+        const hasSL2 = req.security_levels.some((sl) => sl.security_level === 2);
         expect(hasSL2).toBe(true);
       });
     });
@@ -163,7 +163,7 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
       expect(Array.isArray(systemReqs)).toBe(true);
 
       if (systemReqs.length > 0) {
-        systemReqs.forEach(req => {
+        systemReqs.forEach((req) => {
           expect(req.component_type).toBeDefined();
           expect(['system', 'both']).toContain(req.component_type);
         });
@@ -186,9 +186,9 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
       expect(sl4Reqs.length).toBeGreaterThanOrEqual(sl2Reqs.length);
 
       // Verify SL-4 requirements have appropriate security levels
-      sl4Reqs.forEach(req => {
+      sl4Reqs.forEach((req) => {
         const hasValidLevel = req.security_levels.some(
-          sl => sl.security_level >= 1 && sl.security_level <= 4
+          (sl) => sl.security_level >= 1 && sl.security_level <= 4
         );
         expect(hasValidLevel).toBe(true);
       });
@@ -196,14 +196,14 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
 
     it('should validate security level bounds (1-4)', async () => {
       // Test lower bound
-      await expect(
-        mapSecurityLevelRequirements(db, { security_level: 0 })
-      ).rejects.toThrow('Security level must be between 1 and 4');
+      await expect(mapSecurityLevelRequirements(db, { security_level: 0 })).rejects.toThrow(
+        'Security level must be between 1 and 4'
+      );
 
       // Test upper bound
-      await expect(
-        mapSecurityLevelRequirements(db, { security_level: 5 })
-      ).rejects.toThrow('Security level must be between 1 and 4');
+      await expect(mapSecurityLevelRequirements(db, { security_level: 5 })).rejects.toThrow(
+        'Security level must be between 1 and 4'
+      );
     });
   });
 
@@ -220,7 +220,7 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
       expect(result.zones.length).toBeGreaterThan(0);
 
       // Find Level 3 zone
-      const level3Zone = result.zones.find(z => z.purdue_level === 3);
+      const level3Zone = result.zones.find((z) => z.purdue_level === 3);
       expect(level3Zone).toBeDefined();
       expect(level3Zone?.name).toBe('Level 3 - SCADA DMZ');
       expect(level3Zone?.security_level_target).toBe(2);
@@ -256,7 +256,7 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
       expect(Array.isArray(result.zones)).toBe(true);
 
       if (result.zones.length > 0) {
-        result.zones.forEach(zone => {
+        result.zones.forEach((zone) => {
           expect(zone.purdue_level).toBe(2);
         });
       }
@@ -325,7 +325,7 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
       expect(rationaleResult?.security_levels).toBeDefined();
 
       // Each security level should have detailed information
-      rationaleResult?.security_levels.forEach(sl => {
+      rationaleResult?.security_levels.forEach((sl) => {
         expect(sl.security_level).toBeGreaterThanOrEqual(1);
         expect(sl.security_level).toBeLessThanOrEqual(4);
         expect(sl.sl_type).toBeDefined();
@@ -508,7 +508,7 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
         'SELECT id, name, purdue_level FROM zones'
       );
 
-      zones.forEach(zone => {
+      zones.forEach((zone) => {
         expect(zone.purdue_level).toBeGreaterThanOrEqual(0);
         expect(zone.purdue_level).toBeLessThanOrEqual(5);
       });
@@ -583,9 +583,12 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
           options: {},
         });
 
-        if (detailed && detailed.standard_id.startsWith('iec62443') &&
-            !detailed.requirement_id.includes('Zone') &&
-            !detailed.requirement_id.includes('Conduit')) {
+        if (
+          detailed &&
+          detailed.standard_id.startsWith('iec62443') &&
+          !detailed.requirement_id.includes('Zone') &&
+          !detailed.requirement_id.includes('Conduit')
+        ) {
           // Regular requirements should have security levels
           expect(detailed.security_levels).toBeDefined();
           expect(Array.isArray(detailed.security_levels)).toBe(true);
@@ -597,12 +600,12 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
       const zones = db.query<{
         id: number;
         name: string;
-        security_level_target: number | null
+        security_level_target: number | null;
       }>(
         'SELECT id, name, security_level_target FROM zones WHERE security_level_target IS NOT NULL'
       );
 
-      zones.forEach(zone => {
+      zones.forEach((zone) => {
         if (zone.security_level_target !== null) {
           expect(zone.security_level_target).toBeGreaterThanOrEqual(1);
           expect(zone.security_level_target).toBeLessThanOrEqual(4);
@@ -629,7 +632,8 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
       // We should have some mappings
       expect(mappings.length).toBeGreaterThan(0);
 
-      for (const mapping of mappings.slice(0, 5)) { // Test first 5 to avoid timeout
+      for (const mapping of mappings.slice(0, 5)) {
+        // Test first 5 to avoid timeout
         // Verify source requirement exists
         const sourceReq = await getRequirement(db, {
           requirement_id: mapping.source_req,
@@ -651,7 +655,7 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
     it('should verify all standards report accurate requirement counts', async () => {
       const standards = await listStandards(db);
 
-      standards.forEach(standard => {
+      standards.forEach((standard) => {
         // Count requirements directly from database
         const actualCount = db.queryOne<{ count: number }>(
           `SELECT COUNT(*) as count FROM ot_requirements WHERE standard_id = ?`,

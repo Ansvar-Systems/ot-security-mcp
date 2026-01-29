@@ -9,7 +9,7 @@ import {
   OTRequirement,
   OTStandard,
   OTMapping,
-  SecurityLevel
+  SecurityLevel,
 } from '../types/index.js';
 
 /**
@@ -40,7 +40,7 @@ export async function getRequirement(
 
   // Extract options with defaults
   const {
-    include_mappings = true
+    include_mappings = true,
     // TODO: Stage 1 - version parameter will be implemented when multi-version support is added
     // version
   } = options;
@@ -68,10 +68,9 @@ export async function getRequirement(
     }
 
     // Step 2: Get the standard metadata
-    const standardData = db.queryOne<OTStandard>(
-      `SELECT * FROM ot_standards WHERE id = ?`,
-      [standard]
-    );
+    const standardData = db.queryOne<OTStandard>(`SELECT * FROM ot_standards WHERE id = ?`, [
+      standard,
+    ]);
 
     if (!standardData) {
       // This shouldn't happen if FK constraints are working, but handle gracefully
@@ -101,7 +100,7 @@ export async function getRequirement(
       ...requirement,
       standard: standardData,
       mappings,
-      security_levels
+      security_levels,
     };
 
     return result;

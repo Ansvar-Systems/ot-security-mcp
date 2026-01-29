@@ -37,7 +37,7 @@ describe('getRequirementRationale', () => {
     it('should return null when requirement not found', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
       expect(result).toBeNull();
     });
@@ -45,7 +45,7 @@ describe('getRequirementRationale', () => {
     it('should return null when standard does not exist', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: 'SR 1.1',
-        standard: 'nonexistent-standard'
+        standard: 'nonexistent-standard',
       });
       expect(result).toBeNull();
     });
@@ -53,7 +53,7 @@ describe('getRequirementRationale', () => {
     it('should return null with empty requirement_id', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: '',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
       expect(result).toBeNull();
     });
@@ -61,7 +61,7 @@ describe('getRequirementRationale', () => {
     it('should return null with empty standard', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: 'SR 1.1',
-        standard: ''
+        standard: '',
       });
       expect(result).toBeNull();
     });
@@ -80,7 +80,7 @@ describe('getRequirementRationale', () => {
           'current',
           '2023-01-01',
           'https://www.iec.ch/62443-3-3',
-          'Security for industrial automation and control systems'
+          'Security for industrial automation and control systems',
         ]
       );
 
@@ -96,7 +96,7 @@ describe('getRequirementRationale', () => {
           'The control system shall provide the capability to identify and authenticate all human users.',
           'User authentication is essential to ensure that only authorized individuals can access the control system. Without proper authentication, unauthorized users could potentially compromise system integrity, manipulate process variables, or exfiltrate sensitive operational data. This requirement mitigates risks associated with unauthorized access and supports non-repudiation.',
           'host',
-          3
+          3,
         ]
       );
 
@@ -131,7 +131,7 @@ describe('getRequirementRationale', () => {
           'critical infrastructure',
           'NERC CIP, TSA Security Directive',
           '2024-01-01',
-          'Required for critical energy infrastructure'
+          'Required for critical energy infrastructure',
         ]
       );
 
@@ -146,7 +146,7 @@ describe('getRequirementRationale', () => {
           'industrial facilities',
           'NIS2 Directive',
           '2024-10-17',
-          'Recommended for essential entities under NIS2'
+          'Recommended for essential entities under NIS2',
         ]
       );
     });
@@ -154,7 +154,7 @@ describe('getRequirementRationale', () => {
     it('should return complete rationale for IEC 62443 requirement', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       expect(result).not.toBeNull();
@@ -167,7 +167,7 @@ describe('getRequirementRationale', () => {
     it('should include standard metadata', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       expect(result?.standard.id).toBe('iec62443-3-3');
@@ -179,7 +179,7 @@ describe('getRequirementRationale', () => {
     it('should include security levels ordered by level', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       expect(result?.security_levels).toHaveLength(3);
@@ -192,20 +192,20 @@ describe('getRequirementRationale', () => {
     it('should include regulatory context', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       expect(result?.regulatory_context).toHaveLength(2);
 
       // Check energy sector context
-      const energyContext = result?.regulatory_context.find(rc => rc.sector === 'energy');
+      const energyContext = result?.regulatory_context.find((rc) => rc.sector === 'energy');
       expect(energyContext).toBeDefined();
       expect(energyContext?.jurisdiction).toBe('US');
       expect(energyContext?.applicability).toBe('mandatory');
       expect(energyContext?.regulatory_driver).toContain('NERC CIP');
 
       // Check manufacturing sector context
-      const mfgContext = result?.regulatory_context.find(rc => rc.sector === 'manufacturing');
+      const mfgContext = result?.regulatory_context.find((rc) => rc.sector === 'manufacturing');
       expect(mfgContext).toBeDefined();
       expect(mfgContext?.jurisdiction).toBe('EU');
       expect(mfgContext?.regulatory_driver).toContain('NIS2');
@@ -214,7 +214,7 @@ describe('getRequirementRationale', () => {
     it('should have empty related_standards when no mappings exist', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       expect(result?.related_standards).toHaveLength(0);
@@ -233,7 +233,7 @@ describe('getRequirementRationale', () => {
           'r5',
           'current',
           '2020-09-23',
-          'https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final'
+          'https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final',
         ]
       );
 
@@ -247,7 +247,7 @@ describe('getRequirementRationale', () => {
           'Account Management',
           'The organization manages information system accounts.',
           'Proper account management is critical for maintaining system security and ensuring that access is granted only to authorized users. This control helps prevent unauthorized access, supports accountability through audit trails, and enables timely detection of suspicious activities. Account management includes processes for account creation, activation, modification, review, and termination.',
-          'host'
+          'host',
         ]
       );
 
@@ -262,7 +262,7 @@ describe('getRequirementRationale', () => {
           'mandatory',
           'federal information systems',
           'FISMA',
-          '2021-09-23'
+          '2021-09-23',
         ]
       );
     });
@@ -270,7 +270,7 @@ describe('getRequirementRationale', () => {
     it('should return complete rationale for NIST requirement', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: 'AC-2',
-        standard: 'nist-800-53'
+        standard: 'nist-800-53',
       });
 
       expect(result).not.toBeNull();
@@ -283,7 +283,7 @@ describe('getRequirementRationale', () => {
     it('should have empty security_levels for NIST (non-IEC) standard', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: 'AC-2',
-        standard: 'nist-800-53'
+        standard: 'nist-800-53',
       });
 
       expect(result?.security_levels).toHaveLength(0);
@@ -292,7 +292,7 @@ describe('getRequirementRationale', () => {
     it('should include NIST regulatory context', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: 'AC-2',
-        standard: 'nist-800-53'
+        standard: 'nist-800-53',
       });
 
       expect(result?.regulatory_context).toHaveLength(1);
@@ -320,7 +320,7 @@ describe('getRequirementRationale', () => {
           'REQ-1',
           'Test Requirement',
           'A test requirement description',
-          null  // No rationale provided
+          null, // No rationale provided
         ]
       );
     });
@@ -328,7 +328,7 @@ describe('getRequirementRationale', () => {
     it('should return result with null rationale', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: 'REQ-1',
-        standard: 'test-standard'
+        standard: 'test-standard',
       });
 
       expect(result).not.toBeNull();
@@ -339,7 +339,7 @@ describe('getRequirementRationale', () => {
     it('should include other fields even without rationale', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: 'REQ-1',
-        standard: 'test-standard'
+        standard: 'test-standard',
       });
 
       expect(result?.requirement).toBeDefined();
@@ -380,7 +380,7 @@ describe('getRequirementRationale', () => {
           'SR 1.1',
           'Authentication',
           'User authentication',
-          'Ensures authorized access only'
+          'Ensures authorized access only',
         ]
       );
 
@@ -396,7 +396,7 @@ describe('getRequirementRationale', () => {
           'exact_match',
           1.0,
           'Direct mapping for authentication',
-          '2024-01-01'
+          '2024-01-01',
         ]
       );
 
@@ -411,7 +411,7 @@ describe('getRequirementRationale', () => {
           'partial',
           0.8,
           'Partial overlap with account management',
-          '2024-01-01'
+          '2024-01-01',
         ]
       );
 
@@ -426,7 +426,7 @@ describe('getRequirementRationale', () => {
           'related',
           0.6,
           'Related to identification',
-          '2024-01-01'
+          '2024-01-01',
         ]
       );
     });
@@ -434,7 +434,7 @@ describe('getRequirementRationale', () => {
     it('should include related standards from mappings', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       expect(result?.related_standards).toHaveLength(3);
@@ -443,7 +443,7 @@ describe('getRequirementRationale', () => {
     it('should order related standards by confidence (descending)', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       // Should be ordered: 1.0, 0.8, 0.6
@@ -455,11 +455,11 @@ describe('getRequirementRationale', () => {
     it('should correctly identify target standards when source', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       const nist53Mapping = result?.related_standards.find(
-        rs => rs.standard === 'nist-800-53' && rs.requirement_id === 'IA-2'
+        (rs) => rs.standard === 'nist-800-53' && rs.requirement_id === 'IA-2'
       );
       expect(nist53Mapping).toBeDefined();
       expect(nist53Mapping?.mapping_type).toBe('exact_match');
@@ -469,11 +469,11 @@ describe('getRequirementRationale', () => {
     it('should correctly identify source standards when target', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       const nist82Mapping = result?.related_standards.find(
-        rs => rs.standard === 'nist-800-82' && rs.requirement_id === 'AC-2'
+        (rs) => rs.standard === 'nist-800-82' && rs.requirement_id === 'AC-2'
       );
       expect(nist82Mapping).toBeDefined();
       expect(nist82Mapping?.mapping_type).toBe('partial');
@@ -483,10 +483,10 @@ describe('getRequirementRationale', () => {
     it('should include mapping_type for all related standards', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
-      result?.related_standards.forEach(rs => {
+      result?.related_standards.forEach((rs) => {
         expect(rs.mapping_type).toBeDefined();
         expect(['exact_match', 'partial', 'related']).toContain(rs.mapping_type);
       });
@@ -497,7 +497,7 @@ describe('getRequirementRationale', () => {
     it('should handle SQL injection attempts safely', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: "SR 1.1'; DROP TABLE ot_requirements; --",
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       expect(result).toBeNull();
@@ -512,7 +512,7 @@ describe('getRequirementRationale', () => {
     it('should handle whitespace-only requirement_id', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: '   ',
-        standard: 'iec62443-3-3'
+        standard: 'iec62443-3-3',
       });
 
       expect(result).toBeNull();
@@ -521,7 +521,7 @@ describe('getRequirementRationale', () => {
     it('should handle whitespace-only standard', async () => {
       const result = await getRequirementRationale(db, {
         requirement_id: 'SR 1.1',
-        standard: '   '
+        standard: '   ',
       });
 
       expect(result).toBeNull();

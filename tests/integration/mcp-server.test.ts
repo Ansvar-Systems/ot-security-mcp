@@ -47,7 +47,7 @@ describe('McpServer', () => {
       const tables = db.query<{ name: string }>(
         `SELECT name FROM sqlite_master WHERE type='table' ORDER BY name`
       );
-      const tableNames = tables.map(t => t.name);
+      const tableNames = tables.map((t) => t.name);
 
       expect(tableNames).toContain('ot_standards');
       expect(tableNames).toContain('ot_requirements');
@@ -84,7 +84,7 @@ describe('McpServer', () => {
       expect(tools).toBeDefined();
       expect(tools).toHaveLength(7);
 
-      const toolNames = tools.map(t => t.name);
+      const toolNames = tools.map((t) => t.name);
       expect(toolNames).toContain('search_ot_requirements');
       expect(toolNames).toContain('get_ot_requirement');
       expect(toolNames).toContain('list_ot_standards');
@@ -97,7 +97,7 @@ describe('McpServer', () => {
     it('should have valid JSON schemas for all tools', () => {
       const tools = registerTools();
 
-      tools.forEach(tool => {
+      tools.forEach((tool) => {
         expect(tool.name).toBeDefined();
         expect(tool.description).toBeDefined();
         expect(tool.inputSchema).toBeDefined();
@@ -109,7 +109,7 @@ describe('McpServer', () => {
 
     it('should have correct required parameters for search_ot_requirements', () => {
       const tools = registerTools();
-      const searchTool = tools.find(t => t.name === 'search_ot_requirements');
+      const searchTool = tools.find((t) => t.name === 'search_ot_requirements');
 
       expect(searchTool).toBeDefined();
       expect(searchTool?.inputSchema.required).toContain('query');
@@ -122,7 +122,7 @@ describe('McpServer', () => {
 
     it('should have correct required parameters for get_ot_requirement', () => {
       const tools = registerTools();
-      const getTool = tools.find(t => t.name === 'get_ot_requirement');
+      const getTool = tools.find((t) => t.name === 'get_ot_requirement');
 
       expect(getTool).toBeDefined();
       expect(getTool?.inputSchema.required).toContain('requirement_id');
@@ -135,7 +135,7 @@ describe('McpServer', () => {
 
     it('should have no required parameters for list_ot_standards', () => {
       const tools = registerTools();
-      const listTool = tools.find(t => t.name === 'list_ot_standards');
+      const listTool = tools.find((t) => t.name === 'list_ot_standards');
 
       expect(listTool).toBeDefined();
       expect(listTool?.inputSchema.required).toHaveLength(0);
@@ -143,7 +143,7 @@ describe('McpServer', () => {
 
     it('should have correct required parameters for get_mitre_ics_technique', () => {
       const tools = registerTools();
-      const mitreTool = tools.find(t => t.name === 'get_mitre_ics_technique');
+      const mitreTool = tools.find((t) => t.name === 'get_mitre_ics_technique');
 
       expect(mitreTool).toBeDefined();
       expect(mitreTool?.inputSchema.required).toContain('technique_id');
@@ -156,14 +156,18 @@ describe('McpServer', () => {
       const tools = registerTools();
 
       expect(tools[0]?.description).toContain('Search for OT security requirements');
-      expect(tools[1]?.description).toContain('Get detailed information about a specific OT requirement');
+      expect(tools[1]?.description).toContain(
+        'Get detailed information about a specific OT requirement'
+      );
       expect(tools[2]?.description).toContain('List all available OT security standards');
-      expect(tools[3]?.description).toContain('Get detailed information about a MITRE ATT&CK for ICS technique');
+      expect(tools[3]?.description).toContain(
+        'Get detailed information about a MITRE ATT&CK for ICS technique'
+      );
     });
 
     it('should have correct schema types for security_level parameter', () => {
       const tools = registerTools();
-      const searchTool = tools.find(t => t.name === 'search_ot_requirements');
+      const searchTool = tools.find((t) => t.name === 'search_ot_requirements');
 
       const securityLevelProp = searchTool?.inputSchema.properties?.security_level as any;
       expect(securityLevelProp?.type).toBe('number');
@@ -173,7 +177,7 @@ describe('McpServer', () => {
 
     it('should have correct schema types for component_type parameter', () => {
       const tools = registerTools();
-      const searchTool = tools.find(t => t.name === 'search_ot_requirements');
+      const searchTool = tools.find((t) => t.name === 'search_ot_requirements');
 
       const componentTypeProp = searchTool?.inputSchema.properties?.component_type as any;
       expect(componentTypeProp?.type).toBe('string');
