@@ -17,6 +17,8 @@ import { DatabaseClient } from './database/client.js';
 import { registerTools } from './tools/index.js';
 import { searchRequirements } from './tools/search.js';
 import { getRequirement } from './tools/get-requirement.js';
+import { listStandards } from './tools/list-standards.js';
+import { getMitreTechnique } from './tools/get-mitre-technique.js';
 
 /**
  * MCP Server class for OT Security standards and frameworks
@@ -74,7 +76,7 @@ export class McpServer {
             return this.handleGetRequirement(args);
 
           case 'list_ot_standards':
-            return this.handleListStandards(args);
+            return this.handleListStandards();
 
           case 'get_mitre_ics_technique':
             return this.handleGetMitreTechnique(args);
@@ -165,33 +167,87 @@ export class McpServer {
 
   /**
    * Handle list_ot_standards tool
-   * @param _args - Tool arguments (unused in stub)
    */
-  private async handleListStandards(_args: unknown) {
-    // Stub implementation - will be implemented in Task 8
+  private async handleListStandards() {
+    const result = await listStandards(this.db);
+
     return {
       content: [
         {
           type: 'text',
-          text: 'Not implemented yet - list_ot_standards will be implemented in Task 8',
-        },
-      ],
+          text: JSON.stringify(result, null, 2)
+        }
+      ]
     };
   }
 
   /**
    * Handle get_mitre_ics_technique tool
-   * @param _args - Tool arguments (unused in stub)
+   * @param args - Tool arguments containing technique_id and optional parameters
    */
-  private async handleGetMitreTechnique(_args: unknown) {
-    // Stub implementation - will be implemented in Task 8
+  private async handleGetMitreTechnique(args: unknown) {
+    // Validate and extract parameters
+    if (typeof args !== 'object' || args === null) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify({
+              error: 'Invalid arguments - expected an object'
+            }, null, 2)
+          }
+        ]
+      };
+    }
+
+    const { technique_id, include_mitigations, map_to_standards } = args as {
+      technique_id?: string;
+      include_mitigations?: boolean;
+      map_to_standards?: string[];
+    };
+
+    if (!technique_id) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify({
+              error: 'technique_id parameter is required'
+            }, null, 2)
+          }
+        ]
+      };
+    }
+
+    const result = await getMitreTechnique(this.db, {
+      technique_id,
+      options: {
+        include_mitigations,
+        map_to_standards
+      }
+    });
+
+    if (!result) {
+      return {
+        content: [
+          {
+            type: 'text',
+            text: JSON.stringify({
+              error: 'Technique not found',
+              technique_id
+            }, null, 2)
+          }
+        ]
+      };
+    }
+
     return {
       content: [
         {
           type: 'text',
-          text: 'Not implemented yet - get_mitre_ics_technique will be implemented in Task 8',
-        },
-      ],
+          text: JSON.stringify(result, null, 2)
+        }
+      ]
     };
   }
 
