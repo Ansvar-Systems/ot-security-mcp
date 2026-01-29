@@ -263,6 +263,22 @@ export class MitreIngester {
       // Process in a transaction for atomicity
       // Note: better-sqlite3 transactions automatically rollback on any error
       this.db.transaction(() => {
+        // Ensure MITRE ICS standard exists
+        console.log('Ensuring MITRE ICS standard exists...');
+        this.db.run(
+          `INSERT OR REPLACE INTO ot_standards (id, name, version, status, published_date, url, notes)
+           VALUES (?, ?, ?, ?, ?, ?, ?)`,
+          [
+            'mitre-ics',
+            'MITRE ATT&CK for ICS',
+            'v16.0',
+            'current',
+            '2024-10-29',
+            'https://attack.mitre.org/matrices/ics/',
+            'MITRE ATT&CK for Industrial Control Systems framework'
+          ]
+        );
+
         // Clear existing data
         console.log('Clearing existing MITRE data...');
         this.db.run('DELETE FROM mitre_technique_mitigations');
