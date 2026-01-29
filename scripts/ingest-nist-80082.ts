@@ -107,7 +107,7 @@ export class Nist80082Ingester {
         if (controlId === 'ALL_FAMILIES') continue; // Skip meta-control
 
         this.db.run(`
-          INSERT OR IGNORE INTO ot_mappings (
+          INSERT OR REPLACE INTO ot_mappings (
             source_standard,
             source_requirement,
             target_standard,
