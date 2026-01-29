@@ -41,6 +41,54 @@ describe('listStandards', () => {
     });
   });
 
+  describe('Requirement Counts', () => {
+    beforeEach(() => {
+      // Insert standards
+      db.run(
+        `INSERT INTO ot_standards (id, name, status)
+         VALUES (?, ?, ?)`,
+        ['iec62443-3-3', 'IEC 62443-3-3', 'current']
+      );
+      db.run(
+        `INSERT INTO ot_standards (id, name, status)
+         VALUES (?, ?, ?)`,
+        ['nist-csf', 'NIST CSF', 'current']
+      );
+
+      // Insert requirements for iec62443-3-3
+      db.run(
+        `INSERT INTO ot_requirements (id, requirement_id, standard_id, title, description)
+         VALUES (?, ?, ?, ?, ?)`,
+        [1, 'SR 1.1', 'iec62443-3-3', 'User identification', 'Test requirement']
+      );
+      db.run(
+        `INSERT INTO ot_requirements (id, requirement_id, standard_id, title, description)
+         VALUES (?, ?, ?, ?, ?)`,
+        [2, 'SR 1.2', 'iec62443-3-3', 'User authentication', 'Test requirement']
+      );
+    });
+
+    it('should include requirement_count for each standard', async () => {
+      const result = await listStandards(db);
+
+      expect(result).toHaveLength(2);
+      result.forEach(standard => {
+        expect(standard).toHaveProperty('requirement_count');
+        expect(typeof standard.requirement_count).toBe('number');
+      });
+    });
+
+    it('should count requirements correctly', async () => {
+      const result = await listStandards(db);
+
+      const iec = result.find(s => s.id === 'iec62443-3-3');
+      expect(iec?.requirement_count).toBe(2);
+
+      const nist = result.find(s => s.id === 'nist-csf');
+      expect(nist?.requirement_count).toBe(0);
+    });
+  });
+
   describe('Single Standard', () => {
     beforeEach(() => {
       db.run(
@@ -78,6 +126,7 @@ describe('listStandards', () => {
       expect(standard).toHaveProperty('published_date');
       expect(standard).toHaveProperty('url');
       expect(standard).toHaveProperty('notes');
+      expect(standard).toHaveProperty('requirement_count');
     });
 
     it('should handle null optional fields', async () => {

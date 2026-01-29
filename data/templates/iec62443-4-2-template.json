@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "part": "4-2",
+    "title": "IEC 62443-4-2 Technical Security Requirements for IACS Components",
+    "version": "v2.0",
+    "published_date": "2023-10-01"
+  },
+  "requirements": [
+    {
+      "requirement_id": "CR 1.1",
+      "parent_requirement_id": null,
+      "title": "Human user identification and authentication",
+      "description": "The control component shall provide the capability to identify and authenticate all human users. This capability shall enforce such identification and authentication on all interfaces which provide human user access to the component.",
+      "rationale": "Component-level authentication ensures that each control component independently verifies user identity, supporting defense-in-depth and zero-trust architectures.",
+      "component_type": "embedded",
+      "security_levels": [
+        {
+          "security_level": 1,
+          "sl_type": "SL-C",
+          "capability_level": 1,
+          "notes": "Component capability level 1 - basic authentication"
+        },
+        {
+          "security_level": 2,
+          "sl_type": "SL-C",
+          "capability_level": 1,
+          "notes": "Same as SL-1"
+        },
+        {
+          "security_level": 3,
+          "sl_type": "SL-C",
+          "capability_level": 2,
+          "notes": "Enhanced capability required"
+        },
+        {
+          "security_level": 4,
+          "sl_type": "SL-C",
+          "capability_level": 3,
+          "notes": "Advanced capability required"
+        }
+      ]
+    },
+    {
+      "requirement_id": "CR 2.1",
+      "parent_requirement_id": null,
+      "title": "Authorization enforcement",
+      "description": "The control component shall provide the capability to enforce assigned authorizations for controlling access to the component between authenticated users (or processes acting on behalf of users).",
+      "rationale": "Authorization enforcement at the component level ensures that even authenticated users can only access resources and functions they are permitted to use.",
+      "component_type": "network",
+      "security_levels": [
+        {
+          "security_level": 1,
+          "sl_type": "SL-C",
+          "capability_level": 1,
+          "notes": "Basic authorization enforcement"
+        }
+      ]
+    }
+  ]
+}
