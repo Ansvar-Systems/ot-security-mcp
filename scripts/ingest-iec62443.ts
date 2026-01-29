@@ -3,7 +3,6 @@
 import { DatabaseClient } from '../src/database/client.js';
 import { Iec62443Validator } from './validate-iec62443.js';
 import { readFileSync } from 'fs';
-import { resolve } from 'path';
 
 interface Iec62443Data {
   meta: {

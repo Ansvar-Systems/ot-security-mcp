@@ -6,12 +6,12 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
 export class Iec62443Validator {
-  private ajv: Ajv;
+  private ajv: any;
   private schema: any;
 
   constructor() {
-    this.ajv = new Ajv({ allErrors: true, strict: true });
-    addFormats(this.ajv);
+    this.ajv = new (Ajv as any)({ allErrors: true, strict: true });
+    (addFormats as any)(this.ajv);
 
     // Load schema
     const schemaPath = resolve('schemas/iec62443-schema.json');
@@ -29,7 +29,7 @@ export class Iec62443Validator {
     if (!valid) {
       const errors = validate.errors || [];
       const errorMsg = errors
-        .map(err => `${err.instancePath}: ${err.message}`)
+        .map((err: any) => `${err.instancePath}: ${err.message}`)
         .join('; ');
       throw new Error(`Validation failed: ${errorMsg}`);
     }
@@ -59,7 +59,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     validator.validateFile(filePath);
     console.log(`✅ Validation successful: ${filePath}`);
     process.exit(0);
-  } catch (error) {
+  } catch (error: any) {
     console.error(`❌ Validation failed: ${error}`);
     process.exit(1);
   }
