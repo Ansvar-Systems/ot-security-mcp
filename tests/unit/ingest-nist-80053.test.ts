@@ -101,7 +101,8 @@ describe('Nist80053Ingester', () => {
       const controls = ingester.parseOscalCatalog(mockOscal);
       expect(controls).toHaveLength(1);
       expect(controls[0].control_id).toBe('AU-1');
-      expect(controls[0].description).toBe('');
+      // When no statement parts exist, a fallback message is provided
+      expect(controls[0].description).toBe('Policy and Procedures. See NIST SP 800-53 Rev 5 for complete guidance.');
     });
 
     it('should extract control ID from props label', () => {
