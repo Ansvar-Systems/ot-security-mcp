@@ -1,6 +1,6 @@
 {
   "name": "@ansvar/ot-security-mcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "MCP server for OT (Operational Technology) security standards and frameworks",
   "type": "module",
   "author": "Ansvar Systems <hello@ansvar.eu>",
@@ -28,6 +28,7 @@
     "ingest:nist-80082": "tsx scripts/ingest-nist-80082.ts",
     "ingest:iec62443": "tsx scripts/ingest-iec62443.ts",
     "validate:iec62443": "tsx scripts/validate-iec62443.ts",
+    "verify:integrity": "tsx scripts/verify-data-integrity.ts",
     "check-updates": "tsx scripts/check-updates.ts"
   },
   "dependencies": {
