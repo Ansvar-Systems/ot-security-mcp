@@ -271,7 +271,7 @@ get_mitre_ics_technique(
     include_mitigations?: boolean,
     map_to_standards?: string[]
   }
-): Promise<MitreTechnique>
+): Promise<MitreTechniqueDetail | null>
 ```
 
 **map_threats_to_requirements()**
