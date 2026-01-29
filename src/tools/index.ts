@@ -11,6 +11,7 @@ export { getRequirement } from './get-requirement.js';
 export { listStandards } from './list-standards.js';
 export { getMitreTechnique } from './get-mitre-technique.js';
 export { mapSecurityLevelRequirements } from './map-security-level-requirements.js';
+export { getZoneConduitGuidance } from './get-zone-conduit-guidance.js';
 
 /**
  * Register all Stage 1 tools for the MCP server
@@ -143,6 +144,32 @@ export function registerTools(): Tool[] {
           },
         },
         required: ['security_level'],
+      },
+    },
+    {
+      name: 'get_zone_conduit_guidance',
+      description: 'Get IEC 62443 zone and conduit guidance for network segmentation. Query zones by Purdue level (0-5), security level target (1-4), and reference architecture. Returns comprehensive network segmentation guidance including zones, conduits, and data flows for OT environments.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          purdue_level: {
+            type: 'number',
+            description: 'Optional: Filter zones by Purdue level (0-5)',
+            minimum: 0,
+            maximum: 5,
+          },
+          security_level_target: {
+            type: 'number',
+            description: 'Optional: Filter zones by target security level (1-4)',
+            minimum: 1,
+            maximum: 4,
+          },
+          reference_architecture: {
+            type: 'string',
+            description: 'Optional: Filter by reference architecture (e.g., "Purdue Model", "IEC 62443-3-2", "ISA-95")',
+          },
+        },
+        required: [],
       },
     },
   ];

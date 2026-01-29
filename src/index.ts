@@ -20,6 +20,7 @@ import { getRequirement } from './tools/get-requirement.js';
 import { listStandards } from './tools/list-standards.js';
 import { getMitreTechnique } from './tools/get-mitre-technique.js';
 import { mapSecurityLevelRequirements } from './tools/map-security-level-requirements.js';
+import { getZoneConduitGuidance } from './tools/get-zone-conduit-guidance.js';
 
 /**
  * MCP Server class for OT Security standards and frameworks
@@ -84,6 +85,9 @@ export class McpServer {
 
           case 'map_security_level_requirements':
             return this.handleMapSecurityLevelRequirements(args);
+
+          case 'get_zone_conduit_guidance':
+            return this.handleGetZoneConduitGuidance(args);
 
           default:
             throw new McpError(
@@ -273,6 +277,29 @@ export class McpServer {
         {
           type: 'text',
           text: JSON.stringify(requirements, null, 2)
+        }
+      ]
+    };
+  }
+
+  /**
+   * Handle get_zone_conduit_guidance tool
+   * @param args - Tool arguments containing optional filters
+   */
+  private async handleGetZoneConduitGuidance(args: unknown) {
+    const { purdue_level, security_level_target, reference_architecture } = args as any;
+
+    const result = await getZoneConduitGuidance(this.db, {
+      purdue_level,
+      security_level_target,
+      reference_architecture
+    });
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(result, null, 2)
         }
       ]
     };
