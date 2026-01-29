@@ -136,4 +136,35 @@ describe('Nist80082Ingester', () => {
     expect(mapping).toBeDefined();
     expect(mapping.target_requirement).toBe('RA-3');
   });
+
+  it('should not create duplicate mappings on re-run', () => {
+    // Setup standards
+    db.run(`INSERT INTO ot_standards (id, name, version, status)
+            VALUES ('nist-800-82', 'NIST SP 800-82', 'Rev 3', 'current')`);
+    db.run(`INSERT INTO ot_standards (id, name, version, status)
+            VALUES ('nist-800-53', 'NIST SP 800-53', 'Rev 5', 'current')`);
+
+    const mockItems = [{
+      requirement_id: 'G-TEST',
+      title: 'Test Guidance',
+      description: 'Test description',
+      rationale: 'Test rationale',
+      related_controls: ['RA-3', 'RA-5']
+    }];
+
+    // First ingestion
+    ingester.ingestGuidance(mockItems);
+
+    // Second ingestion (simulate re-run)
+    ingester.ingestGuidance(mockItems);
+
+    // Should have exactly 2 mappings (RA-3 and RA-5), not 4
+    const count = db.queryOne<{ count: number }>(
+      `SELECT COUNT(*) as count FROM ot_mappings
+       WHERE source_requirement = 'G-TEST'`,
+      []
+    );
+
+    expect(count?.count).toBe(2);
+  });
 });
