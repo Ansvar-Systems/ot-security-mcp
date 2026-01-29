@@ -366,7 +366,7 @@ export class MitreIngester {
             `Error: ${errorMessage}`,
           ]
         );
-      } catch (logError) {
+      } catch {
         // Silently fail if logging fails (database might not exist yet)
       }
 

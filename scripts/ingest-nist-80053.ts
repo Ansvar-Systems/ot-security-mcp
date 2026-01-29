@@ -335,7 +335,7 @@ export class Nist80053Ingester {
             `Error: ${errorMessage}`,
           ]
         );
-      } catch (logError) {
+      } catch {
         // Silently fail if logging fails
       }
 
