@@ -2,12 +2,69 @@
  * TypeScript Type Definitions for OT Security MCP Server
  *
  * This file contains comprehensive type definitions for:
+ * - Utility types (reusable type aliases)
  * - Domain types (database table rows)
  * - Tool parameter types (MCP tool options)
  * - Tool result types (MCP tool responses)
  *
  * All types match the database schema exactly (see src/database/schema.sql)
  */
+
+// =============================================================================
+// Utility Types (Type Aliases)
+// =============================================================================
+
+/**
+ * Standard status type
+ */
+export type StandardStatus = 'current' | 'superseded';
+
+/**
+ * Component types in OT environments
+ */
+export type ComponentType = 'host' | 'network' | 'embedded' | 'application';
+
+/**
+ * Security level type (IEC 62443)
+ */
+export type SecurityLevelType = 'SL-T' | 'SL-C' | 'SL-A';
+
+/**
+ * Security level values (IEC 62443)
+ */
+export type SecurityLevelValue = 1 | 2 | 3 | 4;
+
+/**
+ * Mapping relationship types
+ */
+export type MappingType = 'exact_match' | 'partial' | 'related' | 'supersedes' | 'broader' | 'narrower';
+
+/**
+ * Sector applicability levels
+ */
+export type ApplicabilityLevel = 'mandatory' | 'recommended' | 'optional' | 'not_applicable';
+
+/**
+ * Threat frameworks supported
+ */
+export type ThreatFramework = 'mitre_ics' | 'stride';
+
+/**
+ * Impact ratings for NERC CIP
+ */
+export type ImpactRating = 'high' | 'medium' | 'low';
+
+/**
+ * Database query result wrapper
+ */
+export interface QueryResult<T> {
+  /** Result data */
+  readonly data: T[];
+  /** Total count (may differ from data.length if limited) */
+  readonly total_count: number;
+  /** Whether more results are available */
+  readonly has_more: boolean;
+}
 
 // =============================================================================
 // Domain Types (Database Tables)
@@ -19,19 +76,19 @@
  */
 export interface OTStandard {
   /** Primary key identifier (e.g., "iec62443-3-3", "nist80082") */
-  id: string;
+  readonly id: string;
   /** Full name of the standard */
-  name: string;
+  readonly name: string;
   /** Version string (e.g., "v2.0", "r3") */
-  version: string | null;
+  readonly version: string | null;
   /** Publication date (ISO 8601 string) */
-  published_date: string | null;
+  readonly published_date: string | null;
   /** Official URL for the standard */
-  url: string | null;
+  readonly url: string | null;
   /** Standard status */
-  status: 'current' | 'superseded' | null;
+  readonly status: StandardStatus | null;
   /** Additional notes about the standard */
-  notes: string | null;
+  readonly notes: string | null;
 }
 
 /**
@@ -40,23 +97,27 @@ export interface OTStandard {
  */
 export interface OTRequirement {
   /** Auto-incremented database ID */
-  id: number;
+  readonly id: number;
   /** Foreign key to ot_standards.id */
-  standard_id: string;
+  readonly standard_id: string;
   /** Requirement identifier within the standard (e.g., "SR 1.1", "SR 1.1 RE 1") */
-  requirement_id: string;
+  readonly requirement_id: string;
   /** Parent requirement ID for enhancements (REs linking to base SR) */
-  parent_requirement_id: string | null;
+  readonly parent_requirement_id: string | null;
   /** Short title of the requirement */
-  title: string | null;
+  readonly title: string | null;
   /** Full description of the requirement */
-  description: string | null;
+  readonly description: string | null;
   /** Rationale explaining why the requirement exists */
-  rationale: string | null;
+  readonly rationale: string | null;
   /** Component type this requirement applies to */
-  component_type: 'host' | 'network' | 'embedded' | 'application' | null;
-  /** Purdue Model level (0-5, nullable) */
-  purdue_level: number | null;
+  readonly component_type: ComponentType | null;
+  /**
+   * Purdue Model level (0-5, nullable)
+   * @minimum 0
+   * @maximum 5
+   */
+  readonly purdue_level: number | null;
 }
 
 /**
@@ -65,17 +126,21 @@ export interface OTRequirement {
  */
 export interface SecurityLevel {
   /** Auto-incremented database ID */
-  id: number;
+  readonly id: number;
   /** Foreign key to ot_requirements.id */
-  requirement_db_id: number;
-  /** Security level (1-4) */
-  security_level: 1 | 2 | 3 | 4;
+  readonly requirement_db_id: number;
+  /**
+   * Security level (1-4)
+   * @minimum 1
+   * @maximum 4
+   */
+  readonly security_level: SecurityLevelValue;
   /** Security level type */
-  sl_type: 'SL-T' | 'SL-C' | 'SL-A' | null;
+  readonly sl_type: SecurityLevelType | null;
   /** Capability level for the security level */
-  capability_level: number | null;
+  readonly capability_level: number | null;
   /** Additional notes about the security level mapping */
-  notes: string | null;
+  readonly notes: string | null;
 }
 
 /**
@@ -84,23 +149,27 @@ export interface SecurityLevel {
  */
 export interface OTMapping {
   /** Auto-incremented database ID */
-  id: number;
+  readonly id: number;
   /** Source standard identifier */
-  source_standard: string;
+  readonly source_standard: string;
   /** Source requirement identifier */
-  source_requirement: string;
+  readonly source_requirement: string;
   /** Target standard identifier */
-  target_standard: string;
+  readonly target_standard: string;
   /** Target requirement identifier */
-  target_requirement: string;
+  readonly target_requirement: string;
   /** Type of mapping relationship */
-  mapping_type: 'exact_match' | 'partial' | 'related' | 'supersedes' | 'broader' | 'narrower';
-  /** Confidence score (0.0-1.0) */
-  confidence: number | null;
+  readonly mapping_type: MappingType;
+  /**
+   * Confidence score (0.0-1.0)
+   * @minimum 0.0
+   * @maximum 1.0
+   */
+  readonly confidence: number | null;
   /** Additional notes about the mapping */
-  notes: string | null;
+  readonly notes: string | null;
   /** Creation timestamp (ISO 8601 string) */
-  created_date: string;
+  readonly created_date: string;
 }
 
 /**
@@ -112,17 +181,17 @@ export interface OTMapping {
  */
 export interface MitreTechnique {
   /** MITRE technique ID (e.g., "T0800") */
-  technique_id: string;
+  readonly technique_id: string;
   /** MITRE tactic category */
-  tactic: string | null;
+  readonly tactic: string | null;
   /** Technique name */
-  name: string | null;
+  readonly name: string | null;
   /** Full description of the technique */
-  description: string | null;
+  readonly description: string | null;
   /** Platforms this technique applies to (parsed from JSON) */
-  platforms: string[] | null;
+  readonly platforms: string[] | null;
   /** Data sources for detection (parsed from JSON) */
-  data_sources: string[] | null;
+  readonly data_sources: string[] | null;
 }
 
 /**
@@ -131,11 +200,11 @@ export interface MitreTechnique {
  */
 export interface MitreMitigation {
   /** MITRE mitigation ID (e.g., "M0800") */
-  mitigation_id: string;
+  readonly mitigation_id: string;
   /** Mitigation name */
-  name: string | null;
+  readonly name: string | null;
   /** Full description of the mitigation */
-  description: string | null;
+  readonly description: string | null;
 }
 
 /**
@@ -144,13 +213,13 @@ export interface MitreMitigation {
  */
 export interface MitreTechniqueMitigation {
   /** Auto-incremented database ID */
-  id: number;
+  readonly id: number;
   /** Foreign key to mitre_ics_techniques.technique_id */
-  technique_id: string;
+  readonly technique_id: string;
   /** Foreign key to mitre_ics_mitigations.mitigation_id */
-  mitigation_id: string;
+  readonly mitigation_id: string;
   /** Optional mapping to OT requirement */
-  ot_requirement_id: string | null;
+  readonly ot_requirement_id: string | null;
 }
 
 /**
@@ -159,21 +228,29 @@ export interface MitreTechniqueMitigation {
  */
 export interface ZoneConduit {
   /** Auto-incremented database ID */
-  id: number;
+  readonly id: number;
   /** Zone name/identifier */
-  zone_name: string | null;
-  /** Purdue Model level (0-5) */
-  purdue_level: number | null;
-  /** Target security level (1-4) */
-  security_level_target: number | null;
+  readonly zone_name: string | null;
+  /**
+   * Purdue Model level (0-5)
+   * @minimum 0
+   * @maximum 5
+   */
+  readonly purdue_level: number | null;
+  /**
+   * Target security level (1-4)
+   * @minimum 1
+   * @maximum 4
+   */
+  readonly security_level_target: number | null;
   /** Type of conduit */
-  conduit_type: string | null;
+  readonly conduit_type: string | null;
   /** Guidance text for implementation */
-  guidance_text: string | null;
+  readonly guidance_text: string | null;
   /** Reference to IEC 62443 section */
-  iec_reference: string | null;
+  readonly iec_reference: string | null;
   /** Reference architecture identifier */
-  reference_architecture: string | null;
+  readonly reference_architecture: string | null;
 }
 
 /**
@@ -182,23 +259,23 @@ export interface ZoneConduit {
  */
 export interface SectorApplicability {
   /** Auto-incremented database ID */
-  id: number;
+  readonly id: number;
   /** Industry sector (e.g., "energy", "water", "manufacturing") */
-  sector: string;
+  readonly sector: string;
   /** Jurisdiction (e.g., "US", "EU", "global") */
-  jurisdiction: string;
+  readonly jurisdiction: string;
   /** Standard identifier */
-  standard: string;
+  readonly standard: string;
   /** Applicability level */
-  applicability: 'mandatory' | 'recommended' | 'optional' | 'not_applicable';
+  readonly applicability: ApplicabilityLevel;
   /** Threshold for applicability (e.g., "critical infrastructure") */
-  threshold: string | null;
+  readonly threshold: string | null;
   /** Regulatory driver (e.g., "NIS2", "NERC CIP") */
-  regulatory_driver: string | null;
+  readonly regulatory_driver: string | null;
   /** Effective date (ISO 8601 string) */
-  effective_date: string | null;
+  readonly effective_date: string | null;
   /** Additional notes */
-  notes: string | null;
+  readonly notes: string | null;
 }
 
 // =============================================================================
@@ -211,10 +288,14 @@ export interface SectorApplicability {
 export interface SearchOptions {
   /** Filter by specific standards (e.g., ["iec62443-3-3", "nist-800-82"]) */
   standards?: string[];
-  /** Filter by security level (1-4) */
-  security_level?: number;
+  /**
+   * Filter by security level (1-4)
+   * @minimum 1
+   * @maximum 4
+   */
+  security_level?: SecurityLevelValue;
   /** Filter by component type */
-  component_type?: 'host' | 'network' | 'embedded' | 'application';
+  component_type?: ComponentType;
   /** Filter by industry sector */
   sector?: string;
   /** Maximum number of results to return */
@@ -236,7 +317,7 @@ export interface GetRequirementOptions {
  */
 export interface SecurityLevelOptions {
   /** Filter by component type */
-  component_type?: 'host' | 'network' | 'embedded' | 'application';
+  component_type?: ComponentType;
   /** Include requirement enhancements (REs) */
   include_enhancements?: boolean;
 }
@@ -245,10 +326,18 @@ export interface SecurityLevelOptions {
  * Options for get_zone_conduit_guidance tool
  */
 export interface ZoneConduitOptions {
-  /** Filter by Purdue level (0-5) */
+  /**
+   * Filter by Purdue level (0-5)
+   * @minimum 0
+   * @maximum 5
+   */
   purdue_level?: number;
-  /** Filter by target security level (1-4) */
-  security_level?: number;
+  /**
+   * Filter by target security level (1-4)
+   * @minimum 1
+   * @maximum 4
+   */
+  security_level?: SecurityLevelValue;
   /** Filter by reference architecture */
   reference_architecture?: string;
 }
@@ -269,8 +358,12 @@ export interface MitreTechniqueOptions {
 export interface GetStandardRequirementsOptions {
   /** Specific version of the standard */
   version?: string;
-  /** Filter by security level */
-  security_level?: number;
+  /**
+   * Filter by security level
+   * @minimum 1
+   * @maximum 4
+   */
+  security_level?: SecurityLevelValue;
 }
 
 /**
@@ -288,7 +381,7 @@ export interface NercCipOptions {
   /** Filter by asset type */
   asset_type?: string;
   /** Filter by impact rating */
-  impact_rating?: 'high' | 'medium' | 'low';
+  impact_rating?: ImpactRating;
 }
 
 /**
@@ -296,7 +389,7 @@ export interface NercCipOptions {
  */
 export interface ThreatMappingOptions {
   /** Threat framework to use */
-  threat_framework?: 'mitre_ics' | 'stride';
+  threat_framework?: ThreatFramework;
   /** Target standard for mapping */
   target_standard?: string;
 }
@@ -318,11 +411,15 @@ export interface ImplementationGuidanceOptions {
  */
 export interface RequirementSearchResult extends OTRequirement {
   /** Relevant text snippet from the requirement */
-  snippet: string;
-  /** Relevance score (0.0-1.0) */
-  relevance: number;
+  readonly snippet: string;
+  /**
+   * Relevance score (0.0-1.0)
+   * @minimum 0.0
+   * @maximum 1.0
+   */
+  readonly relevance: number;
   /** Name of the standard (denormalized for convenience) */
-  standard_name: string;
+  readonly standard_name: string;
 }
 
 /**
@@ -330,11 +427,11 @@ export interface RequirementSearchResult extends OTRequirement {
  */
 export interface RequirementDetail extends OTRequirement {
   /** Standard information */
-  standard: OTStandard;
+  readonly standard: OTStandard;
   /** Cross-standard mappings */
-  mappings: OTMapping[];
+  readonly mappings: OTMapping[];
   /** Security level mappings */
-  security_levels: SecurityLevel[];
+  readonly security_levels: SecurityLevel[];
 }
 
 /**
@@ -342,9 +439,9 @@ export interface RequirementDetail extends OTRequirement {
  */
 export interface MitreTechniqueDetail extends MitreTechnique {
   /** Related mitigations */
-  mitigations: MitreMitigation[];
+  readonly mitigations: MitreMitigation[];
   /** Mapped OT requirements */
-  mapped_requirements: OTRequirement[];
+  readonly mapped_requirements: OTRequirement[];
 }
 
 /**
@@ -352,13 +449,13 @@ export interface MitreTechniqueDetail extends MitreTechnique {
  */
 export interface ComparisonResult {
   /** Requirements being compared */
-  requirements: RequirementDetail[];
+  readonly requirements: RequirementDetail[];
   /** Common themes across requirements */
-  common_themes: string[];
+  readonly common_themes: string[];
   /** Differences between requirements */
-  differences: string[];
+  readonly differences: string[];
   /** Cross-standard mappings between the requirements */
-  mappings: OTMapping[];
+  readonly mappings: OTMapping[];
 }
 
 /**
@@ -366,15 +463,19 @@ export interface ComparisonResult {
  */
 export interface ThreatMapping {
   /** Threat identifier */
-  threat_id: string;
+  readonly threat_id: string;
   /** Threat name */
-  threat_name: string;
+  readonly threat_name: string;
   /** Framework the threat is from */
-  threat_framework: string;
+  readonly threat_framework: string;
   /** Mapped requirements */
-  requirements: OTRequirement[];
-  /** Confidence score for the mapping (0.0-1.0) */
-  confidence: number;
+  readonly requirements: OTRequirement[];
+  /**
+   * Confidence score for the mapping (0.0-1.0)
+   * @minimum 0.0
+   * @maximum 1.0
+   */
+  readonly confidence: number;
 }
 
 /**
@@ -382,15 +483,15 @@ export interface ThreatMapping {
  */
 export interface ImplementationGuidance {
   /** The requirement being implemented */
-  requirement: OTRequirement;
+  readonly requirement: OTRequirement;
   /** Implementation steps */
-  steps: string[];
+  readonly steps: string[];
   /** Best practices */
-  best_practices: string[];
+  readonly best_practices: string[];
   /** Common pitfalls to avoid */
-  pitfalls: string[];
+  readonly pitfalls: string[];
   /** Related requirements */
-  related_requirements: OTRequirement[];
+  readonly related_requirements: OTRequirement[];
 }
 
 /**
@@ -398,13 +499,13 @@ export interface ImplementationGuidance {
  */
 export interface Rationale {
   /** The requirement */
-  requirement: OTRequirement;
+  readonly requirement: OTRequirement;
   /** Why the requirement exists */
-  rationale: string;
+  readonly rationale: string;
   /** Risk addressed by the requirement */
-  risk_addressed: string;
+  readonly risk_addressed: string;
   /** Potential impact of not implementing */
-  impact_of_non_compliance: string;
+  readonly impact_of_non_compliance: string;
 }
 
 /**
@@ -412,60 +513,9 @@ export interface Rationale {
  */
 export interface ZoneGuidance {
   /** Matching zone/conduit configurations */
-  configurations: ZoneConduit[];
+  readonly configurations: ZoneConduit[];
   /** Architecture recommendations */
-  recommendations: string[];
+  readonly recommendations: string[];
   /** IEC 62443 references */
-  iec_references: string[];
+  readonly iec_references: string[];
 }
-
-// =============================================================================
-// Utility Types
-// =============================================================================
-
-/**
- * Database query result wrapper
- */
-export interface QueryResult<T> {
-  /** Result data */
-  data: T[];
-  /** Total count (may differ from data.length if limited) */
-  total_count: number;
-  /** Whether more results are available */
-  has_more: boolean;
-}
-
-/**
- * Standard status type
- */
-export type StandardStatus = 'current' | 'superseded';
-
-/**
- * Component types in OT environments
- */
-export type ComponentType = 'host' | 'network' | 'embedded' | 'application';
-
-/**
- * Security level type (IEC 62443)
- */
-export type SecurityLevelType = 'SL-T' | 'SL-C' | 'SL-A';
-
-/**
- * Mapping relationship types
- */
-export type MappingType = 'exact_match' | 'partial' | 'related' | 'supersedes' | 'broader' | 'narrower';
-
-/**
- * Sector applicability levels
- */
-export type ApplicabilityLevel = 'mandatory' | 'recommended' | 'optional' | 'not_applicable';
-
-/**
- * Threat frameworks supported
- */
-export type ThreatFramework = 'mitre_ics' | 'stride';
-
-/**
- * Impact ratings for NERC CIP
- */
-export type ImpactRating = 'high' | 'medium' | 'low';
