@@ -15,6 +15,8 @@ interface Iec62443Data {
   requirements?: Requirement[];
   zones?: Zone[];
   conduits?: Conduit[];
+  flows?: Flow[];
+  reference_architectures?: ReferenceArchitecture[];
 }
 
 interface Requirement {
@@ -47,6 +49,23 @@ interface Conduit {
   conduit_type: string;
   description: string;
   minimum_security_level?: number;
+}
+
+interface Flow {
+  source_zone_name: string;
+  target_zone_name: string;
+  conduit_name: string;
+  data_flow_description: string;
+  security_level_requirement?: number;
+  bidirectional?: boolean;
+}
+
+interface ReferenceArchitecture {
+  name: string;
+  description: string;
+  diagram_url?: string;
+  applicable_zones?: string;
+  industry_applicability?: string;
 }
 
 export class Iec62443Ingester {
@@ -160,7 +179,60 @@ export class Iec62443Ingester {
       ]);
     }
 
-    console.log(`Ingested ${data.zones?.length || 0} zones and ${data.conduits?.length || 0} conduits from IEC 62443-3-2`);
+    // Ingest flows (after conduits ingestion)
+    for (const flow of data.flows || []) {
+      // Get zone IDs by name
+      const sourceZone = this.db.queryOne<{ id: number }>(
+        'SELECT id FROM zones WHERE name = ?',
+        [flow.source_zone_name]
+      );
+      const targetZone = this.db.queryOne<{ id: number }>(
+        'SELECT id FROM zones WHERE name = ?',
+        [flow.target_zone_name]
+      );
+      const conduit = this.db.queryOne<{ id: number }>(
+        'SELECT id FROM conduits WHERE name = ?',
+        [flow.conduit_name]
+      );
+
+      if (!sourceZone || !targetZone || !conduit) {
+        console.warn(`Skipping flow: missing zone or conduit (${flow.source_zone_name} → ${flow.target_zone_name})`);
+        continue;
+      }
+
+      this.db.run(`
+        INSERT OR REPLACE INTO zone_conduit_flows (
+          source_zone_id, target_zone_id, conduit_id,
+          data_flow_description, security_level_requirement, bidirectional
+        ) VALUES (?, ?, ?, ?, ?, ?)
+      `, [
+        sourceZone.id,
+        targetZone.id,
+        conduit.id,
+        flow.data_flow_description,
+        flow.security_level_requirement || null,
+        flow.bidirectional ? 1 : 0
+      ]);
+    }
+
+    // Ingest reference architectures
+    for (const arch of data.reference_architectures || []) {
+      this.db.run(`
+        INSERT OR REPLACE INTO reference_architectures (
+          name, description, diagram_url, applicable_zones,
+          iec_reference, industry_applicability
+        ) VALUES (?, ?, ?, ?, ?, ?)
+      `, [
+        arch.name,
+        arch.description,
+        arch.diagram_url || null,
+        arch.applicable_zones || null,
+        'IEC 62443-3-2',
+        arch.industry_applicability || null
+      ]);
+    }
+
+    console.log(`Ingested ${data.zones?.length || 0} zones, ${data.conduits?.length || 0} conduits, ${data.flows?.length || 0} flows, ${data.reference_architectures?.length || 0} reference architectures from IEC 62443-3-2`);
   }
 
   /**
