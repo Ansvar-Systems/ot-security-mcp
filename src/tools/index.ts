@@ -12,6 +12,7 @@ export { listStandards } from './list-standards.js';
 export { getMitreTechnique } from './get-mitre-technique.js';
 export { mapSecurityLevelRequirements } from './map-security-level-requirements.js';
 export { getZoneConduitGuidance } from './get-zone-conduit-guidance.js';
+export { getRequirementRationale } from './get-requirement-rationale.js';
 
 /**
  * Register all Stage 1 tools for the MCP server
@@ -170,6 +171,24 @@ export function registerTools(): Tool[] {
           },
         },
         required: [],
+      },
+    },
+    {
+      name: 'get_requirement_rationale',
+      description: 'Get detailed rationale for a specific OT security requirement. Returns comprehensive context including why the requirement exists, security levels (for IEC 62443), regulatory drivers, sector applicability, and related requirements from other standards. Essential for understanding the business and security justification for implementing requirements.',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          requirement_id: {
+            type: 'string',
+            description: 'Requirement identifier (e.g., "SR 1.1", "AC-2")',
+          },
+          standard: {
+            type: 'string',
+            description: 'Standard identifier (e.g., "iec62443-3-3", "nist-800-53")',
+          },
+        },
+        required: ['requirement_id', 'standard'],
       },
     },
   ];
