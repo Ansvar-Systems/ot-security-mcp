@@ -255,6 +255,7 @@ export class MitreIngester {
    */
   async ingestAll(): Promise<void> {
     console.log('Starting MITRE ATT&CK ICS ingestion...\n');
+    const startTime = Date.now();
 
     try {
       // Fetch data
@@ -326,6 +327,21 @@ export class MitreIngester {
       console.log(`Relationships ingested: ${relationshipCount}`);
       console.log('=========================\n');
 
+      // Log ingestion to audit trail
+      const duration = Date.now() - startTime;
+      this.db.run(
+        `INSERT INTO ingestion_log (operation, status, record_count, duration_ms, data_version, notes)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        [
+          'ingest:mitre',
+          'success',
+          techniqueCount + mitigationCount,
+          duration,
+          'MITRE ATT&CK for ICS v16.0',
+          `Techniques: ${techniqueCount}, Mitigations: ${mitigationCount}, Relationships: ${relationshipCount}`
+        ]
+      );
+
     } catch (error) {
       // Transaction automatically rolled back by better-sqlite3
       const errorMessage = error instanceof Error ? error.message : String(error);
@@ -333,6 +349,26 @@ export class MitreIngester {
       console.error(`Error: ${errorMessage}`);
       console.error('Database transaction has been rolled back to maintain consistency.');
       console.error('========================\n');
+
+      // Log failure to audit trail
+      const duration = Date.now() - startTime;
+      try {
+        this.db.run(
+          `INSERT INTO ingestion_log (operation, status, record_count, duration_ms, data_version, notes)
+           VALUES (?, ?, ?, ?, ?, ?)`,
+          [
+            'ingest:mitre',
+            'failed',
+            0,
+            duration,
+            'MITRE ATT&CK for ICS v16.0',
+            `Error: ${errorMessage}`
+          ]
+        );
+      } catch (logError) {
+        // Silently fail if logging fails (database might not exist yet)
+      }
+
       throw error; // Re-throw to signal failure to caller
     }
   }

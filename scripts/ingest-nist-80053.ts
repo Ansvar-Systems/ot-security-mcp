@@ -137,6 +137,54 @@ export class Nist80053Ingester {
   }
 
   /**
+   * Extract description from OSCAL control parts
+   * OSCAL stores control text across multiple nested parts
+   */
+  private extractDescription(control: any): string {
+    const parts: string[] = [];
+
+    // 1. Try statement prose first (control requirement)
+    const statementPart = control.parts?.find((p: any) => p.name === 'statement');
+    if (statementPart?.prose) {
+      parts.push(statementPart.prose);
+    }
+
+    // 2. Try guidance prose (implementation guidance)
+    const guidancePart = control.parts?.find((p: any) => p.name === 'guidance');
+    if (guidancePart?.prose) {
+      parts.push(guidancePart.prose);
+    }
+
+    // 3. If still empty, collect prose from all parts
+    if (parts.length === 0 && control.parts) {
+      for (const part of control.parts) {
+        if (part.prose && typeof part.prose === 'string') {
+          parts.push(part.prose);
+        }
+        // Also check nested parts
+        if (part.parts) {
+          for (const nestedPart of part.parts) {
+            if (nestedPart.prose && typeof nestedPart.prose === 'string') {
+              parts.push(nestedPart.prose);
+            }
+          }
+        }
+      }
+    }
+
+    // 4. Fallback to control title if no prose found
+    if (parts.length === 0) {
+      return `${control.title}. See NIST SP 800-53 Rev 5 for complete guidance.`;
+    }
+
+    // Join all collected parts, truncate if too long
+    const description = parts.join(' ');
+    return description.length > 2000
+      ? description.substring(0, 2000) + '...'
+      : description;
+  }
+
+  /**
    * Parse OSCAL catalog and extract controls
    */
   parseOscalCatalog(oscal: OscalCatalog): NistControl[] {
@@ -150,9 +198,8 @@ export class Nist80053Ingester {
         const labelProp = control.props?.find((p) => p.name === 'label');
         const controlId = labelProp?.value || control.id.toUpperCase();
 
-        // Get statement/description from parts
-        const statementPart = control.parts?.find((p) => p.name === 'statement');
-        const description = statementPart?.prose || '';
+        // Extract description using enhanced parsing
+        const description = this.extractDescription(control);
 
         controls.push({
           control_id: controlId,
@@ -209,6 +256,7 @@ export class Nist80053Ingester {
    */
   async ingestAll(): Promise<void> {
     console.log('Starting NIST 800-53 Rev 5 ingestion...\n');
+    const startTime = Date.now();
 
     try {
       // Ensure standard exists
@@ -248,6 +296,21 @@ export class Nist80053Ingester {
       console.log(`Control families included: ${OT_RELEVANT_FAMILIES.join(', ')}`);
       console.log('==========================\n');
 
+      // Log ingestion to audit trail
+      const duration = Date.now() - startTime;
+      this.db.run(
+        `INSERT INTO ingestion_log (operation, status, record_count, duration_ms, data_version, notes)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        [
+          'ingest:nist-80053',
+          'success',
+          count?.count || 0,
+          duration,
+          'NIST SP 800-53 Rev 5',
+          `Control families: ${OT_RELEVANT_FAMILIES.join(', ')}`
+        ]
+      );
+
     } catch (error) {
       // Transaction automatically rolled back by better-sqlite3
       const errorMessage = error instanceof Error ? error.message : String(error);
@@ -255,6 +318,26 @@ export class Nist80053Ingester {
       console.error(`Error: ${errorMessage}`);
       console.error('Database transaction has been rolled back to maintain consistency.');
       console.error('========================\n');
+
+      // Log failure to audit trail
+      const duration = Date.now() - startTime;
+      try {
+        this.db.run(
+          `INSERT INTO ingestion_log (operation, status, record_count, duration_ms, data_version, notes)
+           VALUES (?, ?, ?, ?, ?, ?)`,
+          [
+            'ingest:nist-80053',
+            'failed',
+            0,
+            duration,
+            'NIST SP 800-53 Rev 5',
+            `Error: ${errorMessage}`
+          ]
+        );
+      } catch (logError) {
+        // Silently fail if logging fails
+      }
+
       throw error; // Re-throw to signal failure to caller
     }
   }

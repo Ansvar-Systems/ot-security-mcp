@@ -91,7 +91,7 @@ describe('E2E Tool Integration Tests', () => {
   });
 
   describe('list_ot_standards Tool', () => {
-    it('should return all 6 standards in Stage 2', async () => {
+    it('should return public standards (MITRE, NIST 800-53, NIST 800-82)', async () => {
       const result = await listStandards(db);
 
       expect(Array.isArray(result)).toBe(true);
