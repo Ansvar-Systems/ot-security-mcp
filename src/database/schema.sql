@@ -155,6 +155,10 @@ CREATE INDEX IF NOT EXISTS idx_mappings_target
 CREATE INDEX IF NOT EXISTS idx_mappings_type
   ON ot_mappings(mapping_type);
 
+-- Ensure unique mappings (no duplicates)
+CREATE UNIQUE INDEX IF NOT EXISTS idx_mappings_unique
+  ON ot_mappings(source_standard, source_requirement, target_standard, target_requirement);
+
 -- Indexes for MITRE ATT&CK queries
 CREATE INDEX IF NOT EXISTS idx_mitre_techniques_tactic
   ON mitre_ics_techniques(tactic);
