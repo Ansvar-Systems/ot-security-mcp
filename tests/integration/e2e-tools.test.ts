@@ -91,15 +91,60 @@ describe('E2E Tool Integration Tests', () => {
   });
 
   describe('list_ot_standards Tool', () => {
-    it('should return IEC 62443 standards in Stage 2', async () => {
+    it('should return all 6 standards in Stage 2', async () => {
       const result = await listStandards(db);
 
       expect(Array.isArray(result)).toBe(true);
-      expect(result.length).toBeGreaterThan(0);
+      expect(result.length).toBe(6);
 
-      // Should have IEC 62443 standards
-      const iecStandards = result.filter(s => s.id.startsWith('iec62443'));
-      expect(iecStandards.length).toBeGreaterThan(0);
+      // Verify all expected standards exist
+      const standardIds = result.map(s => s.id);
+      expect(standardIds).toContain('iec62443-3-3');
+      expect(standardIds).toContain('iec62443-4-2');
+      expect(standardIds).toContain('iec62443-3-2');
+      expect(standardIds).toContain('nist-800-53');
+      expect(standardIds).toContain('nist-800-82');
+      expect(standardIds).toContain('mitre-ics');
+    });
+
+    it('should include requirement counts for each standard', async () => {
+      const result = await listStandards(db);
+
+      // All standards should have requirement_count property
+      result.forEach(standard => {
+        expect(standard).toHaveProperty('requirement_count');
+        expect(typeof standard.requirement_count).toBe('number');
+        expect(standard.requirement_count).toBeGreaterThanOrEqual(0);
+      });
+
+      // Verify specific counts
+      const iec62443_3_3 = result.find(s => s.id === 'iec62443-3-3');
+      expect(iec62443_3_3?.requirement_count).toBe(2);
+
+      const iec62443_4_2 = result.find(s => s.id === 'iec62443-4-2');
+      expect(iec62443_4_2?.requirement_count).toBe(2);
+
+      const iec62443_3_2 = result.find(s => s.id === 'iec62443-3-2');
+      expect(iec62443_3_2?.requirement_count).toBe(0); // Zones/conduits, not requirements
+
+      const nist_800_53 = result.find(s => s.id === 'nist-800-53');
+      expect(nist_800_53?.requirement_count).toBe(228);
+
+      const nist_800_82 = result.find(s => s.id === 'nist-800-82');
+      expect(nist_800_82?.requirement_count).toBe(6);
+
+      const mitre_ics = result.find(s => s.id === 'mitre-ics');
+      expect(mitre_ics?.requirement_count).toBe(83); // Techniques count
+    });
+
+    it('should order standards alphabetically by name', async () => {
+      const result = await listStandards(db);
+      const names = result.map(s => s.name);
+
+      // Verify alphabetical ordering
+      for (let i = 1; i < names.length; i++) {
+        expect(names[i].localeCompare(names[i - 1])).toBeGreaterThanOrEqual(0);
+      }
     });
 
     it('should handle tool call without errors', async () => {
