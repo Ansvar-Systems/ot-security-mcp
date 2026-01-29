@@ -34,6 +34,7 @@ yarn-error.log*
 *.db
 *.db-shm
 *.db-wal
+*.sqlite
 
 # Temporary files
 *.tmp

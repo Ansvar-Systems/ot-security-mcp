@@ -399,4 +399,143 @@ describe('searchRequirements', () => {
       expect(Array.isArray(result)).toBe(true);
     });
   });
+
+  describe('RequirementSearchResult Interface', () => {
+    beforeEach(() => {
+      // Insert test standard
+      db.run(
+        `INSERT INTO ot_standards (id, name, version, status)
+         VALUES (?, ?, ?, ?)`,
+        ['iec62443-3-3', 'IEC 62443-3-3', 'v2.0', 'current']
+      );
+
+      // Insert test requirements with various match locations
+      db.run(
+        `INSERT INTO ot_requirements (standard_id, requirement_id, title, description, rationale, component_type, purdue_level)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [
+          'iec62443-3-3',
+          'SR 1.1',
+          'Human user authentication',
+          'The control system shall provide the capability to identify and authenticate all human users.',
+          'Authentication is essential to ensure only authorized users can access the control system.',
+          'host',
+          3
+        ]
+      );
+
+      db.run(
+        `INSERT INTO ot_requirements (standard_id, requirement_id, title, description, rationale, component_type, purdue_level)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [
+          'iec62443-3-3',
+          'SR 1.2',
+          'Software process identification',
+          'The control system shall provide authentication for all software processes and services running on the system.',
+          'Process authentication prevents unauthorized software execution.',
+          'application',
+          2
+        ]
+      );
+
+      db.run(
+        `INSERT INTO ot_requirements (standard_id, requirement_id, title, description, rationale, component_type, purdue_level)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [
+          'iec62443-3-3',
+          'SR 2.1',
+          'Network segmentation',
+          'The control system shall implement network segmentation between security zones.',
+          'Segmentation limits the impact of security incidents. Strong authentication mechanisms must be used between zones.',
+          'network',
+          1
+        ]
+      );
+    });
+
+    it('should return RequirementSearchResult with snippet field', async () => {
+      const result = await searchRequirements(db, { query: 'authentication' });
+      expect(result.length).toBeGreaterThan(0);
+      expect(result[0]).toHaveProperty('snippet');
+      expect(typeof result[0]?.snippet).toBe('string');
+      expect(result[0]?.snippet.length).toBeGreaterThan(0);
+    });
+
+    it('should return RequirementSearchResult with relevance field', async () => {
+      const result = await searchRequirements(db, { query: 'authentication' });
+      expect(result.length).toBeGreaterThan(0);
+      expect(result[0]).toHaveProperty('relevance');
+      expect(typeof result[0]?.relevance).toBe('number');
+      expect(result[0]?.relevance).toBeGreaterThanOrEqual(0.0);
+      expect(result[0]?.relevance).toBeLessThanOrEqual(1.0);
+    });
+
+    it('should return RequirementSearchResult with standard_name field', async () => {
+      const result = await searchRequirements(db, { query: 'authentication' });
+      expect(result.length).toBeGreaterThan(0);
+      expect(result[0]).toHaveProperty('standard_name');
+      expect(typeof result[0]?.standard_name).toBe('string');
+      expect(result[0]?.standard_name).toBe('IEC 62443-3-3');
+    });
+
+    it('should extract snippet from title when match occurs in title', async () => {
+      const result = await searchRequirements(db, { query: 'authentication' });
+      const titleMatch = result.find(r => r.requirement_id === 'SR 1.1');
+      expect(titleMatch).toBeDefined();
+      expect(titleMatch?.snippet).toBe('Human user authentication');
+    });
+
+    it('should extract snippet from description with context around match', async () => {
+      const result = await searchRequirements(db, { query: 'authentication' });
+      const descMatch = result.find(r => r.requirement_id === 'SR 1.2');
+      expect(descMatch).toBeDefined();
+      expect(descMatch?.snippet).toContain('authentication');
+      // Should have context around the match
+      expect(descMatch?.snippet.length).toBeGreaterThan('authentication'.length);
+    });
+
+    it('should extract snippet from rationale with context around match', async () => {
+      const result = await searchRequirements(db, { query: 'authentication' });
+      const rationaleMatch = result.find(r => r.requirement_id === 'SR 2.1');
+      expect(rationaleMatch).toBeDefined();
+      expect(rationaleMatch?.snippet).toContain('authentication');
+      // Should have context around the match
+      expect(rationaleMatch?.snippet.length).toBeGreaterThan('authentication'.length);
+    });
+
+    it('should assign relevance score 1.0 for title match', async () => {
+      const result = await searchRequirements(db, { query: 'authentication' });
+      const titleMatch = result.find(r => r.requirement_id === 'SR 1.1');
+      expect(titleMatch).toBeDefined();
+      expect(titleMatch?.relevance).toBe(1.0);
+    });
+
+    it('should assign relevance score 0.7 for description match', async () => {
+      const result = await searchRequirements(db, { query: 'processes and services' });
+      const descMatch = result.find(r => r.requirement_id === 'SR 1.2');
+      expect(descMatch).toBeDefined();
+      expect(descMatch?.relevance).toBe(0.7);
+    });
+
+    it('should assign relevance score 0.5 for rationale match', async () => {
+      const result = await searchRequirements(db, { query: 'security incidents' });
+      const rationaleMatch = result.find(r => r.requirement_id === 'SR 2.1');
+      expect(rationaleMatch).toBeDefined();
+      expect(rationaleMatch?.relevance).toBe(0.5);
+    });
+
+    it('should return results ordered by relevance (descending)', async () => {
+      const result = await searchRequirements(db, { query: 'authentication' });
+      expect(result.length).toBeGreaterThanOrEqual(3);
+
+      // Check that results are sorted by relevance descending
+      for (let i = 0; i < result.length - 1; i++) {
+        expect(result[i]!.relevance).toBeGreaterThanOrEqual(result[i + 1]!.relevance);
+      }
+
+      // First result should be the title match (SR 1.1) with relevance 1.0
+      expect(result[0]?.requirement_id).toBe('SR 1.1');
+      expect(result[0]?.relevance).toBe(1.0);
+    });
+  });
 });
