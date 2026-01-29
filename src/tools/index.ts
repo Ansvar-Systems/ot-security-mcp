@@ -5,6 +5,12 @@
 
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
 
+// Export tool implementations
+export { searchRequirements } from './search.js';
+export { getRequirement } from './get-requirement.js';
+export { listStandards } from './list-standards.js';
+export { getMitreTechnique } from './get-mitre-technique.js';
+
 /**
  * Register all Stage 1 tools for the MCP server
  * @returns Array of tool definitions with JSON Schema validation
