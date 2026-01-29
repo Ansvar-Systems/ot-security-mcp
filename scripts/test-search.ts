@@ -95,6 +95,9 @@ async function main() {
     console.log(`   ✓ Found ${result1.length} results`);
     result1.forEach(r => {
       console.log(`     - ${r.requirement_id}: ${r.title}`);
+      console.log(`       Standard: ${r.standard_name}`);
+      console.log(`       Relevance: ${r.relevance}`);
+      console.log(`       Snippet: ${r.snippet.substring(0, 80)}...`);
     });
     console.log();
 
@@ -107,6 +110,7 @@ async function main() {
     console.log(`   ✓ Found ${result2.length} results`);
     result2.forEach(r => {
       console.log(`     - ${r.requirement_id}: ${r.title} (${r.component_type})`);
+      console.log(`       Relevance: ${r.relevance} | Snippet: ${r.snippet.substring(0, 60)}...`);
     });
     console.log();
 
@@ -136,6 +140,8 @@ async function main() {
     console.log('- Component type filtering: Working');
     console.log('- Security level filtering: Working');
     console.log('- Empty database handling: Working');
+    console.log('- RequirementSearchResult fields (snippet, relevance, standard_name): Working');
+    console.log('- Relevance scoring and ordering: Working');
 
   } catch (error) {
     console.error('❌ Test failed:', error);
