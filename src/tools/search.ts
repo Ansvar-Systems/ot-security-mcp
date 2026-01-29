@@ -102,8 +102,13 @@ function calculateRelevance(req: OTRequirement, query: string): number {
  * Search for OT security requirements across all standards
  *
  * Performs full-text search across requirement title, description, and rationale fields.
- * Supports filtering by standard, security level, and component type.
+ * Supports filtering by standard, security level (IEC 62443), and component type.
  * Returns results with relevance scoring and snippet extraction.
+ *
+ * Security Level Filtering:
+ * - Applies to IEC 62443 standards (3-3, 4-2) via security_levels table
+ * - NIST standards don't have security levels, so filter excludes them
+ * - Uses LEFT JOIN to support requirements with/without security levels
  *
  * @param db - Database client instance
  * @param params - Search parameters including query string and optional filters
@@ -138,6 +143,7 @@ export async function searchRequirements(
   `;
 
   // Add LEFT JOIN for security_level filtering if needed
+  // This allows filtering IEC 62443 requirements by security level (SL 1-4)
   if (security_level !== undefined) {
     sql += `
     LEFT JOIN security_levels sl ON r.id = sl.requirement_db_id
@@ -164,7 +170,7 @@ export async function searchRequirements(
     queryParams.push(...standards);
   }
 
-  // Add security_level filter
+  // Add security_level filter (IEC 62443 only)
   if (security_level !== undefined) {
     sql += ` AND sl.security_level = ?`;
     queryParams.push(security_level);
