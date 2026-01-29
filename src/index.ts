@@ -15,6 +15,7 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 import { DatabaseClient } from './database/client.js';
 import { registerTools } from './tools/index.js';
+import { searchRequirements } from './tools/search.js';
 
 /**
  * MCP Server class for OT Security standards and frameworks
@@ -100,15 +101,21 @@ export class McpServer {
 
   /**
    * Handle search_ot_requirements tool
-   * @param _args - Tool arguments (unused in stub)
+   * @param args - Tool arguments containing query and options
    */
-  private async handleSearchRequirements(_args: unknown) {
-    // Stub implementation - will be implemented in Task 6
+  private async handleSearchRequirements(args: unknown) {
+    const { query, ...options } = args as any;
+
+    const requirements = await searchRequirements(this.db, {
+      query,
+      options
+    });
+
     return {
       content: [
         {
           type: 'text',
-          text: 'Not implemented yet - search_ot_requirements will be implemented in Task 6',
+          text: JSON.stringify(requirements, null, 2),
         },
       ],
     };
