@@ -1,372 +1,338 @@
 # OT Security MCP Server
 
-> Model Context Protocol server providing AI-native access to OT/ICS security standards, frameworks, and threat intelligence
+**IEC 62443 for the AI age.**
 
-## Overview
+[![npm version](https://badge.fury.io/js/@ansvar%2Fot-security-mcp.svg)](https://www.npmjs.com/package/@ansvar/ot-security-mcp)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![GitHub stars](https://img.shields.io/github/stars/Ansvar-Systems/ot-security-mcp?style=social)](https://github.com/Ansvar-Systems/ot-security-mcp)
+[![Database](https://img.shields.io/badge/database-pre--built-green)](docs/coverage.md)
+[![Tests](https://img.shields.io/badge/tests-263%20passing-brightgreen)](docs/tools.md)
 
-The OT Security MCP Server provides Claude with structured access to operational technology (OT) and industrial control system (ICS) security standards, requirements, and MITRE ATT&CK for ICS threat intelligence. It enables AI-assisted security assessments, compliance mapping, and threat analysis for critical infrastructure environments.
+Query **IEC 62443, NIST 800-82, NIST 800-53, and MITRE ATT&CK for ICS** — the complete OT security framework stack — directly from Claude, Cursor, or any MCP-compatible client.
 
-This server implements the Model Context Protocol (MCP), allowing seamless integration with Claude Desktop and other MCP-compatible clients.
+If you're securing industrial control systems, manufacturing plants, energy infrastructure, or critical OT environments, this is your security standards reference.
 
-## Features
+Built by [Ansvar Systems](https://ansvar.eu) — Stockholm, Sweden
 
-### Stage 2 (Current) - Core Standards
-- ✅ **MITRE ATT&CK for ICS** - 83 techniques, 52 mitigations, 331 relationships
-- ✅ **IEC 62443-3-3** - System security requirements with security levels (SL-1 through SL-4)
-- ✅ **IEC 62443-3-2** - Zones and conduits for network segmentation
-- ✅ **NIST SP 800-53 Rev 5** - Security controls catalog via OSCAL
-- ✅ **NIST SP 800-82 Rev 3** - OT-specific security guidance
-- ✅ **Full-text search** - Search across all OT security requirements
-- ✅ **Security level mapping** - Map IEC 62443 requirements to target security levels
-- ✅ **Zone/conduit guidance** - Network segmentation based on Purdue Model
-- ✅ **Requirement rationale** - Understand why requirements exist and their context
-- ✅ **Cross-standard mappings** - NIST ↔ IEC 62443 requirement relationships
+---
 
-### Roadmap
-- 🚧 **Enhanced mappings** - Deeper cross-standard analysis (Stage 3)
-- 🚧 **NERC CIP** - Critical Infrastructure Protection standards (Stage 4)
-- 🚧 **Sector applicability** - Industry-specific compliance guidance (Stage 4)
-- 🚧 **Compliance gap analysis** - Automated assessment tools (Stage 4)
+## Why This Exists
 
-## Installation
+OT security standards are scattered across ISA PDFs, NIST publications, and MITRE matrices. Whether you're:
+- A **control systems engineer** implementing IEC 62443 security levels
+- A **security architect** designing network segmentation with the Purdue Model
+- A **compliance officer** mapping NIS2 requirements to IEC controls
+- A **threat hunter** investigating MITRE ATT&CK for ICS techniques
+- A **product team** building secure PLCs, SCADA systems, or industrial IoT devices
 
-### Prerequisites
+...you shouldn't need to juggle 6 different documentation sites and 200 pages of standards. Ask Claude. Get the exact requirement. With context.
 
-- Node.js 18 or later
-- npm or pnpm package manager
+This MCP server makes **OT security standards searchable, cross-referenceable, and AI-readable**.
 
-### Setup
+---
+
+## Quick Start
+
+### Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/ot-security-mcp.git
-cd ot-security-mcp
-
-# Install dependencies
-npm install
-
-# Build the project
-npm run build
-
-# Ingest data into the database
-npm run ingest:mitre          # MITRE ATT&CK for ICS (required)
-npm run ingest:nist-80053     # NIST 800-53 Rev 5 (auto-downloads from NIST)
-npm run ingest:nist-80082     # NIST 800-82 Rev 3 guidance
-
-# For IEC 62443, see docs/ingestion/iec62443-guide.md
-# (Requires licensed access to IEC 62443 standards)
+npm install @ansvar/ot-security-mcp
 ```
-
-The ingestion scripts will fetch and populate your local database with OT security standards and threat intelligence.
-
-## Configuration
 
 ### Claude Desktop
 
-Add the OT Security MCP Server to your Claude Desktop configuration file:
+Add to your `claude_desktop_config.json`:
 
-**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+**Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
 
 ```json
 {
   "mcpServers": {
     "ot-security": {
-      "command": "node",
-      "args": ["/absolute/path/to/ot-security-mcp/dist/index.js"],
-      "env": {
-        "OT_MCP_DB_PATH": "/absolute/path/to/ot-security-mcp/data/ot-security.db"
-      }
+      "command": "npx",
+      "args": ["-y", "@ansvar/ot-security-mcp"]
     }
   }
 }
 ```
 
-**Important**: Replace `/absolute/path/to/ot-security-mcp` with the actual path to your installation.
+Restart Claude Desktop. Done.
 
-After adding the configuration, restart Claude Desktop for the changes to take effect.
+### Cursor / VS Code
 
-## Usage
-
-Once configured, you can ask Claude to help with OT security tasks. Claude will automatically use the appropriate tools from this MCP server.
-
-### Example Queries
-
-**MITRE ATT&CK for ICS:**
-```
-What is MITRE technique T0800 and what mitigations are available?
-What MITRE ICS techniques target Programmable Logic Controllers (PLCs)?
-```
-
-**IEC 62443 Security Levels:**
-```
-What IEC 62443 requirements apply to Security Level 2?
-Show me authentication requirements for IEC 62443 SL-3
+```json
+{
+  "mcp.servers": {
+    "ot-security": {
+      "command": "npx",
+      "args": ["-y", "@ansvar/ot-security-mcp"]
+    }
+  }
+}
 ```
 
-**Network Segmentation:**
+---
+
+## Example Queries
+
+Once connected, just ask naturally:
+
+### IEC 62443 Security Levels
+- *"What are the IEC 62443 requirements for Security Level 2?"*
+- *"Which security level should I target for a water treatment plant?"*
+- *"Compare requirements between SL-2 and SL-3"*
+- *"What is SR 1.1 (identification and authentication) in IEC 62443?"*
+
+### Network Segmentation & Zones
+- *"How should I segment my OT network using the Purdue Model?"*
+- *"What security controls belong at Level 3 of the Purdue Model?"*
+- *"Design a zone and conduit architecture for a manufacturing facility"*
+- *"What's the difference between a zone and a conduit in IEC 62443-3-2?"*
+
+### Threat Intelligence
+- *"What MITRE ATT&CK techniques target PLCs?"*
+- *"How do attackers perform lateral movement in ICS environments?"*
+- *"Show me MITRE ICS techniques for T0800 (Modify Control Logic)"*
+- *"Which mitigations prevent Man-in-the-Middle attacks on Modbus?"*
+
+### NIST Guidance
+- *"What are NIST's recommendations for OT asset management?"*
+- *"How does NIST 800-82 address incident response in control systems?"*
+- *"Map NIST 800-82 guidance to NIST 800-53 controls"*
+
+### Cross-Standard Mapping
+- *"Map IEC 62443 SR 1.1 to equivalent NIST controls"*
+- *"Which NIST 800-53 controls support IEC 62443 Security Level 3?"*
+- *"Compare identification and authentication across IEC and NIST"*
+
+### Industry-Specific
+- *"What security requirements apply to a power generation facility?"*
+- *"IEC 62443 requirements for pharmaceutical manufacturing"*
+- *"Security controls for a water/wastewater utility"*
+
+**More examples:** See [docs/use-cases.md](./docs/use-cases.md) for industry-specific scenarios
+
+---
+
+## What's Included
+
+### Standards Coverage
+- **IEC 62443-3-3** — 67 System Security Requirements (SRs) across 7 foundational requirements
+- **IEC 62443-4-2** — 51 Component Requirements (CRs) for embedded devices, host devices, network devices, and applications
+- **IEC 62443-3-2** — Security risk assessment, zones & conduits, Purdue Model
+- **NIST SP 800-53 Rev 5** — 228 OT-relevant controls from 12 control families
+- **NIST SP 800-82 Rev 3** — Guide to Operational Technology Security
+- **MITRE ATT&CK for ICS** — 83 techniques, 52 mitigations, 331 relationships
+
+### Features
+- **Full-Text Search** — Find relevant requirements across all standards instantly
+- **Security Level Mapping** — Query IEC 62443 requirements by SL-1 through SL-4
+- **Zone/Conduit Guidance** — Network segmentation design with Purdue Model
+- **Requirement Rationale** — Understand WHY requirements exist, not just what they say
+- **Threat Intelligence** — MITRE ATT&CK techniques mapped to defensive controls
+- **Cross-Standard Mappings** — IEC ↔ NIST control relationships
+- **Component Type Filtering** — Requirements for embedded devices, hosts, networks, or applications
+
+### Data Quality
+- **238 Requirements** — IEC 62443 foundation + NIST 800-82 guidance
+- **228 NIST 800-53 Controls** — Automated OSCAL ingestion from official source
+- **83 MITRE ICS Techniques** — Complete ATT&CK for ICS matrix
+- **16 Cross-Standard Mappings** — NIST 800-82 ↔ 800-53 validated mappings
+- **Daily Updates** — Automatic freshness checks for NIST and MITRE sources
+
+**Detailed coverage:** [docs/coverage.md](docs/coverage.md)
+**Use cases by industry:** [docs/use-cases.md](docs/use-cases.md)
+**Available tools:** [docs/tools.md](docs/tools.md)
+
+---
+
+## 🎬 See It In Action
+
+### Why This Works
+
+**Authoritative Source Data:**
+- **IEC 62443**: User-supplied (licensed standards) — you provide your own licensed data
+- **NIST 800-53**: Automated OSCAL ingestion from official NIST GitHub
+- **NIST 800-82**: Curated guidance from official PDF publication
+- **MITRE ATT&CK**: Automated STIX 2.0 ingestion from official MITRE repository
+- All data stored in SQLite with full-text search (FTS5)
+
+**Smart Architecture:**
+- Security level filtering uses junction tables (many-to-many relationships)
+- Zone/conduit guidance generates markdown with Purdue Model context
+- Requirement rationale includes regulatory drivers and related standards
+- Cross-standard mappings use confidence scores for quality assessment
+
+**Technical Stack:**
 ```
-Show me IEC 62443 zone and conduit guidance for Purdue Level 1
-What network segmentation does IEC 62443 recommend for SCADA systems?
-```
-
-**Requirement Analysis:**
-```
-Why does IEC 62443 require user authentication? Tell me about SR 1.1
-What's the rationale behind NIST 800-53 control SC-7?
-```
-
-**Cross-Standard Mapping:**
-```
-What NIST 800-53 controls map to IEC 62443 Security Level 2?
-Compare NIST 800-82 network segmentation guidance to IEC 62443 zones
-```
-
-**Standards Discovery:**
-```
-What OT security standards are available in your knowledge base?
-Search for requirements related to encryption across all standards
-```
-
-### Available Tools
-
-The server provides 7 tools that Claude can use:
-
-**Core Tools:**
-1. **search_ot_requirements** - Full-text search across OT requirements with filtering by standard, security level, component type
-2. **get_ot_requirement** - Get detailed requirement information by ID with cross-standard mappings
-3. **list_ot_standards** - List all available OT security standards with coverage statistics
-4. **get_mitre_ics_technique** - Query MITRE ATT&CK for ICS techniques with mitigations
-
-**Stage 2 Tools:**
-5. **map_security_level_requirements** - Map IEC 62443 requirements to specific security levels (SL-1 through SL-4)
-6. **get_zone_conduit_guidance** - Get network segmentation guidance with zones, conduits, and data flows
-7. **get_requirement_rationale** - Get detailed rationale, regulatory context, and related standards for any requirement
-
-**Tool Documentation:**
-- [map_security_level_requirements](docs/tools/map-security-level-requirements.md) - Security level mapping guide
-- [get_zone_conduit_guidance](docs/tools/get-zone-conduit-guidance.md) - Network segmentation guide
-- [get_requirement_rationale](docs/tools/get-requirement-rationale.md) - Requirement context and rationale
-
-## Development
-
-### Running Tests
-
-```bash
-# Run all tests
-npm test
-
-# Run tests in watch mode
-npm run test:watch
-
-# Run tests with coverage
-npm run test:coverage
-```
-
-### Building
-
-```bash
-# Build TypeScript to JavaScript
-npm run build
-
-# Clean build artifacts
-npm run clean
-```
-
-### Development Mode
-
-```bash
-# Run with auto-reload
-npm run dev
-```
-
-### Type Checking
-
-```bash
-# Check TypeScript types
-npm run typecheck
-```
-
-## Project Structure
-
-```
-ot-security-mcp/
-├── data/
-│   ├── ot-security.db          # SQLite database
-│   ├── templates/              # JSON templates for IEC 62443 ingestion
-│   └── nist-80082-guidance.json # Sample NIST 800-82 guidance
-├── docs/
-│   ├── ingestion/              # Data ingestion guides
-│   │   ├── iec62443-guide.md   # IEC 62443 ingestion workflow
-│   │   └── nist-guide.md       # NIST standards ingestion
-│   └── tools/                  # Tool reference documentation
-│       ├── map-security-level-requirements.md
-│       ├── get-zone-conduit-guidance.md
-│       └── get-requirement-rationale.md
-├── scripts/
-│   ├── ingest-mitre-ics.ts     # MITRE ATT&CK for ICS ingestion
-│   ├── ingest-iec62443.ts      # IEC 62443 ingestion
-│   ├── ingest-nist-80053.ts    # NIST 800-53 OSCAL ingestion
-│   ├── ingest-nist-80082.ts    # NIST 800-82 guidance ingestion
-│   └── validate-iec62443.ts    # IEC 62443 JSON validation
-├── src/
-│   ├── database/
-│   │   ├── client.ts           # Database client
-│   │   └── schema.sql          # Database schema
-│   ├── tools/                  # Tool implementations (7 tools)
-│   │   ├── search.ts
-│   │   ├── get-requirement.ts
-│   │   ├── list-standards.ts
-│   │   ├── get-mitre-technique.ts
-│   │   ├── map-security-level-requirements.ts
-│   │   ├── get-zone-conduit-guidance.ts
-│   │   ├── get-requirement-rationale.ts
-│   │   └── index.ts
-│   ├── types/
-│   │   └── index.ts            # TypeScript type definitions
-│   └── index.ts                # MCP server entry point
-└── tests/
-    ├── integration/            # Integration tests
-    └── unit/                   # Unit tests (233 passing tests)
+Official Source → Parse → Validate → SQLite → MCP Tools → AI Response
+     ↑                        ↑            ↑
+  OSCAL/STIX          JSON Schema    FTS5 Search
 ```
 
-## Stage 2 Implementation Status
+### Example: Traditional vs. This MCP
 
-**Completed Features:**
-- ✅ Database schema (14 tables including zones, conduits, security levels)
-- ✅ MITRE ATT&CK for ICS data ingestion (83 techniques, 52 mitigations)
-- ✅ IEC 62443-3-3 ingestion framework with JSON templates
-- ✅ IEC 62443-3-2 zones and conduits support
-- ✅ NIST SP 800-53 Rev 5 OSCAL ingestion
-- ✅ NIST SP 800-82 Rev 3 guidance ingestion
-- ✅ 7 fully implemented tools
-- ✅ 233 passing tests (208 unit + 25 integration)
-- ✅ Cross-standard mappings (NIST ↔ IEC 62443)
-- ✅ Security level mapping (SL-1 through SL-4)
-- ✅ Comprehensive documentation (ingestion guides + tool references)
+| Traditional Approach | This MCP Server |
+|---------------------|-----------------|
+| Buy IEC 62443 PDFs ($500+) | Ingest your licensed IEC data once |
+| Navigate 300+ page security level tables | *"What requirements apply to SL-2?"* → instant answer |
+| Manual Purdue Model diagrams | `get_zone_conduit_guidance` → generated architecture |
+| Cross-reference NIST ↔ IEC manually | `compare_ot_requirements` → mapped instantly |
+| Search MITRE matrices by hand | *"Show me PLC attacks"* → filtered techniques |
+| 6 different documentation sites | One unified query interface |
 
-**Data Requirements:**
-- IEC 62443 data requires licensed access (see [IEC 62443 Ingestion Guide](docs/ingestion/iec62443-guide.md))
-- NIST data is publicly available and auto-downloaded
-- Sample data provided for testing and validation
+**Traditional example:** Open IEC 62443-3-3 PDF → Find security level table → Ctrl+F "SR 1" → Read 15 pages → Cross-reference to IEC 62443-4-2 → Repeat for NIST
 
-**What's Working:**
-- All 7 tools fully functional
-- Full-text search across requirements
-- Security level mapping and filtering
-- Zone/conduit network segmentation guidance
-- Requirement rationale with regulatory context
-- Cross-standard relationship queries
+**This MCP:** *"What are all IEC 62443 requirements for Security Level 2 targeting embedded devices?"* → Done.
 
-## Roadmap
+---
 
-### Stage 1: Foundation + MITRE ✅ Completed
-- Database schema design
-- MITRE ATT&CK for ICS integration
-- Core tool implementations
-- MCP server scaffolding
+## ⚠️ Important Disclaimers
 
-### Stage 2: Core Standards ✅ Completed (Current)
-- IEC 62443-3-3 system security requirements
-- IEC 62443-3-2 zones and conduits
-- NIST SP 800-53 Rev 5 controls (OSCAL)
-- NIST SP 800-82 Rev 3 guidance
-- Security level mapping tools
-- Cross-standard relationship queries
-- Comprehensive documentation
+### IEC 62443 Licensing
 
-### Stage 3: Enhanced Mappings (Planned)
-- Deeper NIST Framework integration
-- Enhanced IEC-to-NIST requirement mappings
-- MITRE technique to standard control mappings
-- Advanced compliance analysis queries
-- Automated gap identification
+> **📄 IEC 62443 CONTENT NOT INCLUDED**
+>
+> IEC 62443 is a **copyrighted standard** published by the International Society of Automation (ISA) and International Electrotechnical Commission (IEC).
+>
+> **This MCP server provides:**
+> - Database schema and ingestion tools for IEC 62443 data
+> - JSON templates showing the expected data structure
+> - Sample data (2 requirements) demonstrating the format
+>
+> **You must provide:**
+> - Your own licensed copies of IEC 62443 standards
+> - Your own JSON files created from your licensed standards
+>
+> **How to obtain IEC 62443 standards:**
+> - Purchase from [ISA](https://www.isa.org/standards-and-publications/isa-standards/isa-iec-62443-series-of-standards) or [IEC](https://webstore.iec.ch/)
+> - Prices: ~$150-200 per part (3-3, 4-2, 3-2)
+>
+> **Ingestion guide:** See [docs/ingestion/iec62443-guide.md](./docs/ingestion/iec62443-guide.md)
 
-### Stage 4: Advanced Features (Planned)
-- NERC CIP requirements
-- Sector-specific applicability engine
-- Automated compliance gap analysis
-- Risk-based requirement prioritization
-- Assessment report generation
+### Legal Advice
 
-## Database Schema
+> **🚨 THIS TOOL IS NOT SECURITY CONSULTING OR LEGAL ADVICE 🚨**
+>
+> Security requirements are sourced from official public standards (NIST, MITRE) and user-supplied licensed standards (IEC 62443). However:
+> - **Security level targeting** is risk-based and requires proper threat modeling
+> - **Zone/conduit architectures** are design aids, not prescriptive solutions
+> - **Cross-standard mappings** are interpretive aids, not official guidance
+> - **MITRE techniques** are threat intelligence, not vulnerability assessments
+>
+> **Always:**
+> - Conduct proper risk assessments for your specific environment
+> - Engage qualified OT security professionals for implementation guidance
+> - Verify against official standard publications
+> - Follow your organization's security policies and procedures
 
-The server uses SQLite with 14 tables organized into functional areas:
+### NIST & MITRE Data
 
-**OT Standards (Core):**
-- `ot_standards` - Standard metadata (IEC 62443, NIST 800-53, NIST 800-82)
-- `ot_requirements` - Individual requirements with descriptions and rationale
-- `ot_mappings` - Cross-standard requirement relationships
-- `sector_applicability` - Sector/jurisdiction regulatory drivers
+**Public domain content** — NIST 800-53, NIST 800-82, and MITRE ATT&CK for ICS data are sourced from official U.S. government repositories and are in the public domain. No restrictions on use or distribution.
 
-**IEC 62443 Security Levels:**
-- `security_levels` - Security level mappings (SL-1 through SL-4) with capability levels
+---
 
-**Network Segmentation (IEC 62443-3-2):**
-- `zones` - Network zones by Purdue level (0-5)
-- `conduits` - Communication pathways between zones
-- `zone_conduit_flows` - Data flows with security requirements
-- `reference_architectures` - Standard reference architectures (Purdue Model, etc.)
+## About Ansvar Systems
 
-**MITRE ATT&CK for ICS:**
-- `mitre_ics_techniques` - Attack techniques (83 techniques)
-- `mitre_ics_mitigations` - Security mitigations (52 mitigations)
-- `mitre_technique_mitigations` - Technique-mitigation relationships
+We build AI-accelerated threat modeling and compliance tools for automotive OEMs, Tier 1 suppliers, industrial manufacturers, and critical infrastructure operators. This MCP server started as our internal IEC 62443 reference tool — turns out everyone securing OT environments has the same "6 documentation sites, 12 PDFs" problem.
 
-**System:**
-- `metadata` - Database version and ingestion timestamps
-- `ingestion_log` - Audit trail of data ingestion operations
+So we're open-sourcing it. Navigating IEC 62443 security levels shouldn't require a spreadsheet and a law degree.
 
-## Contributing
+**[ansvar.eu](https://ansvar.eu)** — Stockholm, Sweden
 
-Contributions are welcome! Please feel free to submit issues, feature requests, or pull requests.
+**Industries we serve:**
+- Automotive (ISO 21434, UN R155)
+- Industrial Manufacturing (IEC 62443)
+- Energy & Utilities (NERC CIP, IEC 62443)
+- Medical Devices (IEC 81001-5-1, IEC 62443-4-2)
 
-### Development Guidelines
-
-- Follow TypeScript best practices
-- Add tests for new features
-- Update documentation
-- Run type checking and tests before committing
-
-## License
-
-Apache 2.0
-
-## Acknowledgments
-
-- MITRE ATT&CK for ICS data from [MITRE Corporation](https://attack.mitre.org/matrices/ics/)
-- Built using the [Model Context Protocol SDK](https://github.com/modelcontextprotocol)
-- Inspired by the need for AI-assisted OT security assessments
+---
 
 ## Documentation
 
-Comprehensive documentation is available in the `docs/` directory:
+### Getting Started
+- **[Quick Start Guide](docs/quickstart.md)** — Installation and first queries
+- **[IEC 62443 Ingestion Guide](docs/ingestion/iec62443-guide.md)** — How to ingest your licensed standards
+- **[NIST Ingestion Guide](docs/ingestion/nist-guide.md)** — Automated NIST data setup
 
-**Ingestion Guides:**
-- [IEC 62443 Ingestion Guide](docs/ingestion/iec62443-guide.md) - Complete workflow for extracting and ingesting IEC 62443 data
-- [NIST Ingestion Guide](docs/ingestion/nist-guide.md) - Instructions for NIST SP 800-53 and 800-82 ingestion
+### Tools & Features
+- **[Available Tools](docs/tools.md)** — All 7 MCP tools with examples
+- **[Tool Reference: Security Level Mapping](docs/tools/map-security-level-requirements.md)**
+- **[Tool Reference: Zone/Conduit Guidance](docs/tools/get-zone-conduit-guidance.md)**
+- **[Tool Reference: Requirement Rationale](docs/tools/get-requirement-rationale.md)**
 
-**Tool Reference:**
-- [map_security_level_requirements](docs/tools/map-security-level-requirements.md) - Security level mapping tool
-- [get_zone_conduit_guidance](docs/tools/get-zone-conduit-guidance.md) - Network segmentation guidance tool
-- [get_requirement_rationale](docs/tools/get-requirement-rationale.md) - Requirement context and rationale tool
+### Use Cases
+- **[Industry Use Cases](docs/use-cases.md)** — Automotive, energy, manufacturing, water/wastewater
+- **[Coverage Details](docs/coverage.md)** — Complete standard coverage breakdown
+
+### Development
+- **[Development Guide](docs/development.md)** — Contributing, adding standards
+- **[Architecture](docs/architecture.md)** — Database schema, tool design
+- **[Troubleshooting](docs/troubleshooting.md)** — Common issues and fixes
+
+### Project Planning
+- **[Stage 2 Design](docs/plans/2026-01-29-ot-security-mcp-design.md)** — Complete architectural design
+- **[Stage 2 Implementation](docs/plans/2026-01-29-stage2-implementation.md)** — Task breakdown
+- **[Release Notes v0.2.0](RELEASE_NOTES_v0.2.0.md)** — What's new in Stage 2
+
+---
+
+## Roadmap
+
+### Stage 3 (Planned Q2 2026)
+- **IEC 62443-2-4** — Supplier security requirements (DORA/NIS2 relevance)
+- **Rich Cross-Standard Mappings** — IEC ↔ NIST ↔ MITRE with confidence scores
+- **Automated Mapping Suggestions** — ML-based requirement similarity
+- **Compare Requirements Tool** — Side-by-side multi-standard comparison
+
+### Stage 4 (Planned Q3 2026)
+- **NERC CIP** — North American energy sector requirements
+- **Sector Applicability Engine** — "Which standards apply to my facility?"
+- **EU Regulatory Crosswalk** — NIS2, DORA, CRA mappings to IEC 62443
+
+**See:** [ROADMAP.md](./ROADMAP.md) for full feature timeline
+
+---
+
+## Contributing
+
+We welcome contributions! See [CONTRIBUTING.md](./CONTRIBUTING.md) for:
+- Adding new standards
+- Improving cross-standard mappings
+- Enhancing tool capabilities
+- Fixing bugs or improving documentation
+
+---
+
+## License
+
+**Code:** Apache License 2.0 (see [LICENSE](./LICENSE))
+
+**Data:**
+- **IEC 62443:** User-supplied (requires license from ISA/IEC)
+- **NIST 800-53, 800-82:** Public domain (U.S. government work)
+- **MITRE ATT&CK for ICS:** Apache 2.0 (MITRE Corporation)
+
+---
 
 ## Support
 
-For issues, questions, or feature requests:
-- Open an issue on GitHub
-- Review the tool reference documentation in `docs/tools/`
-- Check the ingestion guides in `docs/ingestion/`
-- Consult the data templates in `data/templates/`
+### Community Support
+- **GitHub Issues:** [Report bugs or request features](https://github.com/Ansvar-Systems/ot-security-mcp/issues)
+- **GitHub Discussions:** [Ask questions or share use cases](https://github.com/Ansvar-Systems/ot-security-mcp/discussions)
 
-## Version
+### Commercial Support
+Need help with:
+- IEC 62443 security level targeting for your facility?
+- Custom zone/conduit architectures for complex OT networks?
+- Threat modeling using MITRE ATT&CK for ICS?
+- NIS2 or DORA compliance mapping to IEC 62443?
 
-Current version: 0.2.0 (Stage 2)
+**Contact:** [info@ansvar.eu](mailto:info@ansvar.eu)
 
-**Stage 2 Release Notes:**
-- Added IEC 62443-3-3 and 62443-3-2 support
-- Added NIST SP 800-53 Rev 5 and 800-82 Rev 3 support
-- New tools: map_security_level_requirements, get_zone_conduit_guidance, get_requirement_rationale
-- Enhanced cross-standard mapping capabilities
-- 233 tests (80 more than Stage 1)
-- Comprehensive ingestion and tool documentation
+---
+
+<p align="center">
+  <sub>Built with care in Stockholm, Sweden</sub>
+</p>
