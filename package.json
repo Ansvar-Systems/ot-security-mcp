@@ -2,6 +2,7 @@
   "name": "@ansvar/ot-security-mcp",
   "version": "0.2.0",
   "description": "MCP server for OT (Operational Technology) security standards and frameworks",
+  "mcpName": "io.github.Ansvar-Systems/ot-security-mcp",
   "type": "module",
   "author": "Ansvar Systems <hello@ansvar.eu>",
   "license": "Apache-2.0",
@@ -39,8 +40,16 @@
     "better-sqlite3": "^12.6.2"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.3.1",
+    "@commitlint/config-conventional": "^20.3.1",
     "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^25.0.10",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@typescript-eslint/parser": "^8.54.0",
+    "eslint": "^9.39.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.8.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"

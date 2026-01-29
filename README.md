@@ -233,6 +233,61 @@ Official Source → Parse → Validate → SQLite → MCP Tools → AI Response
 
 ---
 
+## Related Projects: Ansvar Compliance Suite
+
+This server is part of **Ansvar's MCP ecosystem** for industrial and enterprise security:
+
+### 🏭 OT Security MCP (This Project)
+**Query IEC 62443, NIST 800-82/53, and MITRE ATT&CK for ICS**
+- Specialized for OT/ICS environments (manufacturing, energy, critical infrastructure)
+- Security levels, Purdue Model, zone/conduit architecture
+- MITRE ATT&CK for ICS threat intelligence
+- **Install:** `npm install @ansvar/ot-security-mcp`
+
+### 🔐 [Security Controls MCP](https://github.com/Ansvar-Systems/security-controls-mcp)
+**Query 1,451 security controls across 28 IT/OT frameworks**
+- ISO 27001, NIST CSF, DORA, PCI DSS, SOC 2, CMMC, and 22 more
+- Bidirectional framework mapping and gap analysis
+- Works with OT Security MCP for complete IT/OT coverage
+- **Install:** `pipx install security-controls-mcp`
+
+### 🇪🇺 [EU Regulations MCP](https://github.com/Ansvar-Systems/EU_compliance_MCP)
+**Query 47 EU regulations including NIS2 and Cyber Resilience Act**
+- GDPR, AI Act, DORA, NIS2, MDR, CRA, and 41 more
+- Critical for EU OT operators under NIS2 directive
+- **Install:** `npx @ansvar/eu-regulations-mcp`
+
+### 🇺🇸 [US Regulations MCP](https://github.com/Ansvar-Systems/US_Compliance_MCP)
+**Query US compliance laws including TSA Pipeline Security**
+- HIPAA, CCPA, SOX, GLBA, FERPA, COPPA, and 9 more
+- Relevant for US critical infrastructure operators
+- **Install:** `npm install @ansvar/us-regulations-mcp`
+
+### How They Work Together for OT Security
+
+**Complete OT compliance workflow:**
+
+```
+1. "What are NIS2 requirements for energy sector OT systems?"
+   → EU Regulations MCP returns NIS2 Article 21 requirements
+
+2. "What IEC 62443 security level satisfies NIS2 Article 21?"
+   → OT Security MCP recommends Security Level 2-3 based on risk assessment
+
+3. "Map IEC 62443-4-2 SR 1.1 to NIST 800-53 controls"
+   → Security Controls MCP shows bidirectional mapping to AC-2, IA-2, etc.
+
+4. "What MITRE ATT&CK techniques target this configuration?"
+   → OT Security MCP shows relevant ICS attack techniques and mitigations
+```
+
+**Stack these servers for:**
+- **EU OT operators** (NIS2 + IEC 62443 + ISO 27001)
+- **US critical infrastructure** (NIST + IEC 62443 + sector-specific regulations)
+- **Global manufacturers** (All compliance + OT security + framework mapping)
+
+---
+
 ## About Ansvar Systems
 
 We build AI-accelerated threat modeling and compliance tools for automotive OEMs, Tier 1 suppliers, industrial manufacturers, and critical infrastructure operators. This MCP server started as our internal IEC 62443 reference tool — turns out everyone securing OT environments has the same "6 documentation sites, 12 PDFs" problem.
