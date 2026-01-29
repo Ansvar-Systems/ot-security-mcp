@@ -24,6 +24,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "ingest:mitre": "tsx scripts/ingest-mitre-ics.ts",
+    "ingest:nist-80053": "tsx scripts/ingest-nist-80053.ts",
     "check-updates": "tsx scripts/check-updates.ts"
   },
   "dependencies": {
