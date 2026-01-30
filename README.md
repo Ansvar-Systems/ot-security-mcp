@@ -7,6 +7,8 @@
 [![GitHub stars](https://img.shields.io/github/stars/Ansvar-Systems/ot-security-mcp?style=social)](https://github.com/Ansvar-Systems/ot-security-mcp)
 [![Database](https://img.shields.io/badge/database-pre--built-green)](docs/coverage.md)
 [![Tests](https://img.shields.io/badge/tests-263%20passing-brightgreen)](docs/tools.md)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/Ansvar-Systems/ot-security-mcp/badge)](https://securityscorecards.dev/viewer/?uri=github.com/Ansvar-Systems/ot-security-mcp)
+[![Security](https://github.com/Ansvar-Systems/ot-security-mcp/workflows/Security%20Scanning/badge.svg)](https://github.com/Ansvar-Systems/ot-security-mcp/security)
 
 Query **IEC 62443, NIST 800-82, NIST 800-53, and MITRE ATT&CK for ICS** — the complete OT security framework stack — directly from Claude, Cursor, or any MCP-compatible client.
 
