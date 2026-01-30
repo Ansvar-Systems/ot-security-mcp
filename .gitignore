@@ -16,6 +16,7 @@ coverage/
 # IDE
 .vscode/
 .idea/
+.claude/
 *.swp
 *.swo
 *~
@@ -42,3 +43,8 @@ yarn-error.log*
 
 # Git worktrees
 .worktrees/
+
+# MCP Registry tokens and local configs
+.mcpregistry_*
+.playwright-mcp/
+.serena/
