@@ -352,6 +352,22 @@ So we're open-sourcing it. Navigating IEC 62443 security levels shouldn't requir
 
 ---
 
+## More Open Source from Ansvar
+
+We maintain a family of MCP servers for compliance and security professionals:
+
+| Server | Description | Install |
+|--------|-------------|---------|
+| **[EU Regulations](https://github.com/Ansvar-Systems/EU_compliance_MCP)** | 47 EU regulations (GDPR, AI Act, DORA, NIS2, MiFID II, eIDAS, MDR...) | `npx @ansvar/eu-regulations-mcp` |
+| **[US Regulations](https://github.com/Ansvar-Systems/US_Compliance_MCP)** | HIPAA, CCPA, SOX, GLBA, FERPA, COPPA, FDA 21 CFR Part 11, state privacy laws | `npx @ansvar/us-regulations-mcp` |
+| **[Security Controls](https://github.com/Ansvar-Systems/security-controls-mcp)** | 1,451 controls across 28 frameworks (ISO 27001, NIST CSF, PCI DSS, CMMC...) | `pipx install security-controls-mcp` |
+| **[Automotive](https://github.com/Ansvar-Systems/Automotive-MCP)** | UNECE R155/R156, ISO 21434 for automotive cybersecurity | `npx @ansvar/automotive-cybersecurity-mcp` |
+| **[Sanctions](https://github.com/Ansvar-Systems/Sanctions-MCP)** | Offline sanctions screening with OpenSanctions (30+ lists) | `pip install ansvar-sanctions-mcp` |
+
+Browse all projects: [ansvar.eu/open-source](https://ansvar.eu/open-source)
+
+---
+
 ## Contributing
 
 We welcome contributions! See [CONTRIBUTING.md](./CONTRIBUTING.md) for:
