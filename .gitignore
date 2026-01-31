@@ -48,3 +48,11 @@ yarn-error.log*
 .mcpregistry_*
 .playwright-mcp/
 .serena/
+
+# Development task tracking (internal process files)
+TASK*.md
+STAGE*.md
+*_COMPLETION.md
+*_COMPLETE.md
+TEST_QUALITY_REPORT.md
+QUICK_START_*.md
