@@ -11,6 +11,7 @@
     "declarationMap": true,
     "sourceMap": true,
     "outDir": "./dist",
+    "rootDir": "./src",
     "removeComments": true,
 
     /* Interop Constraints */
@@ -31,8 +32,7 @@
     "skipLibCheck": true
   },
   "include": [
-    "src/**/*",
-    "scripts/**/*"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",

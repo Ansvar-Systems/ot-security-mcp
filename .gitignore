@@ -46,6 +46,7 @@ yarn-error.log*
 
 # MCP Registry tokens and local configs
 .mcpregistry_*
+mcp-publisher
 .playwright-mcp/
 .serena/
 

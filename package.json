@@ -1,6 +1,6 @@
 {
   "name": "@ansvar/ot-security-mcp",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "MCP server for OT (Operational Technology) security standards and frameworks",
   "mcpName": "io.github.Ansvar-Systems/ot-security-mcp",
   "type": "module",
@@ -13,6 +13,7 @@
   "types": "dist/index.d.ts",
   "files": [
     "dist",
+    "data/ot-security.db",
     "README.md",
     "LICENSE"
   ],

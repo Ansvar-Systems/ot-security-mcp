@@ -13,8 +13,15 @@ import {
   McpError,
   ErrorCode,
 } from '@modelcontextprotocol/sdk/types.js';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 import { DatabaseClient } from './database/client.js';
 import { registerTools } from './tools/index.js';
+
+// Resolve package root relative to this module (works from dist/ or src/)
+const __ownFilename = fileURLToPath(import.meta.url);
+const __ownDirname = dirname(__ownFilename);
+const packageRoot = join(__ownDirname, '..');
 import { searchRequirements } from './tools/search.js';
 import { getRequirement } from './tools/get-requirement.js';
 import { listStandards } from './tools/list-standards.js';
@@ -36,7 +43,8 @@ export class McpServer {
    */
   constructor(dbPath?: string) {
     // Initialize database client with custom path or environment variable
-    const finalDbPath = dbPath || process.env.OT_MCP_DB_PATH || 'data/ot-security.db';
+    const finalDbPath =
+      dbPath || process.env.OT_MCP_DB_PATH || join(packageRoot, 'data', 'ot-security.db');
     this.db = new DatabaseClient(finalDbPath);
 
     // Create MCP server
