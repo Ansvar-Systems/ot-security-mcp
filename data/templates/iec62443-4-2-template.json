@@ -3,57 +3,442 @@
     "part": "4-2",
     "title": "IEC 62443-4-2 Technical Security Requirements for IACS Components",
     "version": "v2.0",
-    "published_date": "2023-10-01"
+    "published_date": "2023-10-01",
+    "template_notes": "This template contains all CR requirement IDs and publicly known titles. Replace [PLACEHOLDER] fields with content from your licensed IEC 62443-4-2 copy. CRs mirror SRs from 3-3 but apply at component level with SL-C (Component) security levels."
   },
   "requirements": [
     {
       "requirement_id": "CR 1.1",
       "parent_requirement_id": null,
       "title": "Human user identification and authentication",
-      "description": "The control component shall provide the capability to identify and authenticate all human users. This capability shall enforce such identification and authentication on all interfaces which provide human user access to the component.",
-      "rationale": "Component-level authentication ensures that each control component independently verifies user identity, supporting defense-in-depth and zero-trust architectures.",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
       "component_type": "embedded",
       "security_levels": [
-        {
-          "security_level": 1,
-          "sl_type": "SL-C",
-          "capability_level": 1,
-          "notes": "Component capability level 1 - basic authentication"
-        },
-        {
-          "security_level": 2,
-          "sl_type": "SL-C",
-          "capability_level": 1,
-          "notes": "Same as SL-1"
-        },
-        {
-          "security_level": 3,
-          "sl_type": "SL-C",
-          "capability_level": 2,
-          "notes": "Enhanced capability required"
-        },
-        {
-          "security_level": 4,
-          "sl_type": "SL-C",
-          "capability_level": 3,
-          "notes": "Advanced capability required"
-        }
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Component capability level 1 - basic authentication" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced capability required" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced capability required" }
+      ]
+    },
+    {
+      "requirement_id": "CR 1.2",
+      "parent_requirement_id": null,
+      "title": "Software process and device identification and authentication",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic device identification" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced identification" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced identification" }
+      ]
+    },
+    {
+      "requirement_id": "CR 1.3",
+      "parent_requirement_id": null,
+      "title": "Account management",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic account management" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced capability" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced capability" }
+      ]
+    },
+    {
+      "requirement_id": "CR 1.4",
+      "parent_requirement_id": null,
+      "title": "Identifier management",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic identifier management" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" }
+      ]
+    },
+    {
+      "requirement_id": "CR 1.5",
+      "parent_requirement_id": null,
+      "title": "Authenticator management",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "embedded",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic authenticator management" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced capability" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced capability" }
+      ]
+    },
+    {
+      "requirement_id": "CR 1.7",
+      "parent_requirement_id": null,
+      "title": "Strength of password-based authentication",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic password strength" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced password policies" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced password policies" }
+      ]
+    },
+    {
+      "requirement_id": "CR 1.8",
+      "parent_requirement_id": null,
+      "title": "Public key infrastructure certificates",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Not required at SL-2" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 1, "notes": "PKI support required" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 2, "notes": "Advanced PKI required" }
+      ]
+    },
+    {
+      "requirement_id": "CR 1.9",
+      "parent_requirement_id": null,
+      "title": "Strength of public key authentication",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Not required at SL-2" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic public key strength" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced public key strength" }
+      ]
+    },
+    {
+      "requirement_id": "CR 1.10",
+      "parent_requirement_id": null,
+      "title": "Authenticator feedback",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "embedded",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic feedback obscuring" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" }
+      ]
+    },
+    {
+      "requirement_id": "CR 1.11",
+      "parent_requirement_id": null,
+      "title": "Unsuccessful login attempts",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "embedded",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic lockout" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced lockout" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced lockout" }
+      ]
+    },
+    {
+      "requirement_id": "CR 1.12",
+      "parent_requirement_id": null,
+      "title": "System use notification",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic use notification" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-2" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-2" }
+      ]
+    },
+    {
+      "requirement_id": "CR 1.13",
+      "parent_requirement_id": null,
+      "title": "Access via untrusted networks",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic access control" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced access control" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced access control" }
       ]
     },
     {
       "requirement_id": "CR 2.1",
       "parent_requirement_id": null,
       "title": "Authorization enforcement",
-      "description": "The control component shall provide the capability to enforce assigned authorizations for controlling access to the component between authenticated users (or processes acting on behalf of users).",
-      "rationale": "Authorization enforcement at the component level ensures that even authenticated users can only access resources and functions they are permitted to use.",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "embedded",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic authorization enforcement" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced - role-based" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced authorization" }
+      ]
+    },
+    {
+      "requirement_id": "CR 2.5",
+      "parent_requirement_id": null,
+      "title": "Session lock",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic session lock" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced session controls" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced session controls" }
+      ]
+    },
+    {
+      "requirement_id": "CR 2.8",
+      "parent_requirement_id": null,
+      "title": "Auditable events",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "embedded",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic audit events" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced audit events" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced audit events" }
+      ]
+    },
+    {
+      "requirement_id": "CR 2.9",
+      "parent_requirement_id": null,
+      "title": "Audit storage capacity",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "embedded",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic audit storage" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced audit storage" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced audit storage" }
+      ]
+    },
+    {
+      "requirement_id": "CR 2.11",
+      "parent_requirement_id": null,
+      "title": "Timestamps",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "embedded",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic timestamps" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced timestamps" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced timestamps" }
+      ]
+    },
+    {
+      "requirement_id": "CR 2.12",
+      "parent_requirement_id": null,
+      "title": "Non-repudiation",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Not required at SL-2" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 1, "notes": "Non-repudiation required" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced non-repudiation" }
+      ]
+    },
+    {
+      "requirement_id": "CR 3.1",
+      "parent_requirement_id": null,
+      "title": "Communication integrity",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
       "component_type": "network",
       "security_levels": [
-        {
-          "security_level": 1,
-          "sl_type": "SL-C",
-          "capability_level": 1,
-          "notes": "Basic authorization enforcement"
-        }
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic communication integrity" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced integrity" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced integrity" }
+      ]
+    },
+    {
+      "requirement_id": "CR 3.2",
+      "parent_requirement_id": null,
+      "title": "Malicious code protection",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic malware protection" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced protection" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced protection" }
+      ]
+    },
+    {
+      "requirement_id": "CR 3.4",
+      "parent_requirement_id": null,
+      "title": "Software and information integrity",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "embedded",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic integrity checks" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced integrity" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced integrity" }
+      ]
+    },
+    {
+      "requirement_id": "CR 3.5",
+      "parent_requirement_id": null,
+      "title": "Input validation",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "app",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic input validation" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced validation" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced validation" }
+      ]
+    },
+    {
+      "requirement_id": "CR 4.1",
+      "parent_requirement_id": null,
+      "title": "Information confidentiality",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "embedded",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic confidentiality" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced confidentiality" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced confidentiality" }
+      ]
+    },
+    {
+      "requirement_id": "CR 4.3",
+      "parent_requirement_id": null,
+      "title": "Use of cryptography",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "embedded",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic cryptography" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced cryptography" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced cryptography" }
+      ]
+    },
+    {
+      "requirement_id": "CR 5.1",
+      "parent_requirement_id": null,
+      "title": "Network segmentation",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic network segmentation" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced segmentation" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced segmentation" }
+      ]
+    },
+    {
+      "requirement_id": "CR 6.1",
+      "parent_requirement_id": null,
+      "title": "Audit log accessibility",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "embedded",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic audit log access" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced log access" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced log access" }
+      ]
+    },
+    {
+      "requirement_id": "CR 6.2",
+      "parent_requirement_id": null,
+      "title": "Continuous monitoring",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Not required at SL-2" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 1, "notes": "Continuous monitoring required" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced monitoring" }
+      ]
+    },
+    {
+      "requirement_id": "CR 7.1",
+      "parent_requirement_id": null,
+      "title": "Denial of service protection",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic DoS protection" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced DoS protection" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced DoS protection" }
+      ]
+    },
+    {
+      "requirement_id": "CR 7.2",
+      "parent_requirement_id": null,
+      "title": "Resource management",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "embedded",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic resource management" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced resource management" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced resource management" }
+      ]
+    },
+    {
+      "requirement_id": "CR 7.3",
+      "parent_requirement_id": null,
+      "title": "Control system backup",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic backup capability" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced backup" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced backup" }
+      ]
+    },
+    {
+      "requirement_id": "CR 7.4",
+      "parent_requirement_id": null,
+      "title": "Control system recovery and reconstitution",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-4-2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-C", "capability_level": 1, "notes": "Basic recovery capability" },
+        { "security_level": 2, "sl_type": "SL-C", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-C", "capability_level": 2, "notes": "Enhanced recovery" },
+        { "security_level": 4, "sl_type": "SL-C", "capability_level": 3, "notes": "Advanced recovery" }
       ]
     }
   ]

@@ -121,7 +121,7 @@ git clone https://github.com/Ansvar-Systems/ot-security-mcp
 cd ot-security-mcp
 npm install
 
-# Run tests (294 tests)
+# Run tests (309 tests)
 npm test
 
 # Build
@@ -201,7 +201,7 @@ See [central architecture docs](https://github.com/Ansvar-Systems/security-contr
 ## Testing
 
 ```bash
-# Run all 294 tests
+# Run all 309 tests
 npm test
 
 # With coverage
@@ -225,7 +225,7 @@ See [docs/CI-CD-SETUP.md](./docs/CI-CD-SETUP.md) for details.
 
 - TypeScript strict mode
 - ESLint + Prettier
-- Vitest for testing (294 tests, 100% passing)
+- Vitest for testing (309 tests, 100% passing)
 - Conventional Commits
 - All data from official public sources (or user-supplied licensed)
 
@@ -235,12 +235,12 @@ See [docs/CI-CD-SETUP.md](./docs/CI-CD-SETUP.md) for details.
 - **NIST 800-53 Controls**: 260 OT-relevant
 - **NIST 800-82 Guidance**: 16 curated sections
 - **MITRE ICS Techniques**: 83 techniques, 52 mitigations
-- **Cross-Standard Mappings**: 53 validated mappings
+- **Cross-Standard Mappings**: 243 validated mappings (IEC↔NIST: 102, MITRE↔NIST: 88, NIST 800-82↔53: 53)
 - **Purdue Model Zones**: 6 (Levels 0-5)
 - **Conduit Types**: 7
 - **Zone-to-Zone Flows**: 8
 - **Database Size**: ~5MB (without IEC data)
-- **Tests**: 294 passing
+- **Tests**: 309 passing
 
 ## Version History
 

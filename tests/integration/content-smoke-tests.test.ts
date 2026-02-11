@@ -366,19 +366,50 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
       expect(orphans.length).toBe(0);
     });
 
+    it('should have IEC 62443 to NIST 800-53 mappings (40+)', () => {
+      const count = db.queryOne<{ count: number }>(
+        `SELECT COUNT(*) as count FROM ot_mappings
+         WHERE source_standard LIKE 'iec62443%' AND target_standard = 'nist-800-53'`
+      );
+
+      expect(count?.count).toBeGreaterThanOrEqual(40);
+    });
+
+    it('should have MITRE to NIST 800-53 mappings (30+)', () => {
+      const count = db.queryOne<{ count: number }>(
+        `SELECT COUNT(*) as count FROM ot_mappings
+         WHERE source_standard = 'mitre-ics' AND target_standard = 'nist-800-53'`
+      );
+
+      expect(count?.count).toBeGreaterThanOrEqual(30);
+    });
+
+    it('should have populated MITRE ot_requirement_id values', () => {
+      const count = db.queryOne<{ count: number }>(
+        `SELECT COUNT(*) as count FROM mitre_technique_mitigations
+         WHERE ot_requirement_id IS NOT NULL`
+      );
+
+      // At least some technique-mitigation records should have NIST linkages
+      expect(count?.count).toBeGreaterThanOrEqual(10);
+    });
+
     it('should have valid mapping references', () => {
-      // All source requirements in mappings should exist
+      // Check source requirements exist in ot_requirements, excluding:
+      // - IEC 62443 sources (user-supplied licensed data, may not be ingested)
+      // - MITRE ICS sources (mitigations live in mitre_ics_mitigations, not ot_requirements)
       const invalidSources = db.query<{ source_requirement: string }>(
         `SELECT DISTINCT m.source_requirement
          FROM ot_mappings m
          LEFT JOIN ot_requirements r ON r.requirement_id = m.source_requirement
            AND r.standard_id = m.source_standard
-         WHERE r.id IS NULL`
+         WHERE r.id IS NULL
+           AND m.source_standard NOT LIKE 'iec62443%'
+           AND m.source_standard != 'mitre-ics'`
       );
 
-      // Some mappings may reference requirements not in database (e.g., IEC if not ingested)
-      // But at least NIST 800-82 → 800-53 mappings should all be valid
-      expect(invalidSources.length).toBeLessThan(5); // Allow small number of missing references
+      // NIST 800-82 → 800-53 mappings should all be valid
+      expect(invalidSources.length).toBe(0);
     });
   });
 

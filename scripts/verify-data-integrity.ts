@@ -222,11 +222,15 @@ class DataIntegrityVerifier {
 
   /**
    * Check 6: Verify ot_mappings have valid source and target requirements
+   *
+   * Special handling for cross-standard mappings:
+   * - IEC 62443 sources: requirements are user-supplied (licensed data), reported as INFO
+   * - MITRE ICS sources: mitigations live in mitre_ics_mitigations, not ot_requirements
    */
   private checkMappingsForeignKeys(): void {
     console.log('Checking ot_mappings foreign keys...');
 
-    // Check source requirements
+    // Check source requirements (excluding IEC and MITRE which use different tables/data)
     const invalidSource = this.db.query<{
       id: number;
       source_standard: string;
@@ -237,7 +241,9 @@ class DataIntegrityVerifier {
        LEFT JOIN ot_requirements r
          ON m.source_requirement = r.requirement_id
          AND m.source_standard = r.standard_id
-       WHERE r.id IS NULL`
+       WHERE r.id IS NULL
+         AND m.source_standard NOT LIKE 'iec62443%'
+         AND m.source_standard != 'mitre-ics'`
     );
 
     if (invalidSource.length > 0) {
@@ -249,6 +255,45 @@ class DataIntegrityVerifier {
       );
     } else {
       console.log('  ✓ All mappings have valid source requirements');
+    }
+
+    // Report IEC sources as informational (awaiting user data)
+    const iecSources = this.db.queryOne<{ count: number }>(
+      `SELECT COUNT(*) as count FROM ot_mappings
+       WHERE source_standard LIKE 'iec62443%'`
+    );
+    if (iecSources && iecSources.count > 0) {
+      console.log(
+        `  ℹ ${iecSources.count} IEC 62443 source mappings (awaiting user-supplied data)`
+      );
+    }
+
+    // Verify MITRE sources reference valid mitigations
+    const invalidMitreSources = this.db.query<{
+      source_requirement: string;
+    }>(
+      `SELECT DISTINCT m.source_requirement
+       FROM ot_mappings m
+       LEFT JOIN mitre_ics_mitigations mit ON m.source_requirement = mit.mitigation_id
+       WHERE m.source_standard = 'mitre-ics' AND mit.mitigation_id IS NULL`
+    );
+
+    if (invalidMitreSources.length > 0) {
+      this.addIssue(
+        'ot_mappings',
+        'ERROR',
+        `Found ${invalidMitreSources.length} MITRE mappings with invalid mitigation references`,
+        invalidMitreSources
+      );
+    } else {
+      const mitreMappingCount = this.db.queryOne<{ count: number }>(
+        `SELECT COUNT(*) as count FROM ot_mappings WHERE source_standard = 'mitre-ics'`
+      );
+      if (mitreMappingCount && mitreMappingCount.count > 0) {
+        console.log(
+          `  ✓ All ${mitreMappingCount.count} MITRE source mappings reference valid mitigations`
+        );
+      }
     }
 
     // Check target requirements

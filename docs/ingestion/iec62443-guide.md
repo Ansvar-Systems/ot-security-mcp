@@ -118,11 +118,12 @@ For each requirement, map security levels to capability levels:
 
 - **security_level**: 1, 2, 3, or 4 (SL-1 through SL-4)
 - **sl_type**: Usually "SL-T" (Target Security Level)
-- **capability_level**: The capability level required (0-3)
-  - 0 = Not required
+- **capability_level**: The capability level required (1-4)
   - 1 = Basic capability
   - 2 = Enhanced capability (usually requires an RE)
   - 3 = Advanced capability (usually requires multiple REs)
+  - 4 = Maximum capability (all REs required)
+  - *Note: If a requirement does not apply at a given security level, omit that security level entry entirely*
 - **notes**: Implementation guidance or references to REs
 
 #### Handling Requirement Enhancements (RE)
@@ -284,6 +285,32 @@ What IEC 62443 requirements apply to Security Level 2?
 **Test 5: Query zones and conduits**
 ```
 Show me network segmentation guidance for Purdue Level 1
+```
+
+### Step 8: Ingest Cross-Standard Mappings
+
+After ingesting IEC 62443 requirements, run the cross-standard mappings ingestion to enable cross-referencing between IEC 62443, NIST 800-53, and MITRE ATT&CK for ICS:
+
+```bash
+# Ingest cross-standard mappings (IEC↔NIST, MITRE↔NIST)
+npm run ingest:mappings
+```
+
+This populates:
+- **IEC 62443 ↔ NIST 800-53** mappings (102 mappings linking SRs/CRs to NIST controls)
+- **MITRE ATT&CK ↔ NIST 800-53** mappings (88 mitigation-to-control mappings)
+- **MITRE technique linkages** (populates `ot_requirement_id` in technique-mitigation relationships)
+
+After ingestion, verify with:
+```bash
+npm run verify:integrity
+npm test
+```
+
+Test cross-standard queries in Claude Desktop:
+```
+What NIST 800-53 controls map to IEC 62443 requirement SR 1.1?
+Show MITRE ATT&CK mitigations for technique T0800 with NIST mappings
 ```
 
 ## Common Issues and Troubleshooting

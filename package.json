@@ -39,6 +39,7 @@
     "ingest:nist-80053": "tsx scripts/ingest-nist-80053.ts",
     "ingest:nist-80082": "tsx scripts/ingest-nist-80082.ts",
     "ingest:iec62443": "tsx scripts/ingest-iec62443.ts",
+    "ingest:mappings": "tsx scripts/ingest-cross-mappings.ts",
     "validate:iec62443": "tsx scripts/validate-iec62443.ts",
     "verify:integrity": "tsx scripts/verify-data-integrity.ts",
     "verify:setup": "tsx scripts/verify-setup.ts",

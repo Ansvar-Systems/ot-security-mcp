@@ -1,0 +1,936 @@
+{
+  "meta": {
+    "title": "IEC 62443 to NIST 800-53 Cross-Standard Mappings",
+    "description": "Maps IEC 62443-3-3 System Requirements (SRs) and IEC 62443-4-2 Component Requirements (CRs) to NIST SP 800-53 Rev 5 controls",
+    "version": "1.0",
+    "created_date": "2026-02-11",
+    "sources": [
+      "NIST SP 800-82 Rev 3 - Guide to Operational Technology Security (Appendix G crosswalk)",
+      "ISA/IEC 62443 publicly available requirement titles and scope descriptions",
+      "NIST Cybersecurity Framework mappings to 800-53"
+    ],
+    "confidence_basis": "Mappings derived from publicly documented crosswalks. Confidence 0.85 reflects cross-organization mapping interpretation variability.",
+    "notes": "IEC 62443 requirement descriptions are copyrighted. Only publicly known requirement IDs, titles, and scope are used here."
+  },
+  "mappings": [
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 1.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-02",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address human user identification and authentication"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 1.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-05",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "SR 1.1 authentication includes authenticator management"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 1.2",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-03",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address software process and device identification and authentication"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 1.2",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-09",
+      "mapping_type": "related",
+      "confidence": 0.80,
+      "notes": "Service identification relates to SR 1.2 device authentication"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 1.3",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-07",
+      "mapping_type": "related",
+      "confidence": 0.90,
+      "notes": "Both address account lockout after unsuccessful login attempts"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 1.4",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-05",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address identifier management and authenticator lifecycle"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 1.5",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-05",
+      "mapping_type": "related",
+      "confidence": 0.90,
+      "notes": "Both address authenticator management including password policies"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 1.5",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-04",
+      "mapping_type": "related",
+      "confidence": 0.80,
+      "notes": "Identifier management supports authenticator management"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 1.6",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-11",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address wireless access authentication"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 1.6",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-18",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Wireless access restrictions relate to SR 1.6 wireless authentication"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 1.7",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-05",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address strength of password-based authentication"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 1.8",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-06",
+      "mapping_type": "related",
+      "confidence": 0.90,
+      "notes": "Both address public key infrastructure certificate management"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 1.8",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SC-17",
+      "mapping_type": "related",
+      "confidence": 0.80,
+      "notes": "Public key infrastructure certificates relate to SR 1.8"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 1.9",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-05",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address strength of public key authentication"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 1.10",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-02",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address authenticator feedback and protection during login"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 1.11",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-07",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address unsuccessful login attempts handling"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 1.12",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-08",
+      "mapping_type": "related",
+      "confidence": 0.90,
+      "notes": "Both address system use notification and login banners"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 1.13",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-17",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address access via untrusted networks / remote access"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 1.13",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SC-07",
+      "mapping_type": "related",
+      "confidence": 0.80,
+      "notes": "Boundary protection supports access control via untrusted networks"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 2.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-03",
+      "mapping_type": "related",
+      "confidence": 0.90,
+      "notes": "Both address authorization enforcement and access control"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 2.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-06",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Least privilege supports authorization enforcement"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 2.2",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-18",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address wireless use restrictions and control"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 2.3",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-06",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address use control for portable and mobile devices"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 2.3",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-19",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Access control for mobile devices maps to SR 2.3"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 2.4",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-03",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Mobile code restrictions map to access enforcement controls"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 2.5",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-12",
+      "mapping_type": "related",
+      "confidence": 0.90,
+      "notes": "Both address session lock and termination"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 2.5",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-11",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Session lock relates to SR 2.5 session management"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 2.6",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-17",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address remote session termination"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 2.7",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-10",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address concurrent session control"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 2.8",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AU-14",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address auditable events for security-relevant actions"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 2.8",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AU-02",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Event logging supports auditable events"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 2.9",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AU-03",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address audit storage capacity and content of audit records"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 2.10",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AU-05",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address response to audit processing failures"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 2.11",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AU-08",
+      "mapping_type": "related",
+      "confidence": 0.90,
+      "notes": "Both address timestamps for audit records and time synchronization"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 2.12",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-02",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address non-repudiation through account management"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 2.12",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AU-10",
+      "mapping_type": "related",
+      "confidence": 0.90,
+      "notes": "Non-repudiation directly maps to SR 2.12"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 3.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SC-08",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address communication integrity protection"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 3.2",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SI-07",
+      "mapping_type": "related",
+      "confidence": 0.90,
+      "notes": "Both address malicious code protection and software integrity"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 3.2",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SI-03",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Malicious code protection supports system integrity"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 3.3",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SI-07",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address security functionality verification"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 3.4",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SI-07",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address software and information integrity"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 3.5",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SI-10",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address input validation"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 3.6",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AU-02",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address deterministic output and audit event generation"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 3.7",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SI-16",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address error handling and memory protection"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 3.8",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-12",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address session integrity including session termination"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 3.9",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AU-09",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address protection of audit information"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 4.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SC-28",
+      "mapping_type": "related",
+      "confidence": 0.90,
+      "notes": "Both address information confidentiality and protection of data at rest"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 4.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SC-08",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Transmission confidentiality supports data confidentiality"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 4.2",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SC-08",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address information persistence and transmission confidentiality"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 4.3",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SC-12",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address use of cryptography including key management"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 4.3",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SC-13",
+      "mapping_type": "related",
+      "confidence": 0.90,
+      "notes": "Cryptographic protection directly maps to SR 4.3"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 5.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SC-07",
+      "mapping_type": "related",
+      "confidence": 0.90,
+      "notes": "Both address network segmentation and boundary protection"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 5.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-04",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Information flow enforcement supports network segmentation"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 5.2",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SC-07",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address zone boundary protection"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 5.3",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-04",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address general purpose person-to-person communication restriction"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 5.4",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SC-23",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address application partitioning and session authenticity"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 6.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AU-06",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address audit log accessibility and audit review"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 6.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SI-04",
+      "mapping_type": "related",
+      "confidence": 0.80,
+      "notes": "Information system monitoring supports event response"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 6.2",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SI-04",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address continuous monitoring"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 7.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SC-05",
+      "mapping_type": "related",
+      "confidence": 0.90,
+      "notes": "Both address denial of service protection and resource availability"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 7.2",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SC-24",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address resource management and fail-safe operations"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 7.3",
+      "target_standard": "nist-800-53",
+      "target_requirement": "CP-10",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address system recovery and reconstitution"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 7.3",
+      "target_standard": "nist-800-53",
+      "target_requirement": "CP-09",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "System backup supports control system backup and recovery"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 7.4",
+      "target_standard": "nist-800-53",
+      "target_requirement": "CP-10",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address control system recovery and reconstitution"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 7.5",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IR-04",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address emergency power and incident handling procedures"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 7.6",
+      "target_standard": "nist-800-53",
+      "target_requirement": "CM-02",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address network and security configuration settings"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 7.6",
+      "target_standard": "nist-800-53",
+      "target_requirement": "CM-06",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Configuration settings directly relate to SR 7.6"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 7.7",
+      "target_standard": "nist-800-53",
+      "target_requirement": "PE-11",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address least functionality including emergency power"
+    },
+    {
+      "source_standard": "iec62443-3-3",
+      "source_requirement": "SR 7.8",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SC-24",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Both address control system component inventory and fail-safe state"
+    },
+
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 1.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-02",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level human user identification and authentication"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 1.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-05",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Authenticator management at component level"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 1.2",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-03",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level software process and device identification"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 1.3",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-07",
+      "mapping_type": "related",
+      "confidence": 0.90,
+      "notes": "Component-level account lockout"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 1.4",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-04",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level identifier management"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 1.5",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-05",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level authenticator management"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 1.7",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-05",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level strength of password-based authentication"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 1.8",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-06",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level PKI certificate management"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 1.9",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-05",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level public key authentication strength"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 1.10",
+      "target_standard": "nist-800-53",
+      "target_requirement": "IA-02",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level authenticator feedback"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 1.11",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-07",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level unsuccessful login attempts"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 1.12",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-08",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level system use notification"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 1.13",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-17",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level access via untrusted networks"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 2.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-03",
+      "mapping_type": "related",
+      "confidence": 0.90,
+      "notes": "Component-level authorization enforcement"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 2.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-06",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Least privilege at component level"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 2.5",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AC-12",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level session lock"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 2.8",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AU-02",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level auditable events"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 2.9",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AU-04",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level audit storage capacity"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 2.11",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AU-08",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level timestamps"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 2.12",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AU-10",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level non-repudiation"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 3.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SC-08",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level communication integrity"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 3.2",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SI-03",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level malicious code protection"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 3.4",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SI-07",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level software and information integrity"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 3.5",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SI-10",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level input validation"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 4.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SC-28",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level information confidentiality"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 4.3",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SC-13",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level use of cryptography"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 5.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SC-07",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level network segmentation"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 6.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "AU-06",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level audit log accessibility"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 6.2",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SI-04",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level continuous monitoring"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 7.1",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SC-05",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level denial of service protection"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 7.2",
+      "target_standard": "nist-800-53",
+      "target_requirement": "SC-06",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level resource management"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 7.3",
+      "target_standard": "nist-800-53",
+      "target_requirement": "CP-10",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level control system backup"
+    },
+    {
+      "source_standard": "iec62443-4-2",
+      "source_requirement": "CR 7.4",
+      "target_standard": "nist-800-53",
+      "target_requirement": "CP-10",
+      "mapping_type": "related",
+      "confidence": 0.85,
+      "notes": "Component-level control system recovery and reconstitution"
+    }
+  ]
+}

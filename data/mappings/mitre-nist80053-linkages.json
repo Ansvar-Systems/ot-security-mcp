@@ -1,0 +1,271 @@
+{
+  "meta": {
+    "title": "MITRE ATT&CK for ICS to NIST 800-53 Mitigation Linkages",
+    "description": "Maps MITRE ICS mitigations to corresponding NIST SP 800-53 Rev 5 controls. Used to populate ot_mappings and mitre_technique_mitigations.ot_requirement_id.",
+    "version": "1.0",
+    "created_date": "2026-02-11",
+    "sources": [
+      "MITRE ATT&CK for ICS mitigation descriptions and scope",
+      "NIST SP 800-53 Rev 5 control catalog",
+      "NIST SP 800-82 Rev 3 ICS overlay mappings"
+    ],
+    "confidence_basis": "Mappings derived from mitigation descriptions and NIST control scope alignment. Confidence 0.80 reflects cross-framework mapping."
+  },
+  "mitigation_mappings": [
+    {
+      "mitigation_id": "M0800",
+      "nist_controls": ["AC-03", "AC-06"],
+      "notes": "Authorization enforcement maps to access enforcement and least privilege"
+    },
+    {
+      "mitigation_id": "M0801",
+      "nist_controls": ["AC-02", "AC-03", "AC-06"],
+      "notes": "Access management maps to account management, access enforcement, and least privilege"
+    },
+    {
+      "mitigation_id": "M0802",
+      "nist_controls": ["SC-08", "SC-23"],
+      "notes": "Communication authenticity maps to transmission confidentiality/integrity and session authenticity"
+    },
+    {
+      "mitigation_id": "M0803",
+      "nist_controls": ["SC-28"],
+      "notes": "Data loss prevention maps to protection of information at rest"
+    },
+    {
+      "mitigation_id": "M0804",
+      "nist_controls": ["IA-02", "IA-05"],
+      "notes": "Human user authentication maps to identification/authentication and authenticator management"
+    },
+    {
+      "mitigation_id": "M0805",
+      "nist_controls": ["PE-03"],
+      "notes": "Mechanical protection layers map to physical access control"
+    },
+    {
+      "mitigation_id": "M0806",
+      "nist_controls": ["AC-18", "PE-19"],
+      "notes": "Minimize wireless signal propagation maps to wireless access restrictions and information leakage"
+    },
+    {
+      "mitigation_id": "M0807",
+      "nist_controls": ["CM-07", "SC-07"],
+      "notes": "Network allowlists map to least functionality and boundary protection"
+    },
+    {
+      "mitigation_id": "M0808",
+      "nist_controls": ["SC-08", "SC-13"],
+      "notes": "Encrypt network traffic maps to transmission confidentiality and cryptographic protection"
+    },
+    {
+      "mitigation_id": "M0809",
+      "nist_controls": ["SC-28", "SC-08"],
+      "notes": "Operational information confidentiality maps to protection of information at rest and in transit"
+    },
+    {
+      "mitigation_id": "M0810",
+      "nist_controls": ["SC-37", "CP-08"],
+      "notes": "Out-of-band communications maps to out-of-band channels and telecommunications services"
+    },
+    {
+      "mitigation_id": "M0811",
+      "nist_controls": ["CP-07", "SC-36"],
+      "notes": "Redundancy of service maps to alternative processing site and distributed processing"
+    },
+    {
+      "mitigation_id": "M0812",
+      "nist_controls": ["SA-01", "PE-03"],
+      "notes": "Safety instrumented systems map to system acquisition policy and physical access control"
+    },
+    {
+      "mitigation_id": "M0813",
+      "nist_controls": ["IA-03", "IA-09"],
+      "notes": "Software process and device authentication maps to device identification and service identification"
+    },
+    {
+      "mitigation_id": "M0814",
+      "nist_controls": ["CM-07", "SC-07"],
+      "notes": "Static network configuration maps to least functionality and boundary protection"
+    },
+    {
+      "mitigation_id": "M0815",
+      "nist_controls": ["SI-17"],
+      "notes": "Watchdog timers map to fail-safe procedures"
+    },
+    {
+      "mitigation_id": "M0817",
+      "nist_controls": ["SA-12", "SR-01"],
+      "notes": "Supply chain management maps to supply chain protection and supply chain risk management"
+    },
+    {
+      "mitigation_id": "M0818",
+      "nist_controls": ["SI-10"],
+      "notes": "Validate program inputs maps to information input validation"
+    },
+    {
+      "mitigation_id": "M0913",
+      "nist_controls": ["SA-15", "SA-08"],
+      "notes": "Application developer guidance maps to development process and security engineering principles"
+    },
+    {
+      "mitigation_id": "M0915",
+      "nist_controls": ["AC-02", "IA-02"],
+      "notes": "Active Directory configuration maps to account management and identification/authentication"
+    },
+    {
+      "mitigation_id": "M0916",
+      "nist_controls": ["SI-02"],
+      "notes": "Vulnerability scanning maps to flaw remediation"
+    },
+    {
+      "mitigation_id": "M0917",
+      "nist_controls": ["PL-04", "PS-06"],
+      "notes": "User training maps to rules of behavior and access agreements"
+    },
+    {
+      "mitigation_id": "M0918",
+      "nist_controls": ["AC-02"],
+      "notes": "User account management maps to account management"
+    },
+    {
+      "mitigation_id": "M0919",
+      "nist_controls": ["SI-05", "CA-07"],
+      "notes": "Threat intelligence program maps to security alerts/advisories and continuous monitoring"
+    },
+    {
+      "mitigation_id": "M0920",
+      "nist_controls": ["SC-08", "SI-04"],
+      "notes": "SSL/TLS inspection maps to transmission confidentiality and system monitoring"
+    },
+    {
+      "mitigation_id": "M0921",
+      "nist_controls": ["SC-18", "CM-07"],
+      "notes": "Restrict web-based content maps to mobile code and least functionality"
+    },
+    {
+      "mitigation_id": "M0922",
+      "nist_controls": ["AC-06", "AC-03"],
+      "notes": "Restrict file and directory permissions maps to least privilege and access enforcement"
+    },
+    {
+      "mitigation_id": "M0924",
+      "nist_controls": ["AC-06"],
+      "notes": "Restrict registry permissions maps to least privilege"
+    },
+    {
+      "mitigation_id": "M0926",
+      "nist_controls": ["AC-06", "AC-02"],
+      "notes": "Privileged account management maps to least privilege and account management"
+    },
+    {
+      "mitigation_id": "M0927",
+      "nist_controls": ["IA-05"],
+      "notes": "Password policies map to authenticator management"
+    },
+    {
+      "mitigation_id": "M0928",
+      "nist_controls": ["CM-06", "CM-02"],
+      "notes": "Operating system configuration maps to configuration settings and baseline configuration"
+    },
+    {
+      "mitigation_id": "M0930",
+      "nist_controls": ["SC-07", "AC-04"],
+      "notes": "Network segmentation maps to boundary protection and information flow enforcement"
+    },
+    {
+      "mitigation_id": "M0931",
+      "nist_controls": ["SI-04", "SC-07"],
+      "notes": "Network intrusion prevention maps to system monitoring and boundary protection"
+    },
+    {
+      "mitigation_id": "M0932",
+      "nist_controls": ["IA-02"],
+      "notes": "Multi-factor authentication maps to identification and authentication"
+    },
+    {
+      "mitigation_id": "M0934",
+      "nist_controls": ["CM-07", "CM-08"],
+      "notes": "Limit hardware installation maps to least functionality and system component inventory"
+    },
+    {
+      "mitigation_id": "M0935",
+      "nist_controls": ["AC-03", "SC-07"],
+      "notes": "Limit access to resource over network maps to access enforcement and boundary protection"
+    },
+    {
+      "mitigation_id": "M0936",
+      "nist_controls": ["AC-02"],
+      "notes": "Account use policies map to account management"
+    },
+    {
+      "mitigation_id": "M0937",
+      "nist_controls": ["SC-07", "AC-04"],
+      "notes": "Filter network traffic maps to boundary protection and information flow enforcement"
+    },
+    {
+      "mitigation_id": "M0938",
+      "nist_controls": ["CM-07", "SI-16"],
+      "notes": "Execution prevention maps to least functionality and memory protection"
+    },
+    {
+      "mitigation_id": "M0941",
+      "nist_controls": ["SC-28", "SC-13"],
+      "notes": "Encrypt sensitive information maps to protection of information at rest and cryptographic protection"
+    },
+    {
+      "mitigation_id": "M0942",
+      "nist_controls": ["CM-07"],
+      "notes": "Disable or remove feature or program maps to least functionality"
+    },
+    {
+      "mitigation_id": "M0944",
+      "nist_controls": ["CM-07", "SI-16"],
+      "notes": "Restrict library loading maps to least functionality and memory protection"
+    },
+    {
+      "mitigation_id": "M0945",
+      "nist_controls": ["SI-07", "CM-14"],
+      "notes": "Code signing maps to software, firmware, and information integrity"
+    },
+    {
+      "mitigation_id": "M0946",
+      "nist_controls": ["SI-07"],
+      "notes": "Boot integrity maps to software, firmware, and information integrity"
+    },
+    {
+      "mitigation_id": "M0947",
+      "nist_controls": ["AU-02", "AU-06"],
+      "notes": "Audit maps to event logging and audit record review"
+    },
+    {
+      "mitigation_id": "M0948",
+      "nist_controls": ["SC-39", "CM-07"],
+      "notes": "Application isolation and sandboxing maps to process isolation and least functionality"
+    },
+    {
+      "mitigation_id": "M0949",
+      "nist_controls": ["SI-03"],
+      "notes": "Antivirus/antimalware maps to malicious code protection"
+    },
+    {
+      "mitigation_id": "M0950",
+      "nist_controls": ["SI-16", "SC-39"],
+      "notes": "Exploit protection maps to memory protection and process isolation"
+    },
+    {
+      "mitigation_id": "M0951",
+      "nist_controls": ["SI-02"],
+      "notes": "Update software maps to flaw remediation"
+    },
+    {
+      "mitigation_id": "M0953",
+      "nist_controls": ["CP-09"],
+      "notes": "Data backup maps to system backup"
+    },
+    {
+      "mitigation_id": "M0954",
+      "nist_controls": ["CM-06", "CM-07"],
+      "notes": "Software configuration maps to configuration settings and least functionality"
+    }
+  ]
+}

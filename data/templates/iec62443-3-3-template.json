@@ -3,63 +3,1115 @@
     "part": "3-3",
     "title": "IEC 62443-3-3 System Security Requirements and Security Levels",
     "version": "v2.0",
-    "published_date": "2023-10-01"
+    "published_date": "2023-10-01",
+    "template_notes": "This template contains all SR requirement IDs and publicly known titles. Replace [PLACEHOLDER] fields with content from your licensed IEC 62443-3-3 copy."
   },
   "requirements": [
     {
       "requirement_id": "SR 1.1",
       "parent_requirement_id": null,
       "title": "Human user identification and authentication",
-      "description": "The control system shall provide the capability to identify and authenticate all human users. This capability shall enforce such identification and authentication on all interfaces which provide human user access to the control system to support segregation of duties and least privilege in accordance with applicable security policies and procedures.",
-      "rationale": "Human user identification and authentication is the basis for most types of accesses control and for establishing accountability. Unique identification and authentication of authorized users is essential to ensure that the proper user is associated with any attempted or completed actions.",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.3.3.2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
       "component_type": "host",
       "security_levels": [
-        {
-          "security_level": 1,
-          "sl_type": "SL-T",
-          "capability_level": 1,
-          "notes": "Basic capability - identification and authentication required"
-        },
-        {
-          "security_level": 2,
-          "sl_type": "SL-T",
-          "capability_level": 1,
-          "notes": "Same as SL-1"
-        },
-        {
-          "security_level": 3,
-          "sl_type": "SL-T",
-          "capability_level": 2,
-          "notes": "Enhanced capability required - see SR 1.1 RE 1"
-        },
-        {
-          "security_level": 4,
-          "sl_type": "SL-T",
-          "capability_level": 3,
-          "notes": "Advanced capability required - see SR 1.1 RE 2"
-        }
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic capability - identification and authentication required" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced capability required - see SR 1.1 RE 1" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced capability required - see SR 1.1 RE 2" }
       ]
     },
     {
       "requirement_id": "SR 1.1 RE 1",
       "parent_requirement_id": "SR 1.1",
       "title": "Unique identification and authentication",
-      "description": "The control system shall provide the capability to uniquely identify and authenticate all human users. This capability shall enforce such identification and authentication on all interfaces which provide human user access to the control system.",
-      "rationale": "Provides enhanced capability by requiring unique identification for each user, supporting better accountability and audit trails.",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
       "component_type": "host",
       "security_levels": [
-        {
-          "security_level": 3,
-          "sl_type": "SL-T",
-          "capability_level": 2,
-          "notes": "Required for SL-3"
-        },
-        {
-          "security_level": 4,
-          "sl_type": "SL-T",
-          "capability_level": 2,
-          "notes": "Minimum requirement for SL-4"
-        }
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-3" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Minimum requirement for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.1 RE 2",
+      "parent_requirement_id": "SR 1.1",
+      "title": "Multifactor authentication for untrusted networks",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.1 RE 3",
+      "parent_requirement_id": "SR 1.1",
+      "title": "Multifactor authentication for all networks",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.2",
+      "parent_requirement_id": null,
+      "title": "Software process and device identification and authentication",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.3.3.3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic identification required" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced - see SR 1.2 RE 1" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced capability required" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.2 RE 1",
+      "parent_requirement_id": "SR 1.2",
+      "title": "Unique identification and authentication",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-3" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Minimum requirement for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.3",
+      "parent_requirement_id": null,
+      "title": "Account management",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.3.3.4",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic account management" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced capability" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced capability" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.3 RE 1",
+      "parent_requirement_id": "SR 1.3",
+      "title": "Unified account management",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.4",
+      "parent_requirement_id": null,
+      "title": "Identifier management",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.3.3.5",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic identifier management" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.5",
+      "parent_requirement_id": null,
+      "title": "Authenticator management",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.3.3.6",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic authenticator management" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced - hardware authenticators" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced capability" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.5 RE 1",
+      "parent_requirement_id": "SR 1.5",
+      "title": "Hardware security for authenticators",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "embedded",
+      "security_levels": [
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.6",
+      "parent_requirement_id": null,
+      "title": "Wireless access management",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.3.3.7",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic wireless management" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced wireless controls" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced wireless controls" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.6 RE 1",
+      "parent_requirement_id": "SR 1.6",
+      "title": "Unique identification and authentication for wireless",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-3" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.7",
+      "parent_requirement_id": null,
+      "title": "Strength of password-based authentication",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.3.3.8",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic password strength" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced password policies" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced - see SR 1.7 RE 1" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.7 RE 1",
+      "parent_requirement_id": "SR 1.7",
+      "title": "Password generation and lifetime restrictions",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.8",
+      "parent_requirement_id": null,
+      "title": "Public key infrastructure certificates",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.3.3.9",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-2" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 1, "notes": "PKI support required" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Advanced PKI required" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.9",
+      "parent_requirement_id": null,
+      "title": "Strength of public key authentication",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.3.3.10",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-2" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic public key strength" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced public key strength" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.9 RE 1",
+      "parent_requirement_id": "SR 1.9",
+      "title": "Hardware security for public key authentication",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "embedded",
+      "security_levels": [
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.10",
+      "parent_requirement_id": null,
+      "title": "Authenticator feedback",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.3.3.11",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic feedback obscuring" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.11",
+      "parent_requirement_id": null,
+      "title": "Unsuccessful login attempts",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.3.3.12",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic lockout after failed attempts" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced - see SR 1.11 RE 1" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced capability" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.11 RE 1",
+      "parent_requirement_id": "SR 1.11",
+      "title": "Temporary lockout",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-3" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.12",
+      "parent_requirement_id": null,
+      "title": "System use notification",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.3.3.13",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic use notification" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-2" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-2" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.13",
+      "parent_requirement_id": null,
+      "title": "Access via untrusted networks",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.3.3.14",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic untrusted network access control" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced controls" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced - see SR 1.13 RE 1" }
+      ]
+    },
+    {
+      "requirement_id": "SR 1.13 RE 1",
+      "parent_requirement_id": "SR 1.13",
+      "title": "Explicit access request approval",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.1",
+      "parent_requirement_id": null,
+      "title": "Authorization enforcement",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.4.3.2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic authorization enforcement" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced - role-based" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced - see SR 2.1 RE 1-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.1 RE 1",
+      "parent_requirement_id": "SR 2.1",
+      "title": "Authorization enforcement for all users",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-3" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.1 RE 2",
+      "parent_requirement_id": "SR 2.1",
+      "title": "Permission mapping to roles",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-3" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.1 RE 3",
+      "parent_requirement_id": "SR 2.1",
+      "title": "Supervisor override",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-3" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.1 RE 4",
+      "parent_requirement_id": "SR 2.1",
+      "title": "Dual approval",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.2",
+      "parent_requirement_id": null,
+      "title": "Wireless use control",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.4.3.3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic wireless control" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced wireless controls" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced wireless controls" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.3",
+      "parent_requirement_id": null,
+      "title": "Use control for portable and mobile devices",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.4.3.4",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic mobile device control" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced - see SR 2.3 RE 1" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced capability" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.3 RE 1",
+      "parent_requirement_id": "SR 2.3",
+      "title": "Enforcement of security status of portable and mobile devices",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-3" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.4",
+      "parent_requirement_id": null,
+      "title": "Mobile code",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.4.3.5",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic mobile code control" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced - see SR 2.4 RE 1" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced capability" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.4 RE 1",
+      "parent_requirement_id": "SR 2.4",
+      "title": "Mobile code integrity check",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-3" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.5",
+      "parent_requirement_id": null,
+      "title": "Session lock",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.4.3.6",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic session lock" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced session controls" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced session controls" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.6",
+      "parent_requirement_id": null,
+      "title": "Remote session termination",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.4.3.7",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-2" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 1, "notes": "Remote session termination required" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-3" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.7",
+      "parent_requirement_id": null,
+      "title": "Concurrent session control",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.4.3.8",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-2" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 1, "notes": "Concurrent session control required" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced concurrent session control" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.8",
+      "parent_requirement_id": null,
+      "title": "Auditable events",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.4.3.9",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic audit events" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced - see SR 2.8 RE 1" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced capability" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.8 RE 1",
+      "parent_requirement_id": "SR 2.8",
+      "title": "Centrally managed, system-wide audit trail",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-3" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.9",
+      "parent_requirement_id": null,
+      "title": "Audit storage capacity",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.4.3.10",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic audit storage" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced audit storage" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced audit storage" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.9 RE 1",
+      "parent_requirement_id": "SR 2.9",
+      "title": "Warn when audit record storage capacity threshold reached",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-3" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.10",
+      "parent_requirement_id": null,
+      "title": "Response to audit processing failures",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.4.3.11",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic failure response" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced failure handling" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced failure handling" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.11",
+      "parent_requirement_id": null,
+      "title": "Timestamps",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.4.3.12",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic timestamps" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced - see SR 2.11 RE 1" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced - see SR 2.11 RE 2" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.11 RE 1",
+      "parent_requirement_id": "SR 2.11",
+      "title": "Internal time synchronization",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-3" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.11 RE 2",
+      "parent_requirement_id": "SR 2.11",
+      "title": "Protection of time source integrity",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 2.12",
+      "parent_requirement_id": null,
+      "title": "Non-repudiation",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.4.3.13",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-2" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 1, "notes": "Non-repudiation required" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced non-repudiation" }
+      ]
+    },
+    {
+      "requirement_id": "SR 3.1",
+      "parent_requirement_id": null,
+      "title": "Communication integrity",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.5.3.2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic communication integrity" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced - see SR 3.1 RE 1" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced capability" }
+      ]
+    },
+    {
+      "requirement_id": "SR 3.1 RE 1",
+      "parent_requirement_id": "SR 3.1",
+      "title": "Cryptographic integrity protection",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-3" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 3.2",
+      "parent_requirement_id": null,
+      "title": "Malicious code protection",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.5.3.3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic malware protection" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced protection" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced protection" }
+      ]
+    },
+    {
+      "requirement_id": "SR 3.3",
+      "parent_requirement_id": null,
+      "title": "Security functionality verification",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.5.3.4",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic verification" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced - automated" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced capability" }
+      ]
+    },
+    {
+      "requirement_id": "SR 3.4",
+      "parent_requirement_id": null,
+      "title": "Software and information integrity",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.5.3.5",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic integrity checks" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced integrity" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced - see SR 3.4 RE 1" }
+      ]
+    },
+    {
+      "requirement_id": "SR 3.4 RE 1",
+      "parent_requirement_id": "SR 3.4",
+      "title": "Automated notification of integrity violations",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 3.5",
+      "parent_requirement_id": null,
+      "title": "Input validation",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.5.3.6",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "app",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic input validation" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced validation" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced validation" }
+      ]
+    },
+    {
+      "requirement_id": "SR 3.6",
+      "parent_requirement_id": null,
+      "title": "Deterministic output",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.5.3.7",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "app",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic deterministic output" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" }
+      ]
+    },
+    {
+      "requirement_id": "SR 3.7",
+      "parent_requirement_id": null,
+      "title": "Error handling",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.5.3.8",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "app",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic error handling" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced error handling" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced error handling" }
+      ]
+    },
+    {
+      "requirement_id": "SR 3.8",
+      "parent_requirement_id": null,
+      "title": "Session integrity",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.5.3.9",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic session integrity" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced - see SR 3.8 RE 1" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced capability" }
+      ]
+    },
+    {
+      "requirement_id": "SR 3.8 RE 1",
+      "parent_requirement_id": "SR 3.8",
+      "title": "Invalidation of session IDs after session termination",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-3" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 3.9",
+      "parent_requirement_id": null,
+      "title": "Protection of audit information",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.5.3.10",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic audit protection" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced audit protection" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced audit protection" }
+      ]
+    },
+    {
+      "requirement_id": "SR 4.1",
+      "parent_requirement_id": null,
+      "title": "Information confidentiality",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.6.3.2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic confidentiality" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced confidentiality" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced confidentiality" }
+      ]
+    },
+    {
+      "requirement_id": "SR 4.2",
+      "parent_requirement_id": null,
+      "title": "Information persistence",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.6.3.3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-2" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 1, "notes": "Information persistence control" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced persistence control" }
+      ]
+    },
+    {
+      "requirement_id": "SR 4.3",
+      "parent_requirement_id": null,
+      "title": "Use of cryptography",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.6.3.4",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic cryptography" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced cryptography" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced - see SR 4.3 RE 1-2" }
+      ]
+    },
+    {
+      "requirement_id": "SR 4.3 RE 1",
+      "parent_requirement_id": "SR 4.3",
+      "title": "Cryptographic key generation",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 4.3 RE 2",
+      "parent_requirement_id": "SR 4.3",
+      "title": "Cryptographic key establishment and distribution",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 5.1",
+      "parent_requirement_id": null,
+      "title": "Network segmentation",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.7.3.2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic network segmentation" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced - see SR 5.1 RE 1" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced segmentation" }
+      ]
+    },
+    {
+      "requirement_id": "SR 5.1 RE 1",
+      "parent_requirement_id": "SR 5.1",
+      "title": "Physical network segmentation",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-3" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 5.1 RE 2",
+      "parent_requirement_id": "SR 5.1",
+      "title": "Independence from non-control system networks",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 5.2",
+      "parent_requirement_id": null,
+      "title": "Zone boundary protection",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.7.3.3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic zone boundary protection" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced - see SR 5.2 RE 1-3" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced boundary protection" }
+      ]
+    },
+    {
+      "requirement_id": "SR 5.3",
+      "parent_requirement_id": null,
+      "title": "General purpose person-to-person communication restrictions",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.7.3.4",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-2" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 1, "notes": "Communication restrictions required" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced restrictions" }
+      ]
+    },
+    {
+      "requirement_id": "SR 5.4",
+      "parent_requirement_id": null,
+      "title": "Application partitioning",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.7.3.5",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "app",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic application partitioning" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced partitioning" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced partitioning" }
+      ]
+    },
+    {
+      "requirement_id": "SR 6.1",
+      "parent_requirement_id": null,
+      "title": "Audit log accessibility",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.8.3.2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic audit log access" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced - see SR 6.1 RE 1" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced log access" }
+      ]
+    },
+    {
+      "requirement_id": "SR 6.1 RE 1",
+      "parent_requirement_id": "SR 6.1",
+      "title": "Programmatic access to audit logs",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-3" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 6.2",
+      "parent_requirement_id": null,
+      "title": "Continuous monitoring",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.8.3.3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-2" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 1, "notes": "Continuous monitoring required" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced monitoring" }
+      ]
+    },
+    {
+      "requirement_id": "SR 7.1",
+      "parent_requirement_id": null,
+      "title": "Denial of service protection",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.9.3.2",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic DoS protection" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced - see SR 7.1 RE 1" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced DoS protection" }
+      ]
+    },
+    {
+      "requirement_id": "SR 7.1 RE 1",
+      "parent_requirement_id": "SR 7.1",
+      "title": "Manage communication loads",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-3" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 7.1 RE 2",
+      "parent_requirement_id": "SR 7.1",
+      "title": "Limit DoS effects to other systems or networks",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 7.2",
+      "parent_requirement_id": null,
+      "title": "Resource management",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.9.3.3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic resource management" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced resource management" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced resource management" }
+      ]
+    },
+    {
+      "requirement_id": "SR 7.3",
+      "parent_requirement_id": null,
+      "title": "Control system backup",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.9.3.4",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic backup capability" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced - see SR 7.3 RE 1-2" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced backup capability" }
+      ]
+    },
+    {
+      "requirement_id": "SR 7.3 RE 1",
+      "parent_requirement_id": "SR 7.3",
+      "title": "Backup verification",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-3" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 7.3 RE 2",
+      "parent_requirement_id": "SR 7.3",
+      "title": "Backup automation",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 7.4",
+      "parent_requirement_id": null,
+      "title": "Control system recovery and reconstitution",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.9.3.5",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic recovery capability" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced recovery" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced recovery" }
+      ]
+    },
+    {
+      "requirement_id": "SR 7.5",
+      "parent_requirement_id": null,
+      "title": "Emergency power",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.9.3.6",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "embedded",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic emergency power" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced emergency power" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced emergency power" }
+      ]
+    },
+    {
+      "requirement_id": "SR 7.6",
+      "parent_requirement_id": null,
+      "title": "Network and security configuration settings",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.9.3.7",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic configuration management" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced - see SR 7.6 RE 1" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced configuration management" }
+      ]
+    },
+    {
+      "requirement_id": "SR 7.6 RE 1",
+      "parent_requirement_id": "SR 7.6",
+      "title": "Machine-readable reporting of current security settings",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "network",
+      "security_levels": [
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-3" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 2, "notes": "Required for SL-4" }
+      ]
+    },
+    {
+      "requirement_id": "SR 7.7",
+      "parent_requirement_id": null,
+      "title": "Least functionality",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.9.3.8",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic least functionality" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Same as SL-1" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced - restrict ports and services" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced least functionality" }
+      ]
+    },
+    {
+      "requirement_id": "SR 7.8",
+      "parent_requirement_id": null,
+      "title": "Control system component inventory",
+      "description": "[PLACEHOLDER] Replace with content from your licensed IEC 62443-3-3, Section 5.9.3.9",
+      "rationale": "[PLACEHOLDER] Replace with rationale from your licensed copy",
+      "component_type": "host",
+      "security_levels": [
+        { "security_level": 1, "sl_type": "SL-T", "capability_level": 1, "notes": "Not required at SL-1" },
+        { "security_level": 2, "sl_type": "SL-T", "capability_level": 1, "notes": "Basic inventory" },
+        { "security_level": 3, "sl_type": "SL-T", "capability_level": 2, "notes": "Enhanced inventory" },
+        { "security_level": 4, "sl_type": "SL-T", "capability_level": 3, "notes": "Advanced inventory" }
       ]
     }
   ]
