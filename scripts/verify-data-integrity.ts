@@ -342,8 +342,8 @@ class DataIntegrityVerifier {
       'iec62443-3-3': 2, // SR 1.1, SR 1.1 RE 1
       'iec62443-4-2': 2, // Component requirements
       'iec62443-3-2': 0, // Zones/conduits, not requirements
-      'nist-800-53': 228, // Full OSCAL catalog
-      'nist-800-82': 6, // 800-82 Rev 3 controls
+      'nist-800-53': 260, // Full OSCAL catalog (15 OT-relevant families)
+      'nist-800-82': 16, // 800-82 Rev 3 guidance sections
       'mitre-ics': 83, // Techniques (not in ot_requirements)
     };
 

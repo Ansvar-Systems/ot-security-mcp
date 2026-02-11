@@ -33,6 +33,20 @@
       "security_level_target": 2,
       "description": "Physical process zone containing sensors, actuators, and field devices directly interacting with the physical process.",
       "typical_assets": "Sensors, Actuators, Field instruments, Smart transmitters, Motor drives"
+    },
+    {
+      "name": "Level 4 - Site Business Planning and Logistics",
+      "purdue_level": 4,
+      "security_level_target": 2,
+      "description": "Site business planning and logistics zone containing systems that manage production scheduling, operational management, and plant-level business functions. Bridges operational technology and enterprise IT.",
+      "typical_assets": "MES servers, ERP connectors, Production schedulers, Plant databases, Business intelligence systems, Quality management systems"
+    },
+    {
+      "name": "Level 5 - Enterprise Network",
+      "purdue_level": 5,
+      "security_level_target": 1,
+      "description": "Enterprise network zone containing corporate IT systems, business applications, and external connectivity. Standard IT security practices apply, with additional controls for any connections to lower Purdue levels.",
+      "typical_assets": "Corporate ERP, Email servers, Office applications, Finance systems, Cloud connectors, Internet gateways"
     }
   ],
   "conduits": [
@@ -53,6 +67,30 @@
       "conduit_type": "open_bidirectional",
       "description": "Switched network within Level 1 zone connecting PLCs and controllers. Security enforced at zone boundary rather than internally. Should be monitored for anomalous behavior.",
       "minimum_security_level": 1
+    },
+    {
+      "name": "Enterprise Firewall - Level 3 to Level 4",
+      "conduit_type": "filtered_bidirectional",
+      "description": "Enterprise-grade firewall with application-layer inspection between the SCADA DMZ and site business planning zone. Enforces strict data flow policies for MES/ERP integration, allowing only approved application protocols and data exchanges.",
+      "minimum_security_level": 2
+    },
+    {
+      "name": "Business Gateway - Level 4 to Level 5",
+      "conduit_type": "filtered_bidirectional",
+      "description": "Gateway connecting site business planning systems to the corporate enterprise network. Provides controlled data exchange for production reporting, ERP synchronization, and business intelligence while preventing direct enterprise access to operational systems.",
+      "minimum_security_level": 1
+    },
+    {
+      "name": "Secure Remote Access Gateway",
+      "conduit_type": "filtered_bidirectional",
+      "description": "Dedicated remote access infrastructure with multi-factor authentication, session recording, and jump server architecture. Provides controlled access for vendor maintenance, remote engineering, and emergency support while enforcing least-privilege and time-limited sessions.",
+      "minimum_security_level": 3
+    },
+    {
+      "name": "Field Bus - Level 0 to Level 1",
+      "conduit_type": "open_bidirectional",
+      "description": "Industrial field bus networks (Modbus, PROFIBUS, HART, Foundation Fieldbus) connecting field devices to controllers. Typically lacks built-in authentication or encryption. Security depends on physical isolation and zone boundary protections.",
+      "minimum_security_level": 2
     }
   ],
   "flows": [
@@ -71,6 +109,54 @@
       "data_flow_description": "One-way historian data replication from process controllers to SCADA DMZ for monitoring and analysis",
       "security_level_requirement": 3,
       "bidirectional": false
+    },
+    {
+      "source_zone_name": "Level 0 - Physical Process",
+      "target_zone_name": "Level 1 - Basic Control",
+      "conduit_name": "Field Bus - Level 0 to Level 1",
+      "data_flow_description": "Process variable readings from sensors/transmitters and control outputs to actuators via industrial field bus protocols",
+      "security_level_requirement": 2,
+      "bidirectional": true
+    },
+    {
+      "source_zone_name": "Level 1 - Basic Control",
+      "target_zone_name": "Level 2 - Area Supervisory Control",
+      "conduit_name": "Firewall - Level 2 to Level 3",
+      "data_flow_description": "Control commands, setpoint changes, and process data between basic controllers and area supervisory systems",
+      "security_level_requirement": 2,
+      "bidirectional": true
+    },
+    {
+      "source_zone_name": "Level 2 - Area Supervisory Control",
+      "target_zone_name": "Level 3 - SCADA DMZ",
+      "conduit_name": "Data Diode - Level 1 to Level 3",
+      "data_flow_description": "Aggregated production data and alarm summaries from area supervisory control to SCADA DMZ for historian archival",
+      "security_level_requirement": 3,
+      "bidirectional": false
+    },
+    {
+      "source_zone_name": "Level 3 - SCADA DMZ",
+      "target_zone_name": "Level 4 - Site Business Planning and Logistics",
+      "conduit_name": "Enterprise Firewall - Level 3 to Level 4",
+      "data_flow_description": "Production reports, quality data, and operational metrics from SCADA DMZ to MES and business planning systems",
+      "security_level_requirement": 2,
+      "bidirectional": true
+    },
+    {
+      "source_zone_name": "Level 4 - Site Business Planning and Logistics",
+      "target_zone_name": "Level 5 - Enterprise Network",
+      "conduit_name": "Business Gateway - Level 4 to Level 5",
+      "data_flow_description": "ERP data synchronization, production scheduling, and business intelligence data exchange between site operations and corporate enterprise",
+      "security_level_requirement": 1,
+      "bidirectional": true
+    },
+    {
+      "source_zone_name": "Level 3 - SCADA DMZ",
+      "target_zone_name": "Level 3 - SCADA DMZ",
+      "conduit_name": "Secure Remote Access Gateway",
+      "data_flow_description": "Remote engineering sessions, vendor maintenance access, and emergency support connections via authenticated and monitored gateway",
+      "security_level_requirement": 3,
+      "bidirectional": true
     }
   ],
   "reference_architectures": [

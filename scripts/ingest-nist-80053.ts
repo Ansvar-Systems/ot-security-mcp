@@ -7,7 +7,7 @@
  *
  * OSCAL Format:
  * - catalog → groups (control families) → controls
- * - Filters to 12 OT-relevant control families (~200 controls)
+ * - Filters to 15 OT-relevant control families (~260 controls)
  * - Populates ot_requirements table
  */
 
@@ -16,7 +16,7 @@ import { DatabaseClient } from '../src/database/client.js';
 const NIST_OSCAL_URL =
   'https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_catalog.json';
 
-// OT-relevant control families (12 families)
+// OT-relevant control families (15 families)
 const OT_RELEVANT_FAMILIES = [
   'AC', // Access Control
   'AU', // Audit and Accountability
@@ -27,9 +27,12 @@ const OT_RELEVANT_FAMILIES = [
   'IR', // Incident Response
   'MA', // Maintenance
   'PE', // Physical and Environmental Protection
+  'PL', // Planning
+  'PS', // Personnel Security
   'SA', // System and Services Acquisition
   'SC', // System and Communications Protection
   'SI', // System and Information Integrity
+  'SR', // Supply Chain Risk Management
 ];
 
 /**

@@ -54,6 +54,86 @@
       "description": "Apply the ICS overlay to tailor NIST 800-53 controls for operational technology environments, focusing on availability, safety, and operational constraints.",
       "ics_context": "The overlay provides ICS-specific guidance for 800-53 controls, including implementation considerations, compensating controls, and priority adjustments.",
       "related_800_53_controls": ["ALL_FAMILIES"]
+    },
+    {
+      "id": "G-5.4",
+      "section": "5.4",
+      "title": "Supply Chain Risk Management for ICS",
+      "description": "Implement supply chain risk management practices that address the unique risks of ICS components, including counterfeit detection, firmware integrity verification, and vendor trust assessment. OT supply chains involve specialized hardware and software from vendors who may have limited cybersecurity maturity.",
+      "ics_context": "ICS supply chains are particularly vulnerable because of long equipment lifecycles (15-30 years), reliance on specialized vendors, limited alternative sources, and the potential for compromised firmware or hardware to directly impact physical processes and safety systems.",
+      "related_800_53_controls": ["SR-02", "SR-03", "SR-05", "SA-09"]
+    },
+    {
+      "id": "G-5.5",
+      "section": "5.5",
+      "title": "Personnel Security for ICS Environments",
+      "description": "Establish personnel security practices tailored to ICS environments, including background screening, role-based training, separation of duties, and personnel transfer/termination procedures that account for access to safety-critical systems.",
+      "ics_context": "Personnel with access to ICS can directly affect physical processes and safety. Insider threats in OT environments are particularly dangerous because operators often have broad access to control systems. Training must cover both cybersecurity awareness and safe operational practices.",
+      "related_800_53_controls": ["PS-02", "PS-03", "PS-04", "PS-06", "PS-07"]
+    },
+    {
+      "id": "G-5.6",
+      "section": "5.6",
+      "title": "Security Architecture and Design for ICS",
+      "description": "Design ICS security architectures that incorporate defense-in-depth principles, network segmentation following the Purdue Model, secure remote access, and fail-safe defaults. Architecture should prioritize availability and safety while maintaining confidentiality and integrity.",
+      "ics_context": "ICS security architecture must balance cybersecurity requirements with operational needs. Defense-in-depth for OT includes physical security, network segmentation, application whitelisting, and protocol-aware monitoring. Architectures must account for legacy devices that cannot be updated.",
+      "related_800_53_controls": ["PL-02", "PL-08", "SA-08", "SA-17"]
+    },
+    {
+      "id": "G-6.5",
+      "section": "6.5",
+      "title": "Patch Management for ICS",
+      "description": "Develop and implement patch management processes specific to ICS that account for operational constraints, vendor dependencies, testing requirements, and rollback procedures. Patches must be validated in test environments before deployment to production ICS.",
+      "ics_context": "ICS patching is fundamentally different from IT patching. Systems often cannot be taken offline for updates, vendor approval may be required, and patches can affect real-time performance or safety functions. Organizations should maintain compensating controls for systems that cannot be patched promptly.",
+      "related_800_53_controls": ["SI-02", "CM-03", "CM-08", "SI-07"]
+    },
+    {
+      "id": "G-6.6",
+      "section": "6.6",
+      "title": "Physical Security for ICS",
+      "description": "Implement physical security controls for ICS components including access control to control rooms, cabinets, and field devices. Physical security is a critical layer in ICS defense-in-depth, as physical access to controllers or network infrastructure can bypass logical controls.",
+      "ics_context": "Many ICS components are deployed in remote or distributed locations (substations, pump stations, field cabinets) where physical security is challenging. Tamper detection, environmental monitoring, and physical access logging are essential for distributed OT infrastructure.",
+      "related_800_53_controls": ["PE-02", "PE-03", "PE-06"]
+    },
+    {
+      "id": "G-6.7",
+      "section": "6.7",
+      "title": "Incident Response for OT Environments",
+      "description": "Develop incident response plans specific to OT environments that address cyber-physical incidents, coordinate between IT and OT teams, preserve forensic evidence from industrial protocols, and include procedures for safe manual operation during cyber incidents.",
+      "ics_context": "OT incident response must prioritize safety and process continuity. Response teams need specialized knowledge of industrial protocols, control system architectures, and safe shutdown procedures. Forensic collection must not disrupt running processes, and recovery must include verification of control system integrity.",
+      "related_800_53_controls": ["IR-04", "IR-05", "IR-06", "IR-08"]
+    },
+    {
+      "id": "G-6.8",
+      "section": "6.8",
+      "title": "Backup and Recovery for ICS",
+      "description": "Establish backup and recovery procedures for ICS that cover controller configurations, firmware images, historian data, HMI graphics, and network device configurations. Recovery procedures must be tested regularly and include provisions for manual operation during restoration.",
+      "ics_context": "ICS backup strategies must account for PLC/DCS program backups, HMI configuration files, historian databases, and network device configurations. Recovery time objectives in OT are driven by safety and process requirements. Offline backups are critical to protect against ransomware affecting control systems.",
+      "related_800_53_controls": ["CP-09", "CP-10", "CP-06"]
+    },
+    {
+      "id": "G-6.9",
+      "section": "6.9",
+      "title": "Configuration and Change Management for ICS",
+      "description": "Implement configuration and change management processes for ICS that track hardware and software inventories, control changes to PLC/DCS programs, manage firmware versions, and maintain baseline configurations for all control system components.",
+      "ics_context": "Configuration management in OT must track PLC programs, firmware versions, HMI configurations, network device settings, and safety system parameters. Unauthorized changes to control logic can have safety implications. Change management must include impact assessment for process operations and safety.",
+      "related_800_53_controls": ["CM-02", "CM-03", "CM-05", "CM-06", "CM-08"]
+    },
+    {
+      "id": "G-6.10",
+      "section": "6.10",
+      "title": "Wireless Security in OT Environments",
+      "description": "Secure wireless communications in OT environments including industrial wireless protocols (WirelessHART, ISA100.11a), Wi-Fi access points in control areas, and cellular/satellite links for remote sites. Wireless networks must be segmented, encrypted, and monitored for unauthorized access.",
+      "ics_context": "Wireless technologies in ICS introduce unique attack surfaces. Industrial wireless protocols have specific security features that must be properly configured. Rogue access points in control system areas can provide unauthorized network access. RF interference can affect both wireless communications and process instrumentation.",
+      "related_800_53_controls": ["AC-18", "SC-40", "SC-08"]
+    },
+    {
+      "id": "G-6.11",
+      "section": "6.11",
+      "title": "Remote Access Security for ICS",
+      "description": "Implement secure remote access to ICS environments using multi-factor authentication, encrypted tunnels, jump servers, and session monitoring. Remote access should be limited to defined maintenance windows when possible and all sessions should be logged and monitored.",
+      "ics_context": "Remote access to OT networks is a primary attack vector for adversaries targeting industrial systems. Vendor remote access for maintenance must be tightly controlled with time-limited credentials, session recording, and approval workflows. VPN connections should terminate in a DMZ, not directly on the control network.",
+      "related_800_53_controls": ["AC-17", "IA-02", "SC-10", "SC-12"]
     }
   ]
 }

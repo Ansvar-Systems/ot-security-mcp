@@ -1,0 +1,20 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.Ansvar-Systems/ot-security-mcp",
+  "description": "OT security standards: IEC 62443, NIST 800-82/53, MITRE ATT&CK for ICS",
+  "repository": {
+    "url": "https://github.com/Ansvar-Systems/ot-security-mcp",
+    "source": "github"
+  },
+  "version": "0.3.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@ansvar/ot-security-mcp",
+      "version": "0.3.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}

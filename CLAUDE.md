@@ -9,7 +9,7 @@ MCP server for Operational Technology (OT) security standards. Query IEC 62443, 
 ## Key Features
 
 - **IEC 62443**: 238 requirements (3-3, 4-2, 3-2) - user-supplied licensed data
-- **NIST 800-53 Rev 5**: 228 OT-relevant controls from 12 families
+- **NIST 800-53 Rev 5**: 260 OT-relevant controls from 15 families
 - **NIST 800-82 Rev 3**: Guide to Operational Technology Security
 - **MITRE ATT&CK for ICS**: 83 techniques, 52 mitigations, 331 relationships
 - **Security Level Mapping**: Query by SL-1 through SL-4
@@ -232,10 +232,13 @@ See [docs/CI-CD-SETUP.md](./docs/CI-CD-SETUP.md) for details.
 ## Current Statistics
 
 - **IEC 62443 Requirements**: 238 (user-supplied)
-- **NIST 800-53 Controls**: 228 OT-relevant
-- **NIST 800-82 Guidance**: Curated sections
+- **NIST 800-53 Controls**: 260 OT-relevant
+- **NIST 800-82 Guidance**: 16 curated sections
 - **MITRE ICS Techniques**: 83 techniques, 52 mitigations
-- **Cross-Standard Mappings**: 16 validated mappings
+- **Cross-Standard Mappings**: 53 validated mappings
+- **Purdue Model Zones**: 6 (Levels 0-5)
+- **Conduit Types**: 7
+- **Zone-to-Zone Flows**: 8
 - **Database Size**: ~5MB (without IEC data)
 - **Tests**: 294 passing
 

@@ -156,7 +156,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
       );
 
       expect(count?.count).toBeGreaterThanOrEqual(200);
-      expect(count?.count).toBeLessThan(250);
+      expect(count?.count).toBeLessThan(270);
     });
 
     it('should have substantive control descriptions', () => {
@@ -227,7 +227,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
         ['nist-800-82']
       );
 
-      expect(count?.count).toBeGreaterThanOrEqual(5);
+      expect(count?.count).toBeGreaterThanOrEqual(15);
     });
 
     it('should have substantive OT-specific guidance', () => {
@@ -265,7 +265,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
         ['nist-800-82', 'nist-800-53']
       );
 
-      expect(count?.count).toBeGreaterThanOrEqual(10);
+      expect(count?.count).toBeGreaterThanOrEqual(40);
     });
 
     it('should have valid mapping confidence scores', () => {
@@ -350,7 +350,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
         } else if (std.id === 'nist-800-53') {
           expect(std.requirement_count).toBeGreaterThanOrEqual(200);
         } else if (std.id === 'nist-800-82') {
-          expect(std.requirement_count).toBeGreaterThanOrEqual(5);
+          expect(std.requirement_count).toBeGreaterThanOrEqual(15);
         }
         // IEC templates may be 0 or populated depending on user ingestion
       });

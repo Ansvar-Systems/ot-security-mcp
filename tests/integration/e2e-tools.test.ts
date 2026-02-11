@@ -128,10 +128,10 @@ describe('E2E Tool Integration Tests', () => {
       expect(iec62443_3_2?.requirement_count).toBe(0); // Zones/conduits, not requirements
 
       const nist_800_53 = result.find((s) => s.id === 'nist-800-53');
-      expect(nist_800_53?.requirement_count).toBe(228);
+      expect(nist_800_53?.requirement_count).toBe(260);
 
       const nist_800_82 = result.find((s) => s.id === 'nist-800-82');
-      expect(nist_800_82?.requirement_count).toBe(6);
+      expect(nist_800_82?.requirement_count).toBe(16);
 
       const mitre_ics = result.find((s) => s.id === 'mitre-ics');
       expect(mitre_ics?.requirement_count).toBe(83); // Techniques count

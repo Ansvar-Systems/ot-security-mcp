@@ -149,17 +149,34 @@ describe('Nist80053Ingester', () => {
         { control_id: 'AC-1', family: 'AC', title: 'Test', description: 'Test' }, // OT-relevant
         { control_id: 'AT-1', family: 'AT', title: 'Test', description: 'Test' }, // Not OT-relevant (Awareness Training)
         { control_id: 'IA-2', family: 'IA', title: 'Test', description: 'Test' }, // OT-relevant
-        { control_id: 'PS-1', family: 'PS', title: 'Test', description: 'Test' }, // Not OT-relevant (Personnel Security)
+        { control_id: 'PS-1', family: 'PS', title: 'Test', description: 'Test' }, // OT-relevant (Personnel Security)
         { control_id: 'SC-7', family: 'SC', title: 'Test', description: 'Test' }, // OT-relevant
+        { control_id: 'PM-1', family: 'PM', title: 'Test', description: 'Test' }, // Not OT-relevant (Program Management)
       ];
 
       const filtered = ingester.filterOtRelevantControls(controls);
-      expect(filtered).toHaveLength(3);
-      expect(filtered.map((c) => c.control_id)).toEqual(['AC-1', 'IA-2', 'SC-7']);
+      expect(filtered).toHaveLength(4);
+      expect(filtered.map((c) => c.control_id)).toEqual(['AC-1', 'IA-2', 'PS-1', 'SC-7']);
     });
 
-    it('should include all 12 OT-relevant families', () => {
-      const allFamilies = ['AC', 'AU', 'CA', 'CM', 'CP', 'IA', 'IR', 'MA', 'PE', 'SA', 'SC', 'SI'];
+    it('should include all 15 OT-relevant families', () => {
+      const allFamilies = [
+        'AC',
+        'AU',
+        'CA',
+        'CM',
+        'CP',
+        'IA',
+        'IR',
+        'MA',
+        'PE',
+        'PL',
+        'PS',
+        'SA',
+        'SC',
+        'SI',
+        'SR',
+      ];
       const controls = allFamilies.map((family, idx) => ({
         control_id: `${family}-${idx + 1}`,
         family,
@@ -168,7 +185,7 @@ describe('Nist80053Ingester', () => {
       }));
 
       const filtered = ingester.filterOtRelevantControls(controls);
-      expect(filtered).toHaveLength(12);
+      expect(filtered).toHaveLength(15);
       expect(filtered.map((c) => c.family).sort()).toEqual(allFamilies.sort());
     });
   });
