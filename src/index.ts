@@ -51,7 +51,7 @@ export class McpServer {
     this.server = new Server(
       {
         name: 'ot-security-mcp',
-        version: '0.2.0',
+        version: '0.3.1',
       },
       {
         capabilities: {
@@ -459,7 +459,22 @@ export class McpServer {
 }
 
 // If this file is executed directly (not imported), start the server
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Use argv check with realpath fallback for npx/symlink compatibility
+import { realpathSync } from 'fs';
+
+const isDirectExecution = (() => {
+  try {
+    const argv1 = process.argv[1];
+    if (!argv1) return false;
+    const scriptPath = realpathSync(argv1);
+    const modulePath = fileURLToPath(import.meta.url);
+    return scriptPath === modulePath || import.meta.url === `file://${argv1}`;
+  } catch {
+    return false;
+  }
+})();
+
+if (isDirectExecution) {
   const server = new McpServer();
 
   server.start().catch((error) => {
