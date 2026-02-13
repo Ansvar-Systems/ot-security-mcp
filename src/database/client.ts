@@ -29,9 +29,6 @@ export class DatabaseClient {
     // Initialize @ansvar/mcp-sqlite
     this.db = new Database(dbPath);
 
-    // Enable WAL mode for better concurrency
-    this.db.pragma('journal_mode = WAL');
-
     // Enable foreign key constraints
     this.db.pragma('foreign_keys = ON');
 
