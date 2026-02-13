@@ -1,0 +1,67 @@
+{
+  "manifest_version": "0.3",
+  "name": "ot-security-mcp",
+  "display_name": "OT Security MCP Server",
+  "version": "0.4.0",
+  "description": "MCP server for OT (Operational Technology) security standards and frameworks",
+  "author": {
+    "name": "Ansvar Systems",
+    "email": "hello@ansvar.eu",
+    "url": "https://ansvar.eu"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ansvar-Systems/ot-security-mcp"
+  },
+  "homepage": "https://ansvar.eu",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "ot-security",
+    "operational-technology",
+    "ics",
+    "industrial-control-systems",
+    "scada",
+    "plc",
+    "dcs",
+    "iec-62443",
+    "nist-800-53",
+    "nist-800-82",
+    "mitre-attack",
+    "mitre-ics",
+    "security-standards",
+    "compliance",
+    "cybersecurity",
+    "critical-infrastructure",
+    "threat-intelligence",
+    "purdue-model",
+    "network-segmentation",
+    "claude",
+    "claude-desktop"
+  ],
+  "server": {
+    "type": "node",
+    "entry_point": "dist/index.js",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/dist/index.js"],
+      "env": {}
+    }
+  },
+  "tools": [
+    { "name": "search_ot_requirements" },
+    { "name": "get_ot_requirement" },
+    { "name": "list_ot_standards" },
+    { "name": "get_mitre_ics_technique" },
+    { "name": "map_security_level_requirements" },
+    { "name": "get_zone_conduit_guidance" },
+    { "name": "get_requirement_rationale" }
+  ],
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": {
+      "node": ">=18.0.0"
+    }
+  }
+}
