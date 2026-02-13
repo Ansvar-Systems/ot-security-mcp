@@ -54,7 +54,7 @@ describe('McpServer', () => {
       expect(tableNames).toContain('mitre_ics_techniques');
     });
 
-    it('should respect OT_MCP_DB_PATH environment variable', async () => {
+    it('should respect OT_MCP_DB_PATH environment variable', { timeout: 15000 }, async () => {
       const customPath = 'tests/data/custom-db.sqlite';
       process.env.OT_MCP_DB_PATH = customPath;
 

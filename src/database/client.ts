@@ -1,9 +1,9 @@
 /**
- * Database client wrapper for better-sqlite3
+ * Database client wrapper for @ansvar/mcp-sqlite
  * Provides a clean interface for database operations with automatic schema initialization
  */
 
-import Database from 'better-sqlite3';
+import Database, { type RunResult } from '@ansvar/mcp-sqlite';
 import { readFileSync, existsSync, mkdirSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
@@ -13,7 +13,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export class DatabaseClient {
-  private db: Database.Database;
+  private db: InstanceType<typeof Database>;
 
   /**
    * Creates a new database client
@@ -26,7 +26,7 @@ export class DatabaseClient {
       mkdirSync(dbDir, { recursive: true });
     }
 
-    // Initialize better-sqlite3
+    // Initialize @ansvar/mcp-sqlite
     this.db = new Database(dbPath);
 
     // Enable WAL mode for better concurrency
@@ -54,9 +54,9 @@ export class DatabaseClient {
    * Execute a SQL statement (INSERT, UPDATE, DELETE)
    * @param sql - SQL statement
    * @param params - Parameters for the SQL statement
-   * @returns Database.RunResult containing lastInsertRowid and changes
+   * @returns RunResult containing lastInsertRowid and changes
    */
-  run(sql: string, params?: unknown[]): Database.RunResult {
+  run(sql: string, params?: unknown[]): RunResult {
     const stmt = this.db.prepare(sql);
     return stmt.run(...(params || []));
   }
@@ -101,9 +101,9 @@ export class DatabaseClient {
   }
 
   /**
-   * Get the raw better-sqlite3 database instance for advanced operations
+   * Get the raw @ansvar/mcp-sqlite database instance for advanced operations
    */
-  get database(): Database.Database {
+  get database(): InstanceType<typeof Database> {
     return this.db;
   }
 }

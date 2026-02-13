@@ -61,9 +61,10 @@ describe('DatabaseClient', () => {
       expect(result?.foreign_keys).toBe(1);
     });
 
-    it('should use WAL mode', () => {
+    it('should use WAL mode or delete (WASM fallback)', () => {
       const result = db.queryOne<{ journal_mode: string }>('PRAGMA journal_mode');
-      expect(result?.journal_mode).toBe('wal');
+      // node-sqlite3-wasm doesn't support WAL; falls back to 'delete'
+      expect(['wal', 'delete']).toContain(result?.journal_mode);
     });
   });
 
