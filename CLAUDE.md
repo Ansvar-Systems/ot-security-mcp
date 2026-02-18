@@ -265,3 +265,9 @@ See [docs/CI-CD-SETUP.md](./docs/CI-CD-SETUP.md) for details.
 
 **For complete Ansvar MCP suite documentation, see:**
 📖 [Central Architecture Documentation](https://github.com/Ansvar-Systems/security-controls-mcp/blob/main/docs/ANSVAR_MCP_ARCHITECTURE.md)
+
+## Git Workflow
+
+- **Never commit directly to `main`.** Always create a feature branch and open a Pull Request.
+- Branch protection requires: verified signatures, PR review, and status checks to pass.
+- Use conventional commit prefixes: `feat:`, `fix:`, `chore:`, `docs:`, etc.
