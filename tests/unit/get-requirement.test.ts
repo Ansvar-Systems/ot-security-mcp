@@ -5,19 +5,14 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { DatabaseClient } from '../../src/database/client.js';
 import { getRequirement } from '../../src/tools/get-requirement.js';
-import { unlink } from 'fs/promises';
-import { existsSync } from 'fs';
-import { join } from 'path';
+import { createTestDbPath, cleanupTestDb } from '../helpers/test-db.js';
 
 describe('getRequirement', () => {
   let db: DatabaseClient;
-  const testDbPath = join(process.cwd(), 'tests/data/test-get-requirement.sqlite');
+  let testDbPath: string;
 
   beforeEach(async () => {
-    // Clean up any existing test database
-    if (existsSync(testDbPath)) {
-      await unlink(testDbPath);
-    }
+    testDbPath = createTestDbPath('get-requirement');
     // Create database client
     db = new DatabaseClient(testDbPath);
   });
@@ -28,9 +23,7 @@ describe('getRequirement', () => {
       db.close();
     }
     // Clean up test database
-    if (existsSync(testDbPath)) {
-      await unlink(testDbPath);
-    }
+    await cleanupTestDb(testDbPath);
   });
 
   describe('Empty Database', () => {

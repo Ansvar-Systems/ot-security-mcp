@@ -5,19 +5,14 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { DatabaseClient } from '../../src/database/client.js';
 import { getZoneConduitGuidance } from '../../src/tools/get-zone-conduit-guidance.js';
-import { unlink } from 'fs/promises';
-import { existsSync } from 'fs';
-import { join } from 'path';
+import { createTestDbPath, cleanupTestDb } from '../helpers/test-db.js';
 
 describe('getZoneConduitGuidance', () => {
   let db: DatabaseClient;
-  const testDbPath = join(process.cwd(), 'tests/data/test-zone-conduit.sqlite');
+  let testDbPath: string;
 
   beforeEach(async () => {
-    // Clean up any existing test database
-    if (existsSync(testDbPath)) {
-      await unlink(testDbPath);
-    }
+    testDbPath = createTestDbPath('zone-conduit');
     // Create database client
     db = new DatabaseClient(testDbPath);
 
@@ -115,9 +110,7 @@ describe('getZoneConduitGuidance', () => {
       db.close();
     }
     // Clean up test database
-    if (existsSync(testDbPath)) {
-      await unlink(testDbPath);
-    }
+    await cleanupTestDb(testDbPath);
   });
 
   it('should return all zones and conduits when no filters provided', async () => {

@@ -1,22 +1,22 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { DatabaseClient } from '../../src/database/client.js';
 import { Nist80082Ingester } from '../../scripts/ingest-nist-80082.js';
-import { existsSync, unlinkSync } from 'fs';
+import { createTestDbPath, cleanupTestDb } from '../helpers/test-db.js';
 
 describe('Nist80082Ingester', () => {
-  const testDbPath = 'tests/data/test-nist-80082.db';
+  let testDbPath: string;
   let db: DatabaseClient;
   let ingester: Nist80082Ingester;
 
   beforeEach(() => {
-    if (existsSync(testDbPath)) unlinkSync(testDbPath);
+    testDbPath = createTestDbPath('ingest-nist82');
     db = new DatabaseClient(testDbPath);
     ingester = new Nist80082Ingester(db);
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     db.close();
-    if (existsSync(testDbPath)) unlinkSync(testDbPath);
+    await cleanupTestDb(testDbPath);
   });
 
   it('should validate guidance JSON structure', () => {

@@ -1,0 +1,149 @@
+{
+  "description": "Golden contract tests for OT Security MCP data accuracy verification",
+  "version": "0.4.0",
+  "generated": "2026-02-17",
+  "tests": [
+    {
+      "id": "nist-ac-2",
+      "tool": "get_ot_requirement",
+      "input": { "requirement_id": "AC-2", "standard": "nist-800-53" },
+      "expected": {
+        "requirement_id": "AC-2",
+        "title_contains": "Account Management",
+        "standard_id": "nist-800-53",
+        "not_null_fields": ["description", "title"]
+      }
+    },
+    {
+      "id": "nist-si-3",
+      "tool": "get_ot_requirement",
+      "input": { "requirement_id": "SI-3", "standard": "nist-800-53" },
+      "expected": {
+        "requirement_id": "SI-3",
+        "title_contains": "Malicious Code Protection",
+        "standard_id": "nist-800-53"
+      }
+    },
+    {
+      "id": "nist-pe-3",
+      "tool": "get_ot_requirement",
+      "input": { "requirement_id": "PE-3", "standard": "nist-800-53" },
+      "expected": {
+        "requirement_id": "PE-3",
+        "title_contains": "Physical Access Control",
+        "standard_id": "nist-800-53"
+      }
+    },
+    {
+      "id": "nist-ia-2",
+      "tool": "get_ot_requirement",
+      "input": { "requirement_id": "IA-2", "standard": "nist-800-53" },
+      "expected": {
+        "requirement_id": "IA-2",
+        "title_contains": "Identification and Authentication",
+        "standard_id": "nist-800-53"
+      }
+    },
+    {
+      "id": "nist-au-6",
+      "tool": "get_ot_requirement",
+      "input": { "requirement_id": "AU-6", "standard": "nist-800-53" },
+      "expected": {
+        "requirement_id": "AU-6",
+        "title_contains": "Audit Record Review",
+        "standard_id": "nist-800-53"
+      }
+    },
+    {
+      "id": "mitre-t0800",
+      "tool": "get_mitre_ics_technique",
+      "input": { "technique_id": "T0800" },
+      "expected": {
+        "technique_id": "T0800",
+        "name_contains": "Activate Firmware Update Mode",
+        "not_null_fields": ["description", "tactic"]
+      }
+    },
+    {
+      "id": "mitre-t0836",
+      "tool": "get_mitre_ics_technique",
+      "input": { "technique_id": "T0836" },
+      "expected": {
+        "technique_id": "T0836",
+        "name_contains": "Modify Parameter",
+        "not_null_fields": ["description"]
+      }
+    },
+    {
+      "id": "mitre-t0831",
+      "tool": "get_mitre_ics_technique",
+      "input": { "technique_id": "T0831" },
+      "expected": {
+        "technique_id": "T0831",
+        "name_contains": "Manipulation of Control",
+        "not_null_fields": ["description"]
+      }
+    },
+    {
+      "id": "search-authentication",
+      "tool": "search_ot_requirements",
+      "input": { "query": "authentication" },
+      "expected": {
+        "min_results": 1,
+        "any_result_contains_field": "requirement_id"
+      }
+    },
+    {
+      "id": "search-segmentation",
+      "tool": "search_ot_requirements",
+      "input": { "query": "network segmentation" },
+      "expected": {
+        "min_results": 1,
+        "any_result_contains_field": "requirement_id"
+      }
+    },
+    {
+      "id": "search-access-control",
+      "tool": "search_ot_requirements",
+      "input": { "query": "access control" },
+      "expected": {
+        "min_results": 1,
+        "any_result_contains_field": "requirement_id"
+      }
+    },
+    {
+      "id": "list-standards-coverage",
+      "tool": "list_ot_standards",
+      "input": {},
+      "expected": {
+        "min_results": 3,
+        "any_result_contains_field": "id"
+      }
+    },
+    {
+      "id": "zone-conduit-purdue-0",
+      "tool": "get_zone_conduit_guidance",
+      "input": { "purdue_level": 0 },
+      "expected": {
+        "not_null_fields": ["zones"],
+        "zones_min_count": 1
+      }
+    },
+    {
+      "id": "negative-test-nonexistent",
+      "tool": "get_ot_requirement",
+      "input": { "requirement_id": "XYZ-999", "standard": "nist-800-53" },
+      "expected": {
+        "is_null": true
+      }
+    },
+    {
+      "id": "sl2-mapping",
+      "tool": "map_security_level_requirements",
+      "input": { "security_level": 2 },
+      "expected": {
+        "not_error": true
+      }
+    }
+  ]
+}

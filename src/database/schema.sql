@@ -206,7 +206,7 @@ CREATE TABLE IF NOT EXISTS sector_applicability (
 -- =============================================================================
 
 -- Database metadata (schema version, last updated, etc.)
-CREATE TABLE IF NOT EXISTS metadata (
+CREATE TABLE IF NOT EXISTS db_metadata (
   key TEXT PRIMARY KEY,
   value TEXT NOT NULL,
   updated_at TEXT DEFAULT (datetime('now'))

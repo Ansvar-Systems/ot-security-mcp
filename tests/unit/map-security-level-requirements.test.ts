@@ -5,19 +5,14 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { DatabaseClient } from '../../src/database/client.js';
 import { mapSecurityLevelRequirements } from '../../src/tools/map-security-level-requirements.js';
-import { unlink } from 'fs/promises';
-import { existsSync } from 'fs';
-import { join } from 'path';
+import { createTestDbPath, cleanupTestDb } from '../helpers/test-db.js';
 
 describe('mapSecurityLevelRequirements', () => {
   let db: DatabaseClient;
-  const testDbPath = join(process.cwd(), 'tests/data/test-sl-requirements.sqlite');
+  let testDbPath: string;
 
   beforeEach(async () => {
-    // Clean up any existing test database
-    if (existsSync(testDbPath)) {
-      await unlink(testDbPath);
-    }
+    testDbPath = createTestDbPath('map-sl');
     // Create database client
     db = new DatabaseClient(testDbPath);
 
@@ -76,9 +71,7 @@ describe('mapSecurityLevelRequirements', () => {
       db.close();
     }
     // Clean up test database
-    if (existsSync(testDbPath)) {
-      await unlink(testDbPath);
-    }
+    await cleanupTestDb(testDbPath);
   });
 
   it('should return requirements for SL-2', async () => {

@@ -5,19 +5,14 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { McpServer } from '../../src/index.js';
 import { registerTools } from '../../src/tools/index.js';
-import { unlink } from 'fs/promises';
-import { existsSync } from 'fs';
-import { join } from 'path';
+import { createTestDbPath, cleanupTestDb } from '../helpers/test-db.js';
 
 describe('McpServer', () => {
   let server: McpServer;
-  const testDbPath = join(process.cwd(), 'tests/data/mcp-test-db.sqlite');
+  let testDbPath: string;
 
   beforeEach(async () => {
-    // Clean up any existing test database
-    if (existsSync(testDbPath)) {
-      await unlink(testDbPath);
-    }
+    testDbPath = createTestDbPath('mcp-server');
     // Create server instance with test database
     server = new McpServer(testDbPath);
   });
@@ -28,9 +23,7 @@ describe('McpServer', () => {
       server.close();
     }
     // Clean up test database
-    if (existsSync(testDbPath)) {
-      await unlink(testDbPath);
-    }
+    await cleanupTestDb(testDbPath);
   });
 
   describe('Server Initialization', () => {
@@ -55,7 +48,7 @@ describe('McpServer', () => {
     });
 
     it('should respect OT_MCP_DB_PATH environment variable', { timeout: 15000 }, async () => {
-      const customPath = 'tests/data/custom-db.sqlite';
+      const customPath = createTestDbPath('mcp-custom');
       process.env.OT_MCP_DB_PATH = customPath;
 
       const customServer = new McpServer();
@@ -66,9 +59,7 @@ describe('McpServer', () => {
       // Clean up
       customServer.close();
       delete process.env.OT_MCP_DB_PATH;
-      if (existsSync(customPath)) {
-        await unlink(customPath);
-      }
+      await cleanupTestDb(customPath);
     });
 
     it('should be instantiable and closeable', () => {
@@ -155,13 +146,13 @@ describe('McpServer', () => {
     it('should have valid descriptions for all tools', () => {
       const tools = registerTools();
 
-      expect(tools[0]?.description).toContain('Search for OT security requirements');
+      expect(tools[0]?.description).toContain('Full-text search across all OT security standards');
       expect(tools[1]?.description).toContain(
-        'Get detailed information about a specific OT requirement'
+        'Get detailed information about a specific OT security requirement'
       );
       expect(tools[2]?.description).toContain('List all available OT security standards');
       expect(tools[3]?.description).toContain(
-        'Get detailed information about a MITRE ATT&CK for ICS technique'
+        'Get detailed MITRE ATT&CK for ICS technique information'
       );
     });
 

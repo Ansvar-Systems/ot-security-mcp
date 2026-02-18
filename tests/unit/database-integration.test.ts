@@ -4,19 +4,14 @@
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { DatabaseClient } from '../../src/database/client.js';
-import { unlink } from 'fs/promises';
-import { existsSync } from 'fs';
-import { join } from 'path';
+import { createTestDbPath, cleanupTestDb } from '../helpers/test-db.js';
 
 describe('DatabaseClient - Integration Test', () => {
   let db: DatabaseClient;
-  const testDbPath = join(process.cwd(), 'tests/data/integration-test-db.sqlite');
+  let testDbPath: string;
 
   beforeEach(async () => {
-    // Clean up any existing test database
-    if (existsSync(testDbPath)) {
-      await unlink(testDbPath);
-    }
+    testDbPath = createTestDbPath('db-integration');
     // Create database client
     db = new DatabaseClient(testDbPath);
   });
@@ -27,9 +22,7 @@ describe('DatabaseClient - Integration Test', () => {
       db.close();
     }
     // Clean up test database
-    if (existsSync(testDbPath)) {
-      await unlink(testDbPath);
-    }
+    await cleanupTestDb(testDbPath);
   });
 
   it('should handle a complete workflow: standards, requirements, security levels, and mappings', () => {

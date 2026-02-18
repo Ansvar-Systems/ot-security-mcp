@@ -1,0 +1,5 @@
+{
+  "generated": "2026-02-17T00:00:00.000Z",
+  "description": "Golden hashes for drift detection. Run 'npm run generate:hashes' after building the production database to populate.",
+  "hashes": {}
+}

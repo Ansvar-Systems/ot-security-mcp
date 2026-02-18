@@ -45,6 +45,8 @@
     "verify:setup": "tsx scripts/verify-setup.ts",
     "verify:production": "tsx verify-production-ready.ts",
     "check-updates": "tsx scripts/check-updates.ts",
+    "populate:metadata": "tsx scripts/populate-metadata.ts",
+    "generate:hashes": "tsx scripts/generate-golden-hashes.ts",
     "security:audit": "npm audit --audit-level=moderate",
     "security:check": "npm run security:audit && npm run lint"
   },

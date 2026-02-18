@@ -1,22 +1,22 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { DatabaseClient } from '../../src/database/client.js';
 import { CrossMappingsIngester } from '../../scripts/ingest-cross-mappings.js';
-import { existsSync, unlinkSync } from 'fs';
+import { createTestDbPath, cleanupTestDb } from '../helpers/test-db.js';
 
 describe('CrossMappingsIngester', () => {
-  const testDbPath = 'tests/data/test-cross-mappings.db';
+  let testDbPath: string;
   let db: DatabaseClient;
   let ingester: CrossMappingsIngester;
 
   beforeEach(() => {
-    if (existsSync(testDbPath)) unlinkSync(testDbPath);
+    testDbPath = createTestDbPath('ingest-mappings');
     db = new DatabaseClient(testDbPath);
     ingester = new CrossMappingsIngester(db);
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     db.close();
-    if (existsSync(testDbPath)) unlinkSync(testDbPath);
+    await cleanupTestDb(testDbPath);
   });
 
   describe('IEC-NIST mapping validation', () => {

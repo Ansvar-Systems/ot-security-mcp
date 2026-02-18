@@ -1,0 +1,74 @@
+# Data Source Provenance for OT Security MCP
+# Lists all authoritative data sources, update mechanisms, and currency
+
+sources:
+  nist-800-53:
+    name: "NIST SP 800-53 Rev 5"
+    type: primary
+    url: "https://github.com/usnistgov/oscal-content/tree/main/nist.gov/SP800-53/rev5"
+    format: OSCAL JSON
+    update_mechanism: automated
+    update_frequency: "Daily check via GitHub Actions"
+    ingestion_script: "scripts/ingest-nist-80053.ts"
+    last_verified: "2026-02-17"
+    license: "Public Domain (US Government)"
+    notes: "260 OT-relevant controls from 15 families"
+
+  nist-800-82:
+    name: "NIST SP 800-82 Rev 3"
+    type: primary
+    url: "https://csrc.nist.gov/pubs/sp/800/82/r3/final"
+    format: "Curated JSON from official PDF"
+    update_mechanism: manual
+    update_frequency: "On new NIST revision"
+    ingestion_script: "scripts/ingest-nist-80082.ts"
+    last_verified: "2026-02-17"
+    license: "Public Domain (US Government)"
+    notes: "16 curated guidance sections"
+
+  mitre-attack-ics:
+    name: "MITRE ATT&CK for ICS"
+    type: primary
+    url: "https://github.com/mitre-attack/attack-stix-data/tree/master/ics-attack"
+    format: STIX 2.0 JSON
+    update_mechanism: automated
+    update_frequency: "Daily check via GitHub Actions"
+    ingestion_script: "scripts/ingest-mitre-ics.ts"
+    last_verified: "2026-02-17"
+    license: "Apache 2.0"
+    notes: "83 techniques, 52 mitigations, 331 relationships"
+
+  iec-62443:
+    name: "IEC 62443 Series (3-3, 4-2, 3-2)"
+    type: user-supplied
+    url: "https://www.isa.org/standards-and-publications/isa-iec-62443-series-of-standards"
+    format: "User-created JSON from licensed PDFs"
+    update_mechanism: manual
+    update_frequency: "On user license renewal or new standard revision"
+    ingestion_script: "scripts/ingest-iec62443.ts"
+    last_verified: "N/A - user-supplied"
+    license: "ISA/IEC Copyright - requires license"
+    notes: "NOT included in distribution. Users must supply their own licensed data."
+
+  cross-standard-mappings:
+    name: "Cross-Standard Mappings (IEC<>NIST, MITRE<>NIST)"
+    type: curated
+    url: "N/A - internally curated from official mapping tables"
+    format: JSON
+    update_mechanism: manual
+    update_frequency: "On new standard revisions"
+    ingestion_script: "scripts/ingest-cross-mappings.ts"
+    last_verified: "2026-02-17"
+    license: "Apache 2.0"
+    notes: "243 validated mappings"
+
+  purdue-model:
+    name: "Purdue Enterprise Reference Architecture"
+    type: curated
+    url: "https://www.isa.org/isa95"
+    format: "Curated JSON"
+    update_mechanism: manual
+    update_frequency: "Stable reference architecture"
+    last_verified: "2026-02-17"
+    license: "Apache 2.0"
+    notes: "6 Purdue levels, 7 conduit types, 8 zone-to-zone flows"

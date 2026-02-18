@@ -1,22 +1,22 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { DatabaseClient } from '../../src/database/client.js';
 import { Iec62443Ingester } from '../../scripts/ingest-iec62443.js';
-import { existsSync, unlinkSync } from 'fs';
+import { createTestDbPath, cleanupTestDb } from '../helpers/test-db.js';
 
 describe('Iec62443Ingester', () => {
-  const testDbPath = 'tests/data/test-iec62443.db';
+  let testDbPath: string;
   let db: DatabaseClient;
   let ingester: Iec62443Ingester;
 
   beforeEach(() => {
-    if (existsSync(testDbPath)) unlinkSync(testDbPath);
+    testDbPath = createTestDbPath('ingest-iec');
     db = new DatabaseClient(testDbPath);
     ingester = new Iec62443Ingester(db);
   });
 
-  afterEach(() => {
+  afterEach(async () => {
     db.close();
-    if (existsSync(testDbPath)) unlinkSync(testDbPath);
+    await cleanupTestDb(testDbPath);
   });
 
   describe('Part 3-3 (System Requirements)', () => {

@@ -5,20 +5,15 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { DatabaseClient } from '../../src/database/client.js';
 import { Nist80053Ingester } from '../../scripts/ingest-nist-80053.js';
-import { unlink } from 'fs/promises';
-import { existsSync } from 'fs';
-import { join } from 'path';
+import { createTestDbPath, cleanupTestDb } from '../helpers/test-db.js';
 
 describe('Nist80053Ingester', () => {
   let db: DatabaseClient;
   let ingester: Nist80053Ingester;
-  const testDbPath = join(process.cwd(), 'tests/data/test-nist-80053.sqlite');
+  let testDbPath: string;
 
   beforeEach(async () => {
-    // Clean up any existing test database
-    if (existsSync(testDbPath)) {
-      await unlink(testDbPath);
-    }
+    testDbPath = createTestDbPath('ingest-nist53');
     // Create database client and ingester
     db = new DatabaseClient(testDbPath);
     ingester = new Nist80053Ingester(db);
@@ -30,9 +25,7 @@ describe('Nist80053Ingester', () => {
       db.close();
     }
     // Clean up test database
-    if (existsSync(testDbPath)) {
-      await unlink(testDbPath);
-    }
+    await cleanupTestDb(testDbPath);
   });
 
   describe('OSCAL Catalog Parsing', () => {

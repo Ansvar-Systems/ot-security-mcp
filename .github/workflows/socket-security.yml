@@ -1,0 +1,23 @@
+name: Socket Security
+
+on:
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    - cron: '0 4 * * 1' # Weekly Monday 4 AM UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  socket:
+    name: Socket Security Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: SocketDev/socket-security-action@v1
+        with:
+          npm_package_json: package.json

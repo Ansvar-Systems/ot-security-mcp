@@ -51,7 +51,7 @@ export class McpServer {
     this.server = new Server(
       {
         name: 'ot-security-mcp',
-        version: '0.3.1',
+        version: '0.4.0',
       },
       {
         capabilities: {

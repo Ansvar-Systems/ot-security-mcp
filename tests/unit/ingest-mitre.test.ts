@@ -5,20 +5,15 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { DatabaseClient } from '../../src/database/client.js';
 import { MitreIngester } from '../../scripts/ingest-mitre-ics.js';
-import { unlink } from 'fs/promises';
-import { existsSync } from 'fs';
-import { join } from 'path';
+import { createTestDbPath, cleanupTestDb } from '../helpers/test-db.js';
 
 describe('MitreIngester', () => {
   let db: DatabaseClient;
   let ingester: MitreIngester;
-  const testDbPath = join(process.cwd(), 'tests/data/test-mitre-ingest.sqlite');
+  let testDbPath: string;
 
   beforeEach(async () => {
-    // Clean up any existing test database
-    if (existsSync(testDbPath)) {
-      await unlink(testDbPath);
-    }
+    testDbPath = createTestDbPath('ingest-mitre');
     // Create database client and ingester
     db = new DatabaseClient(testDbPath);
     ingester = new MitreIngester(db);
@@ -30,9 +25,7 @@ describe('MitreIngester', () => {
       db.close();
     }
     // Clean up test database
-    if (existsSync(testDbPath)) {
-      await unlink(testDbPath);
-    }
+    await cleanupTestDb(testDbPath);
   });
 
   describe('STIX Attack Pattern Parsing', () => {
