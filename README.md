@@ -327,11 +327,29 @@ So we're open-sourcing it. Navigating IEC 62443 security levels shouldn't requir
 - **[Development Guide](docs/development.md)** — Contributing, adding standards
 - **[Architecture](docs/architecture.md)** — Database schema, tool design
 - **[Troubleshooting](docs/troubleshooting.md)** — Common issues and fixes
+- **[Privacy Policy](PRIVACY.md)** — Data handling and retention notes
 
 ### Project Planning
 - **[Stage 2 Design](docs/plans/2026-01-29-ot-security-mcp-design.md)** — Complete architectural design
 - **[Stage 2 Implementation](docs/plans/2026-01-29-stage2-implementation.md)** — Task breakdown
 - **[Release Notes v0.2.0](RELEASE_NOTES_v0.2.0.md)** — What's new in Stage 2
+
+---
+
+## Directory Review Notes
+
+### Testing Account and Sample Data
+
+This server is read-only and does not require a login account for functional review.
+For directory review, use the bundled dataset and these sample prompts:
+- *"What IEC 62443 requirements apply to Security Level 2?"*
+- *"Show MITRE ICS techniques related to PLC manipulation."*
+- *"Map IEC 62443 SR 1.1 to NIST controls."*
+
+### Remote Authentication (OAuth 2.0)
+
+If you deploy a remote authenticated endpoint, use OAuth 2.0 over TLS with certificates from recognized authorities.
+If deployed in read-only unauthenticated mode, document that deployment policy explicitly.
 
 ---
 
