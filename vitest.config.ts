@@ -9,6 +9,9 @@ export default defineConfig({
     pool: 'forks',
     maxForks: 1,
     minForks: 1,
+    // Ensure test files run sequentially (not in parallel) to prevent
+    // SQLite "database is locked" errors from concurrent file access.
+    fileParallelism: false,
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
