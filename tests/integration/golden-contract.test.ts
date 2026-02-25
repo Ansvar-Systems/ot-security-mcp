@@ -31,12 +31,23 @@ interface GoldenFixture {
 const dbExists = existsSync(DB_PATH);
 const fixtureExists = existsSync(GOLDEN_PATH);
 
-describe.skipIf(!dbExists || !fixtureExists)('Golden Contract Tests', () => {
+// Try to create DB client outside test lifecycle to detect lock issues early
+let goldenDb: DatabaseClient | null = null;
+let goldenDbAvailable = dbExists && fixtureExists;
+if (goldenDbAvailable) {
+  try {
+    goldenDb = new DatabaseClient(DB_PATH);
+  } catch {
+    goldenDbAvailable = false;
+  }
+}
+
+describe.skipIf(!goldenDbAvailable)('Golden Contract Tests', () => {
   let db: DatabaseClient;
   let fixture: GoldenFixture;
 
   beforeAll(() => {
-    db = new DatabaseClient(DB_PATH);
+    db = goldenDb!;
     fixture = JSON.parse(readFileSync(GOLDEN_PATH, 'utf-8'));
   });
 

@@ -21,14 +21,28 @@ import { getRequirementRationale } from '../../src/tools/get-requirement-rationa
 import { join } from 'path';
 import { existsSync } from 'fs';
 
-describe('Stage 2: End-to-End Workflow Tests', () => {
+// Check if IEC 62443 data is available before running Stage 2 tests.
+// These workflows require IEC 62443 data (licensed, not always ingested).
+const stage2DbPath = join(process.cwd(), 'data/ot-security.db');
+const hasStage2Data = (() => {
+  if (!existsSync(stage2DbPath)) return false;
+  try {
+    const tempDb = new DatabaseClient(stage2DbPath);
+    const result = tempDb.queryOne<{ count: number }>(
+      "SELECT COUNT(*) as count FROM ot_standards WHERE id LIKE 'iec62443%'"
+    );
+    tempDb.close();
+    return (result?.count ?? 0) > 0;
+  } catch {
+    return false;
+  }
+})();
+
+describe.skipIf(!hasStage2Data)('Stage 2: End-to-End Workflow Tests', () => {
   let db: DatabaseClient;
-  const testDbPath = join(process.cwd(), 'data/ot-security.db');
+  const testDbPath = stage2DbPath;
 
   beforeAll(async () => {
-    if (!existsSync(testDbPath)) {
-      throw new Error(`Database not found at ${testDbPath}. Run ingestion scripts first.`);
-    }
     db = new DatabaseClient(testDbPath);
   });
 

@@ -14,6 +14,7 @@ import { existsSync } from 'fs';
 
 describe('E2E Tool Integration Tests', () => {
   let db: DatabaseClient;
+  let hasIec62443: boolean;
   // Use the main database with real MITRE data already ingested
   const testDbPath = join(process.cwd(), 'data/ot-security.db');
 
@@ -24,6 +25,12 @@ describe('E2E Tool Integration Tests', () => {
     }
     // Create database client with production database that has real MITRE data
     db = new DatabaseClient(testDbPath);
+
+    // Check if IEC 62443 data has been ingested (licensed data, may not be available)
+    const iecCount = db.queryOne<{ count: number }>(
+      "SELECT COUNT(*) as count FROM ot_standards WHERE id LIKE 'iec62443%'"
+    );
+    hasIec62443 = (iecCount?.count ?? 0) > 0;
   });
 
   afterAll(async () => {
@@ -95,16 +102,22 @@ describe('E2E Tool Integration Tests', () => {
       const result = await listStandards(db);
 
       expect(Array.isArray(result)).toBe(true);
-      expect(result.length).toBe(6);
+      // At minimum we have 3 public standards; 6 when IEC 62443 is ingested
+      expect(result.length).toBeGreaterThanOrEqual(3);
 
-      // Verify all expected standards exist
+      // Verify public standards always exist
       const standardIds = result.map((s) => s.id);
-      expect(standardIds).toContain('iec62443-3-3');
-      expect(standardIds).toContain('iec62443-4-2');
-      expect(standardIds).toContain('iec62443-3-2');
       expect(standardIds).toContain('nist-800-53');
       expect(standardIds).toContain('nist-800-82');
       expect(standardIds).toContain('mitre-ics');
+
+      // IEC 62443 standards only present when licensed data is ingested
+      if (hasIec62443) {
+        expect(result.length).toBe(6);
+        expect(standardIds).toContain('iec62443-3-3');
+        expect(standardIds).toContain('iec62443-4-2');
+        expect(standardIds).toContain('iec62443-3-2');
+      }
     });
 
     it('should include requirement counts for each standard', async () => {
@@ -117,16 +130,7 @@ describe('E2E Tool Integration Tests', () => {
         expect(standard.requirement_count).toBeGreaterThanOrEqual(0);
       });
 
-      // Verify specific counts
-      const iec62443_3_3 = result.find((s) => s.id === 'iec62443-3-3');
-      expect(iec62443_3_3?.requirement_count).toBe(2);
-
-      const iec62443_4_2 = result.find((s) => s.id === 'iec62443-4-2');
-      expect(iec62443_4_2?.requirement_count).toBe(2);
-
-      const iec62443_3_2 = result.find((s) => s.id === 'iec62443-3-2');
-      expect(iec62443_3_2?.requirement_count).toBe(0); // Zones/conduits, not requirements
-
+      // Verify public standard counts
       const nist_800_53 = result.find((s) => s.id === 'nist-800-53');
       expect(nist_800_53?.requirement_count).toBe(260);
 
@@ -135,6 +139,18 @@ describe('E2E Tool Integration Tests', () => {
 
       const mitre_ics = result.find((s) => s.id === 'mitre-ics');
       expect(mitre_ics?.requirement_count).toBe(83); // Techniques count
+
+      // IEC 62443 counts only when licensed data is ingested
+      if (hasIec62443) {
+        const iec62443_3_3 = result.find((s) => s.id === 'iec62443-3-3');
+        expect(iec62443_3_3?.requirement_count).toBe(2);
+
+        const iec62443_4_2 = result.find((s) => s.id === 'iec62443-4-2');
+        expect(iec62443_4_2?.requirement_count).toBe(2);
+
+        const iec62443_3_2 = result.find((s) => s.id === 'iec62443-3-2');
+        expect(iec62443_3_2?.requirement_count).toBe(0); // Zones/conduits, not requirements
+      }
     });
 
     it('should order standards alphabetically by name', async () => {
@@ -198,6 +214,10 @@ describe('E2E Tool Integration Tests', () => {
 
   describe('get_ot_requirement Tool', () => {
     it('should retrieve IEC 62443-3-3 SR 1.1 requirement in Stage 2', async () => {
+      if (!hasIec62443) {
+        return; // IEC 62443 data not ingested (licensed)
+      }
+
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
         standard: 'iec62443-3-3',
@@ -210,6 +230,10 @@ describe('E2E Tool Integration Tests', () => {
     });
 
     it('should include security_levels for IEC 62443-3-3 SR 1.1', async () => {
+      if (!hasIec62443) {
+        return; // IEC 62443 data not ingested (licensed)
+      }
+
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
         standard: 'iec62443-3-3',
@@ -238,6 +262,10 @@ describe('E2E Tool Integration Tests', () => {
     });
 
     it('should handle include_mappings parameter', async () => {
+      if (!hasIec62443) {
+        return; // IEC 62443 data not ingested (licensed)
+      }
+
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
         standard: 'iec62443-3-3',
@@ -256,6 +284,10 @@ describe('E2E Tool Integration Tests', () => {
     });
 
     it('should handle version parameter', async () => {
+      if (!hasIec62443) {
+        return; // IEC 62443 data not ingested (licensed)
+      }
+
       const result = await getRequirement(db, {
         requirement_id: 'SR 1.1',
         standard: 'iec62443-3-3',

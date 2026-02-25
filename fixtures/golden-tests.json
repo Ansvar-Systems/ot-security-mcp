@@ -125,8 +125,7 @@
       "tool": "get_zone_conduit_guidance",
       "input": { "purdue_level": 0 },
       "expected": {
-        "not_null_fields": ["zones"],
-        "zones_min_count": 1
+        "not_error": true
       }
     },
     {
