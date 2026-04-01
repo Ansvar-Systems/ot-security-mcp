@@ -50,12 +50,12 @@ Add to your `claude_desktop_config.json`:
 
 ```json
 {
-  "mcpServers": {
-    "ot-security": {
-      "command": "npx",
-      "args": ["-y", "@ansvar/ot-security-mcp"]
-    }
-  }
+ "mcpServers": {
+ "ot-security": {
+ "command": "npx",
+ "args": ["-y", "@ansvar/ot-security-mcp"]
+ }
+ }
 }
 ```
 
@@ -65,17 +65,44 @@ Restart Claude Desktop. Done.
 
 ```json
 {
-  "mcp.servers": {
-    "ot-security": {
-      "command": "npx",
-      "args": ["-y", "@ansvar/ot-security-mcp"]
-    }
-  }
+ "mcp.servers": {
+ "ot-security": {
+ "command": "npx",
+ "args": ["-y", "@ansvar/ot-security-mcp"]
+ }
+ }
 }
 ```
 
 ---
 
+
+### Public Endpoint (Streamable HTTP)
+
+Connect from any MCP client (Claude Desktop, ChatGPT, Cursor, VS Code, GitHub Copilot):
+
+```
+https://mcp.ansvar.eu/ot-security/mcp
+```
+
+**Claude Code:**
+```bash
+claude mcp add ot-security --transport http https://mcp.ansvar.eu/ot-security/mcp
+```
+
+**Claude Desktop / Cursor** (`claude_desktop_config.json`):
+```json
+{
+ "mcpServers": {
+ "ot-security": {
+ "type": "url",
+ "url": "https://mcp.ansvar.eu/ot-security/mcp"
+ }
+ }
+}
+```
+
+No authentication required. See [all Ansvar MCP endpoints](https://github.com/Ansvar-Systems/Ansvar-Architecture-Documentation/blob/main/docs/mcp-remote-access.md).
 ## Example Queries
 
 Once connected, just ask naturally:
@@ -149,7 +176,7 @@ Once connected, just ask naturally:
 
 ---
 
-## 🎬 See It In Action
+## See It In Action
 
 ### Why This Works
 
@@ -169,8 +196,8 @@ Once connected, just ask naturally:
 **Technical Stack:**
 ```
 Official Source → Parse → Validate → SQLite → MCP Tools → AI Response
-     ↑                        ↑            ↑
-  OSCAL/STIX          JSON Schema    FTS5 Search
+ ↑ ↑ ↑
+ OSCAL/STIX JSON Schema FTS5 Search
 ```
 
 ### Example: Traditional vs. This MCP
@@ -190,11 +217,11 @@ Official Source → Parse → Validate → SQLite → MCP Tools → AI Response
 
 ---
 
-## ⚠️ Important Disclaimers
+## Important Disclaimers
 
 ### IEC 62443 Licensing
 
-> **📄 IEC 62443 CONTENT NOT INCLUDED**
+> ** IEC 62443 CONTENT NOT INCLUDED**
 >
 > IEC 62443 is a **copyrighted standard** published by the International Society of Automation (ISA) and International Electrotechnical Commission (IEC).
 >
@@ -215,7 +242,7 @@ Official Source → Parse → Validate → SQLite → MCP Tools → AI Response
 
 ### Legal Advice
 
-> **🚨 THIS TOOL IS NOT SECURITY CONSULTING OR LEGAL ADVICE 🚨**
+> ** THIS TOOL IS NOT SECURITY CONSULTING OR LEGAL ADVICE **
 >
 > Security requirements are sourced from official public standards (NIST, MITRE) and user-supplied licensed standards (IEC 62443). However:
 > - **Security level targeting** is risk-based and requires proper threat modeling
@@ -239,14 +266,14 @@ Official Source → Parse → Validate → SQLite → MCP Tools → AI Response
 
 This server is part of **Ansvar's MCP ecosystem** for industrial and enterprise security:
 
-### 🏭 OT Security MCP (This Project)
+### OT Security MCP (This Project)
 **Query IEC 62443, NIST 800-82/53, and MITRE ATT&CK for ICS**
 - Specialized for OT/ICS environments (manufacturing, energy, critical infrastructure)
 - Security levels, Purdue Model, zone/conduit architecture
 - MITRE ATT&CK for ICS threat intelligence
 - **Install:** `npm install @ansvar/ot-security-mcp`
 
-### 🔐 [Security Controls MCP](https://github.com/Ansvar-Systems/security-controls-mcp)
+### [Security Controls MCP](https://github.com/Ansvar-Systems/security-controls-mcp)
 **Query 1,451 security controls across 28 IT/OT frameworks**
 - ISO 27001, NIST CSF, DORA, PCI DSS, SOC 2, CMMC, and 22 more
 - Bidirectional framework mapping and gap analysis
@@ -271,16 +298,16 @@ This server is part of **Ansvar's MCP ecosystem** for industrial and enterprise 
 
 ```
 1. "What are NIS2 requirements for energy sector OT systems?"
-   → EU Regulations MCP returns NIS2 Article 21 requirements
+ → EU Regulations MCP returns NIS2 Article 21 requirements
 
 2. "What IEC 62443 security level satisfies NIS2 Article 21?"
-   → OT Security MCP recommends Security Level 2-3 based on risk assessment
+ → OT Security MCP recommends Security Level 2-3 based on risk assessment
 
 3. "Map IEC 62443-4-2 SR 1.1 to NIST 800-53 controls"
-   → Security Controls MCP shows bidirectional mapping to AC-2, IA-2, etc.
+ → Security Controls MCP shows bidirectional mapping to AC-2, IA-2, etc.
 
 4. "What MITRE ATT&CK techniques target this configuration?"
-   → OT Security MCP shows relevant ICS attack techniques and mitigations
+ → OT Security MCP shows relevant ICS attack techniques and mitigations
 ```
 
 **Stack these servers for:**
@@ -425,5 +452,5 @@ Need help with:
 ---
 
 <p align="center">
-  <sub>Built with care in Stockholm, Sweden</sub>
+ <sub>Built with care in Stockholm, Sweden</sub>
 </p>
