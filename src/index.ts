@@ -325,11 +325,21 @@ export class McpServer {
       include_enhancements,
     });
 
+    const withCitations = requirements.map((r: any) => ({
+      ...r,
+      _citation: buildCitation(
+        `${r.standard_id}:${r.requirement_id}`,
+        `${r.requirement_id} — ${r.title ?? ''}`,
+        'get_ot_requirement',
+        { requirement_id: r.requirement_id, standard: r.standard_id },
+      ),
+    }));
+
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(requirements, null, 2),
+          text: JSON.stringify(withCitations, null, 2),
         },
       ],
     };
@@ -348,11 +358,29 @@ export class McpServer {
       reference_architecture,
     });
 
+    const canonicalRef = purdue_level !== undefined
+      ? `IEC62443:Purdue-L${purdue_level}`
+      : security_level_target !== undefined
+        ? `IEC62443:SL-${security_level_target}`
+        : 'IEC62443:Zone-Conduit';
+
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(result, null, 2),
+          text: JSON.stringify({
+            ...result,
+            _citation: buildCitation(
+              canonicalRef,
+              `IEC 62443 zone/conduit guidance`,
+              'get_zone_conduit_guidance',
+              {
+                ...(purdue_level !== undefined && { purdue_level: String(purdue_level) }),
+                ...(security_level_target !== undefined && { security_level_target: String(security_level_target) }),
+                ...(reference_architecture && { reference_architecture }),
+              },
+            ),
+          }, null, 2),
         },
       ],
     };
