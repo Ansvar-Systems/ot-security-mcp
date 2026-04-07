@@ -29,6 +29,7 @@ import { getMitreTechnique } from './tools/get-mitre-technique.js';
 import { mapSecurityLevelRequirements } from './tools/map-security-level-requirements.js';
 import { getZoneConduitGuidance } from './tools/get-zone-conduit-guidance.js';
 import { getRequirementRationale } from './tools/get-requirement-rationale.js';
+import { buildCitation } from './citation.js';
 
 /**
  * MCP Server class for OT Security standards and frameworks
@@ -131,11 +132,21 @@ export class McpServer {
       options,
     });
 
+    const withCitations = requirements.map((r: any) => ({
+      ...r,
+      _citation: buildCitation(
+        `${r.standard_id ?? r.standard_name}:${r.requirement_id}`,
+        `${r.requirement_id} — ${r.title ?? ''}`,
+        'get_ot_requirement',
+        { requirement_id: r.requirement_id, standard: r.standard_id },
+      ),
+    }));
+
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(requirements, null, 2),
+          text: JSON.stringify(withCitations, null, 2),
         },
       ],
     };
@@ -180,7 +191,15 @@ export class McpServer {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(result, null, 2),
+          text: JSON.stringify({
+            ...result,
+            _citation: buildCitation(
+              `${standard}:${requirement_id}`,
+              `${requirement_id} (${standard})`,
+              'get_ot_requirement',
+              { requirement_id, standard },
+            ),
+          }, null, 2),
         },
       ],
     };
@@ -278,7 +297,16 @@ export class McpServer {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(result, null, 2),
+          text: JSON.stringify({
+            ...result,
+            _citation: buildCitation(
+              technique_id,
+              `${technique_id} — ${result.name ?? ''}`,
+              'get_mitre_ics_technique',
+              { technique_id },
+              `https://attack.mitre.org/techniques/${technique_id.replace('.', '/')}/`,
+            ),
+          }, null, 2),
         },
       ],
     };
@@ -420,7 +448,15 @@ export class McpServer {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(result, null, 2),
+          text: JSON.stringify({
+            ...result,
+            _citation: buildCitation(
+              `${standard}:${requirement_id}`,
+              `${requirement_id} rationale (${standard})`,
+              'get_requirement_rationale',
+              { requirement_id, standard },
+            ),
+          }, null, 2),
         },
       ],
     };
