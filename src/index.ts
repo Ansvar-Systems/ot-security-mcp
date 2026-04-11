@@ -30,6 +30,9 @@ import { mapSecurityLevelRequirements } from './tools/map-security-level-require
 import { getZoneConduitGuidance } from './tools/get-zone-conduit-guidance.js';
 import { getRequirementRationale } from './tools/get-requirement-rationale.js';
 
+const SERVER_VERSION = '0.4.0';
+const SERVER_NAME = 'ot-security-mcp';
+
 /**
  * MCP Server class for OT Security standards and frameworks
  */
@@ -50,8 +53,8 @@ export class McpServer {
     // Create MCP server
     this.server = new Server(
       {
-        name: 'ot-security-mcp',
-        version: '0.4.0',
+        name: SERVER_NAME,
+        version: SERVER_VERSION,
       },
       {
         capabilities: {
@@ -62,6 +65,38 @@ export class McpServer {
 
     // Register handlers
     this.registerHandlers();
+  }
+
+  /**
+   * Build standard _meta block for all tool responses
+   */
+  private responseMeta(toolName: string): Record<string, unknown> {
+    return {
+      server: SERVER_NAME,
+      version: SERVER_VERSION,
+      timestamp: new Date().toISOString(),
+      tool: toolName,
+    };
+  }
+
+  /**
+   * Build a _citation block for a single requirement
+   */
+  private buildCitation(
+    requirementId: string,
+    standard: string,
+    title?: string
+  ): Record<string, unknown> {
+    const displayParts = [standard.toUpperCase(), requirementId];
+    if (title) displayParts.push(`- ${title}`);
+    return {
+      canonical_ref: `${standard}:${requirementId}`,
+      display_text: displayParts.join(' '),
+      lookup: {
+        tool: 'get_ot_requirement',
+        params: { requirement_id: requirementId, standard },
+      },
+    };
   }
 
   /**
@@ -101,6 +136,15 @@ export class McpServer {
           case 'get_requirement_rationale':
             return this.handleGetRequirementRationale(args);
 
+          case 'about':
+            return this.handleAbout();
+
+          case 'list_sources':
+            return this.handleListSources();
+
+          case 'check_data_freshness':
+            return this.handleCheckDataFreshness();
+
           default:
             throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${name}`);
         }
@@ -131,11 +175,26 @@ export class McpServer {
       options,
     });
 
+    // Enrich each result with a _citation block
+    const enriched = Array.isArray(requirements)
+      ? requirements.map((item: any) => ({
+          ...item,
+          _citation: this.buildCitation(item.requirement_id, item.standard, item.title),
+        }))
+      : requirements;
+
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(requirements, null, 2),
+          text: JSON.stringify(
+            {
+              results: enriched,
+              _meta: this.responseMeta('search_ot_requirements'),
+            },
+            null,
+            2
+          ),
         },
       ],
     };
@@ -165,8 +224,10 @@ export class McpServer {
             text: JSON.stringify(
               {
                 error: 'Requirement not found',
+                _error_type: 'not_found',
                 requirement_id,
                 standard,
+                _meta: this.responseMeta('get_ot_requirement'),
               },
               null,
               2
@@ -176,11 +237,24 @@ export class McpServer {
       };
     }
 
+    const anyResult = result as any;
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(result, null, 2),
+          text: JSON.stringify(
+            {
+              ...anyResult,
+              _citation: this.buildCitation(
+                anyResult.requirement_id ?? requirement_id,
+                anyResult.standard ?? standard,
+                anyResult.title
+              ),
+              _meta: this.responseMeta('get_ot_requirement'),
+            },
+            null,
+            2
+          ),
         },
       ],
     };
@@ -196,7 +270,14 @@ export class McpServer {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(result, null, 2),
+          text: JSON.stringify(
+            {
+              standards: result,
+              _meta: this.responseMeta('list_ot_standards'),
+            },
+            null,
+            2
+          ),
         },
       ],
     };
@@ -216,6 +297,8 @@ export class McpServer {
             text: JSON.stringify(
               {
                 error: 'Invalid arguments - expected an object',
+                _error_type: 'invalid_argument',
+                _meta: this.responseMeta('get_mitre_ics_technique'),
               },
               null,
               2
@@ -239,6 +322,8 @@ export class McpServer {
             text: JSON.stringify(
               {
                 error: 'technique_id parameter is required',
+                _error_type: 'invalid_argument',
+                _meta: this.responseMeta('get_mitre_ics_technique'),
               },
               null,
               2
@@ -264,7 +349,9 @@ export class McpServer {
             text: JSON.stringify(
               {
                 error: 'Technique not found',
+                _error_type: 'not_found',
                 technique_id,
+                _meta: this.responseMeta('get_mitre_ics_technique'),
               },
               null,
               2
@@ -274,11 +361,27 @@ export class McpServer {
       };
     }
 
+    const anyResult = result as any;
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(result, null, 2),
+          text: JSON.stringify(
+            {
+              ...anyResult,
+              _citation: {
+                canonical_ref: `mitre-ics:${technique_id}`,
+                display_text: `MITRE ATT&CK for ICS ${technique_id}${anyResult.name ? ` - ${anyResult.name}` : ''}`,
+                lookup: {
+                  tool: 'get_mitre_ics_technique',
+                  params: { technique_id },
+                },
+              },
+              _meta: this.responseMeta('get_mitre_ics_technique'),
+            },
+            null,
+            2
+          ),
         },
       ],
     };
@@ -301,7 +404,14 @@ export class McpServer {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(requirements, null, 2),
+          text: JSON.stringify(
+            {
+              requirements,
+              _meta: this.responseMeta('map_security_level_requirements'),
+            },
+            null,
+            2
+          ),
         },
       ],
     };
@@ -324,7 +434,14 @@ export class McpServer {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(result, null, 2),
+          text: JSON.stringify(
+            {
+              ...((result as any) ?? {}),
+              _meta: this.responseMeta('get_zone_conduit_guidance'),
+            },
+            null,
+            2
+          ),
         },
       ],
     };
@@ -344,6 +461,8 @@ export class McpServer {
             text: JSON.stringify(
               {
                 error: 'Invalid arguments - expected an object',
+                _error_type: 'invalid_argument',
+                _meta: this.responseMeta('get_requirement_rationale'),
               },
               null,
               2
@@ -366,6 +485,8 @@ export class McpServer {
             text: JSON.stringify(
               {
                 error: 'requirement_id parameter is required',
+                _error_type: 'invalid_argument',
+                _meta: this.responseMeta('get_requirement_rationale'),
               },
               null,
               2
@@ -383,6 +504,8 @@ export class McpServer {
             text: JSON.stringify(
               {
                 error: 'standard parameter is required',
+                _error_type: 'invalid_argument',
+                _meta: this.responseMeta('get_requirement_rationale'),
               },
               null,
               2
@@ -405,8 +528,10 @@ export class McpServer {
             text: JSON.stringify(
               {
                 error: 'Requirement not found',
+                _error_type: 'not_found',
                 requirement_id,
                 standard,
+                _meta: this.responseMeta('get_requirement_rationale'),
               },
               null,
               2
@@ -416,11 +541,226 @@ export class McpServer {
       };
     }
 
+    const anyResult = result as any;
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify(result, null, 2),
+          text: JSON.stringify(
+            {
+              ...anyResult,
+              _citation: this.buildCitation(
+                anyResult.requirement_id ?? requirement_id,
+                anyResult.standard ?? standard,
+                anyResult.title
+              ),
+              _meta: this.responseMeta('get_requirement_rationale'),
+            },
+            null,
+            2
+          ),
+        },
+      ],
+    };
+  }
+
+  /**
+   * Handle about tool - returns server identity and capabilities
+   */
+  private async handleAbout() {
+    const aboutData = {
+      name: SERVER_NAME,
+      version: SERVER_VERSION,
+      description:
+        'OT Security MCP Server providing access to IEC 62443, NIST 800-53, NIST 800-82, and MITRE ATT&CK for ICS standards and frameworks.',
+      publisher: 'Ansvar Systems',
+      license: 'Apache-2.0',
+      homepage: 'https://github.com/Ansvar-Systems/ot-security-mcp',
+      standards: [
+        {
+          id: 'iec62443-3-3',
+          name: 'IEC 62443-3-3',
+          description: 'System Security Requirements and Security Levels',
+          license: 'user-supplied',
+        },
+        {
+          id: 'iec62443-4-2',
+          name: 'IEC 62443-4-2',
+          description: 'Technical Security Requirements for IACS Components',
+          license: 'user-supplied',
+        },
+        {
+          id: 'iec62443-3-2',
+          name: 'IEC 62443-3-2',
+          description: 'Security Risk Assessment for System Design (Zones/Conduits)',
+          license: 'user-supplied',
+        },
+        {
+          id: 'nist-800-53',
+          name: 'NIST SP 800-53 Rev 5',
+          description: 'Security and Privacy Controls for Information Systems',
+          license: 'public-domain',
+        },
+        {
+          id: 'nist-800-82',
+          name: 'NIST SP 800-82 Rev 3',
+          description: 'Guide to Operational Technology Security',
+          license: 'public-domain',
+        },
+        {
+          id: 'mitre-ics',
+          name: 'MITRE ATT&CK for ICS',
+          description: 'Adversary tactics and techniques for industrial control systems',
+          license: 'Apache-2.0',
+        },
+      ],
+      tools: [
+        'about',
+        'list_sources',
+        'check_data_freshness',
+        'list_ot_standards',
+        'search_ot_requirements',
+        'get_ot_requirement',
+        'get_mitre_ics_technique',
+        'map_security_level_requirements',
+        'get_zone_conduit_guidance',
+        'get_requirement_rationale',
+      ],
+      _meta: this.responseMeta('about'),
+    };
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(aboutData, null, 2),
+        },
+      ],
+    };
+  }
+
+  /**
+   * Handle list_sources tool - returns data source provenance information
+   */
+  private async handleListSources() {
+    const sourcesData = {
+      sources: [
+        {
+          id: 'iec62443',
+          name: 'IEC 62443 Series',
+          publisher: 'ISA / IEC',
+          license: 'Proprietary — user-supplied licensed data required',
+          parts: ['IEC 62443-3-3', 'IEC 62443-4-2', 'IEC 62443-3-2'],
+          update_mechanism: 'manual',
+          update_instructions:
+            'Purchase from ISA (isa.org) or IEC (webstore.iec.ch), extract to JSON, run npm run ingest:iec62443',
+          canonical_url:
+            'https://www.isa.org/standards-and-publications/isa-iec-62443-series-of-standards',
+        },
+        {
+          id: 'nist-800-53',
+          name: 'NIST SP 800-53 Rev 5',
+          publisher: 'National Institute of Standards and Technology (NIST)',
+          license: 'Public domain (US Government work)',
+          update_mechanism: 'automated',
+          update_schedule: 'daily GitHub Actions check',
+          data_format: 'OSCAL JSON',
+          canonical_url: 'https://github.com/usnistgov/oscal-content',
+        },
+        {
+          id: 'nist-800-82',
+          name: 'NIST SP 800-82 Rev 3',
+          publisher: 'National Institute of Standards and Technology (NIST)',
+          license: 'Public domain (US Government work)',
+          update_mechanism: 'manual',
+          update_schedule: 'curated — checked when new revision published',
+          canonical_url: 'https://csrc.nist.gov/publications/detail/sp/800-82/rev-3/final',
+        },
+        {
+          id: 'mitre-ics',
+          name: 'MITRE ATT&CK for ICS',
+          publisher: 'The MITRE Corporation',
+          license: 'Apache-2.0',
+          update_mechanism: 'automated',
+          update_schedule: 'daily GitHub Actions check',
+          data_format: 'STIX 2.0 JSON',
+          canonical_url: 'https://github.com/mitre-attack/attack-stix-data',
+        },
+      ],
+      _meta: this.responseMeta('list_sources'),
+    };
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(sourcesData, null, 2),
+        },
+      ],
+    };
+  }
+
+  /**
+   * Handle check_data_freshness tool - returns freshness status of each data source
+   */
+  private async handleCheckDataFreshness() {
+    // Query the database for standard metadata including last ingested timestamps
+    let standards: any[] = [];
+    try {
+      standards = await this.db.query<any>(
+        `SELECT id, name, version, last_updated, status FROM ot_standards ORDER BY name`
+      );
+    } catch {
+      // If query fails, return static freshness info
+    }
+
+    const now = new Date().toISOString();
+
+    const freshnessData = {
+      checked_at: now,
+      sources:
+        standards.length > 0
+          ? standards.map((s: any) => ({
+              id: s.id,
+              name: s.name,
+              version: s.version,
+              last_updated: s.last_updated,
+              status: s.status,
+            }))
+          : [
+              {
+                id: 'nist-800-53',
+                name: 'NIST SP 800-53 Rev 5',
+                update_mechanism: 'automated',
+                note: 'Check GitHub Actions for latest ingestion date',
+              },
+              {
+                id: 'mitre-ics',
+                name: 'MITRE ATT&CK for ICS',
+                update_mechanism: 'automated',
+                note: 'Check GitHub Actions for latest ingestion date',
+              },
+              {
+                id: 'nist-800-82',
+                name: 'NIST SP 800-82 Rev 3',
+                update_mechanism: 'manual',
+                note: 'Manually curated — check docs/coverage.md for last update',
+              },
+              {
+                id: 'iec62443',
+                name: 'IEC 62443 Series',
+                update_mechanism: 'user-supplied',
+                note: 'User-supplied licensed data — check your ingestion logs',
+              },
+            ],
+      _meta: this.responseMeta('check_data_freshness'),
+    };
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(freshnessData, null, 2),
         },
       ],
     };

@@ -69,11 +69,11 @@ describe('McpServer', () => {
   });
 
   describe('Tool Registry', () => {
-    it('should return 7 tools (Stage 1 + Stage 2)', () => {
+    it('should return 10 tools (Stage 1 + Stage 2 + meta-tools)', () => {
       const tools = registerTools();
 
       expect(tools).toBeDefined();
-      expect(tools).toHaveLength(7);
+      expect(tools).toHaveLength(10);
 
       const toolNames = tools.map((t) => t.name);
       expect(toolNames).toContain('search_ot_requirements');
@@ -83,6 +83,9 @@ describe('McpServer', () => {
       expect(toolNames).toContain('map_security_level_requirements');
       expect(toolNames).toContain('get_zone_conduit_guidance');
       expect(toolNames).toContain('get_requirement_rationale');
+      expect(toolNames).toContain('about');
+      expect(toolNames).toContain('list_sources');
+      expect(toolNames).toContain('check_data_freshness');
     });
 
     it('should have valid JSON schemas for all tools', () => {

@@ -225,6 +225,36 @@ export function registerTools(): Tool[] {
         required: ['requirement_id', 'standard'],
       },
     },
+    {
+      name: 'about',
+      description:
+        'Returns identity and capability information for this MCP server: name, version, publisher, license, list of supported standards, and available tool names. Use this first to understand what this server provides before calling other tools.',
+      inputSchema: {
+        type: 'object',
+        properties: {},
+        required: [],
+      },
+    },
+    {
+      name: 'list_sources',
+      description:
+        'Returns provenance information for every data source used by this server: publisher, license, update mechanism, data format, and canonical URL. Use this to understand data lineage and licensing before citing content, or to determine how to update a specific data source.',
+      inputSchema: {
+        type: 'object',
+        properties: {},
+        required: [],
+      },
+    },
+    {
+      name: 'check_data_freshness',
+      description:
+        'Reports the freshness status of each data source, including last-updated timestamps where available. Use this to verify that your data is current before making compliance decisions, or to identify which sources need manual refresh.',
+      inputSchema: {
+        type: 'object',
+        properties: {},
+        required: [],
+      },
+    },
   ];
 
   return annotateTools(tools);
