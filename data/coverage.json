@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0",
+  "last_updated": "2026-01-29T00:00:00Z",
+  "server": "ot-security-mcp",
+  "server_version": "0.4.0",
+  "sources": {
+    "iec62443-3-3": {
+      "name": "IEC 62443-3-3",
+      "description": "System Security Requirements and Security Levels",
+      "publisher": "ISA / IEC",
+      "license": "proprietary-user-supplied",
+      "requirement_count": 2,
+      "expected_count": 67,
+      "status": "template",
+      "note": "Sample data only — requires user-supplied licensed data",
+      "last_ingested": null,
+      "update_mechanism": "manual"
+    },
+    "iec62443-4-2": {
+      "name": "IEC 62443-4-2",
+      "description": "Technical Security Requirements for IACS Components",
+      "publisher": "ISA / IEC",
+      "license": "proprietary-user-supplied",
+      "requirement_count": 2,
+      "expected_count": 51,
+      "status": "template",
+      "note": "Sample data only — requires user-supplied licensed data",
+      "last_ingested": null,
+      "update_mechanism": "manual"
+    },
+    "iec62443-3-2": {
+      "name": "IEC 62443-3-2",
+      "description": "Security Risk Assessment — Zones and Conduits",
+      "publisher": "ISA / IEC",
+      "license": "proprietary-user-supplied",
+      "zone_count": 4,
+      "conduit_count": 3,
+      "status": "template",
+      "note": "Sample data only — requires user-supplied licensed data",
+      "last_ingested": null,
+      "update_mechanism": "manual"
+    },
+    "nist-800-53": {
+      "name": "NIST SP 800-53 Rev 5",
+      "description": "Security and Privacy Controls for Information Systems",
+      "publisher": "NIST",
+      "license": "public-domain",
+      "control_count": 228,
+      "control_families": 12,
+      "status": "current",
+      "data_format": "OSCAL JSON",
+      "canonical_url": "https://github.com/usnistgov/oscal-content",
+      "last_ingested": "2026-01-29T00:00:00Z",
+      "update_mechanism": "automated",
+      "update_schedule": "daily"
+    },
+    "nist-800-82": {
+      "name": "NIST SP 800-82 Rev 3",
+      "description": "Guide to Operational Technology Security",
+      "publisher": "NIST",
+      "license": "public-domain",
+      "guidance_topic_count": 6,
+      "cross_mapping_count": 16,
+      "status": "current",
+      "last_ingested": "2026-01-29T00:00:00Z",
+      "update_mechanism": "manual",
+      "note": "Curated subset of key guidance topics with NIST 800-53 mappings"
+    },
+    "mitre-ics": {
+      "name": "MITRE ATT&CK for ICS",
+      "description": "Adversary tactics and techniques for industrial control systems",
+      "publisher": "The MITRE Corporation",
+      "license": "Apache-2.0",
+      "technique_count": 83,
+      "tactic_count": 11,
+      "mitigation_count": 52,
+      "relationship_count": 331,
+      "status": "current",
+      "data_format": "STIX 2.0 JSON",
+      "canonical_url": "https://github.com/mitre-attack/attack-stix-data",
+      "last_ingested": "2026-01-29T00:00:00Z",
+      "update_mechanism": "automated",
+      "update_schedule": "daily"
+    }
+  },
+  "cross_mappings": {
+    "nist-800-82_to_nist-800-53": {
+      "count": 16,
+      "status": "current",
+      "confidence": "high"
+    },
+    "iec62443_to_nist-800-53": {
+      "count": 102,
+      "status": "current",
+      "note": "Populated when user-supplied IEC 62443 data is ingested"
+    },
+    "mitre-ics_to_nist-800-53": {
+      "count": 88,
+      "status": "current"
+    },
+    "nist-800-82_to_nist-800-53_validated": {
+      "count": 53,
+      "status": "current"
+    }
+  },
+  "totals": {
+    "standards": 6,
+    "requirements_and_controls": 435,
+    "cross_standard_mappings": 243,
+    "purdue_zones": 6,
+    "conduit_types": 7
+  }
+}

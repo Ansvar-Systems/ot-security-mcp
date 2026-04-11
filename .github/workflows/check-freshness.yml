@@ -1,0 +1,71 @@
+name: Check Data Freshness
+
+on:
+  schedule:
+    # Run daily at 06:00 UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-freshness:
+    name: Check Data Source Freshness
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check MITRE ATT&CK for ICS freshness
+        id: mitre-check
+        run: |
+          # Fetch latest MITRE ATT&CK for ICS release info
+          LATEST=$(curl -sf https://api.github.com/repos/mitre-attack/attack-stix-data/releases/latest | jq -r '.tag_name // "unknown"')
+          echo "mitre_latest=$LATEST" >> "$GITHUB_OUTPUT"
+          echo "MITRE ATT&CK for ICS latest release: $LATEST"
+
+      - name: Check NIST 800-53 OSCAL freshness
+        id: nist-check
+        run: |
+          # Fetch latest NIST OSCAL content commit date
+          LATEST_COMMIT=$(curl -sf "https://api.github.com/repos/usnistgov/oscal-content/commits?per_page=1" | jq -r '.[0].commit.committer.date // "unknown"')
+          echo "nist_latest_commit=$LATEST_COMMIT" >> "$GITHUB_OUTPUT"
+          echo "NIST OSCAL latest commit: $LATEST_COMMIT"
+
+      - name: Build project
+        run: npm run build
+
+      - name: Run freshness verification
+        run: |
+          echo "=== Data Freshness Report ==="
+          echo "MITRE ATT&CK for ICS: ${{ steps.mitre-check.outputs.mitre_latest }}"
+          echo "NIST 800-53 OSCAL latest commit: ${{ steps.nist-check.outputs.nist_latest_commit }}"
+          echo "Check complete at: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+      - name: Update coverage.json with freshness timestamp
+        run: |
+          node -e "
+            const fs = require('fs');
+            const path = 'data/coverage.json';
+            if (fs.existsSync(path)) {
+              const data = JSON.parse(fs.readFileSync(path, 'utf8'));
+              data.freshness_checked_at = new Date().toISOString();
+              data.mitre_upstream_release = '${{ steps.mitre-check.outputs.mitre_latest }}';
+              data.nist_upstream_commit = '${{ steps.nist-check.outputs.nist_latest_commit }}';
+              fs.writeFileSync(path, JSON.stringify(data, null, 2));
+              console.log('Updated coverage.json with freshness info');
+            } else {
+              console.log('data/coverage.json not found, skipping update');
+            }
+          "
