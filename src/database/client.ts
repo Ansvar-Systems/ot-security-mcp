@@ -4,13 +4,26 @@
  */
 
 import Database, { type RunResult } from '@ansvar/mcp-sqlite';
-import { readFileSync, existsSync, mkdirSync } from 'fs';
-import { dirname, join } from 'path';
+import { readFileSync, existsSync, mkdirSync, copyFileSync } from 'fs';
+import { basename, dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 // Get the directory of the current module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+/**
+ * Copy the database to /tmp to work around node-sqlite3-wasm inability
+ * to read from Docker overlay filesystem layers (causes "disk I/O error").
+ * Returns the /tmp path. No-op if the file is already there.
+ */
+function ensureReadableDb(srcPath: string): string {
+  const tmpPath = join('/tmp', basename(srcPath));
+  if (!existsSync(tmpPath)) {
+    copyFileSync(srcPath, tmpPath);
+  }
+  return tmpPath;
+}
 
 export class DatabaseClient {
   private db: InstanceType<typeof Database>;
@@ -26,8 +39,11 @@ export class DatabaseClient {
       mkdirSync(dbDir, { recursive: true });
     }
 
+    // Copy DB to /tmp to avoid overlay filesystem I/O errors in Docker
+    const readablePath = ensureReadableDb(dbPath);
+
     // Initialize @ansvar/mcp-sqlite
-    this.db = new Database(dbPath);
+    this.db = new Database(readablePath);
 
     // Enable foreign key constraints
     this.db.pragma('foreign_keys = ON');
