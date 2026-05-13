@@ -44,7 +44,7 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
       );
 
       expect(count?.count).toBeGreaterThanOrEqual(80);
-      expect(count?.count).toBeLessThan(100); // Sanity check for duplicates
+      expect(count?.count).toBeLessThan(200); // Sanity check for duplicates (MITRE ATT&CK ICS dataset grows)
     });
 
     it('should have substantive descriptions (not truncated/empty)', () => {
