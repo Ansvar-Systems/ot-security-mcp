@@ -41,7 +41,7 @@ export function buildCitation(
   toolName: string,
   toolArgs: Record<string, string>,
   sourceUrl?: string | null,
-  aliases?: string[],
+  aliases?: string[]
 ): CitationMetadata {
   return {
     canonical_ref: canonicalRef,
@@ -76,7 +76,7 @@ export function buildProvisionCitation(
   inputDocId: string,
   inputSection: string,
   sourceUrl?: string | null,
-  shortName?: string | null,
+  shortName?: string | null
 ): CitationMetadata {
   // Build canonical_ref — detect common statute ID formats
   let canonicalRef: string;
@@ -136,7 +136,7 @@ export function buildRegulationCitation(
   toolName: string,
   toolArgs: Record<string, string>,
   authority?: string | null,
-  sourceUrl?: string | null,
+  sourceUrl?: string | null
 ): CitationMetadata {
   const canonicalRef = reference;
   const displayText = title || reference;

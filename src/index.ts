@@ -138,7 +138,7 @@ export class McpServer {
         `${r.standard_id ?? r.standard_name}:${r.requirement_id}`,
         `${r.requirement_id} — ${r.title ?? ''}`,
         'get_ot_requirement',
-        { requirement_id: r.requirement_id, standard: r.standard_id },
+        { requirement_id: r.requirement_id, standard: r.standard_id }
       ),
     }));
 
@@ -191,15 +191,19 @@ export class McpServer {
       content: [
         {
           type: 'text',
-          text: JSON.stringify({
-            ...result,
-            _citation: buildCitation(
-              `${standard}:${requirement_id}`,
-              `${requirement_id} (${standard})`,
-              'get_ot_requirement',
-              { requirement_id, standard },
-            ),
-          }, null, 2),
+          text: JSON.stringify(
+            {
+              ...result,
+              _citation: buildCitation(
+                `${standard}:${requirement_id}`,
+                `${requirement_id} (${standard})`,
+                'get_ot_requirement',
+                { requirement_id, standard }
+              ),
+            },
+            null,
+            2
+          ),
         },
       ],
     };
@@ -297,16 +301,20 @@ export class McpServer {
       content: [
         {
           type: 'text',
-          text: JSON.stringify({
-            ...result,
-            _citation: buildCitation(
-              technique_id,
-              `${technique_id} — ${result.name ?? ''}`,
-              'get_mitre_ics_technique',
-              { technique_id },
-              `https://attack.mitre.org/techniques/${technique_id.replace('.', '/')}/`,
-            ),
-          }, null, 2),
+          text: JSON.stringify(
+            {
+              ...result,
+              _citation: buildCitation(
+                technique_id,
+                `${technique_id} — ${result.name ?? ''}`,
+                'get_mitre_ics_technique',
+                { technique_id },
+                `https://attack.mitre.org/techniques/${technique_id.replace('.', '/')}/`
+              ),
+            },
+            null,
+            2
+          ),
         },
       ],
     };
@@ -331,7 +339,7 @@ export class McpServer {
         `${r.standard_id}:${r.requirement_id}`,
         `${r.requirement_id} — ${r.title ?? ''}`,
         'get_ot_requirement',
-        { requirement_id: r.requirement_id, standard: r.standard_id },
+        { requirement_id: r.requirement_id, standard: r.standard_id }
       ),
     }));
 
@@ -358,29 +366,36 @@ export class McpServer {
       reference_architecture,
     });
 
-    const canonicalRef = purdue_level !== undefined
-      ? `IEC62443:Purdue-L${purdue_level}`
-      : security_level_target !== undefined
-        ? `IEC62443:SL-${security_level_target}`
-        : 'IEC62443:Zone-Conduit';
+    const canonicalRef =
+      purdue_level !== undefined
+        ? `IEC62443:Purdue-L${purdue_level}`
+        : security_level_target !== undefined
+          ? `IEC62443:SL-${security_level_target}`
+          : 'IEC62443:Zone-Conduit';
 
     return {
       content: [
         {
           type: 'text',
-          text: JSON.stringify({
-            ...result,
-            _citation: buildCitation(
-              canonicalRef,
-              `IEC 62443 zone/conduit guidance`,
-              'get_zone_conduit_guidance',
-              {
-                ...(purdue_level !== undefined && { purdue_level: String(purdue_level) }),
-                ...(security_level_target !== undefined && { security_level_target: String(security_level_target) }),
-                ...(reference_architecture && { reference_architecture }),
-              },
-            ),
-          }, null, 2),
+          text: JSON.stringify(
+            {
+              ...result,
+              _citation: buildCitation(
+                canonicalRef,
+                `IEC 62443 zone/conduit guidance`,
+                'get_zone_conduit_guidance',
+                {
+                  ...(purdue_level !== undefined && { purdue_level: String(purdue_level) }),
+                  ...(security_level_target !== undefined && {
+                    security_level_target: String(security_level_target),
+                  }),
+                  ...(reference_architecture && { reference_architecture }),
+                }
+              ),
+            },
+            null,
+            2
+          ),
         },
       ],
     };
@@ -476,15 +491,19 @@ export class McpServer {
       content: [
         {
           type: 'text',
-          text: JSON.stringify({
-            ...result,
-            _citation: buildCitation(
-              `${standard}:${requirement_id}`,
-              `${requirement_id} rationale (${standard})`,
-              'get_requirement_rationale',
-              { requirement_id, standard },
-            ),
-          }, null, 2),
+          text: JSON.stringify(
+            {
+              ...result,
+              _citation: buildCitation(
+                `${standard}:${requirement_id}`,
+                `${requirement_id} rationale (${standard})`,
+                'get_requirement_rationale',
+                { requirement_id, standard }
+              ),
+            },
+            null,
+            2
+          ),
         },
       ],
     };

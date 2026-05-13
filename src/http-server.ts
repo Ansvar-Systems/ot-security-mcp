@@ -42,13 +42,26 @@ async function main() {
     res.setHeader('Access-Control-Expose-Headers', 'mcp-session-id');
 
     try {
-      if (req.method === 'OPTIONS') { res.writeHead(204); res.end(); return; }
+      if (req.method === 'OPTIONS') {
+        res.writeHead(204);
+        res.end();
+        return;
+      }
 
       if (url.pathname === '/health' && req.method === 'GET') {
         let dbOk = false;
-        try { templateInstance.getDatabase().query('SELECT 1'); dbOk = true; } catch {}
+        try {
+          templateInstance.getDatabase().query('SELECT 1');
+          dbOk = true;
+        } catch {}
         res.writeHead(dbOk ? 200 : 503, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ status: dbOk ? 'ok' : 'degraded', server: SERVER_NAME, version: SERVER_VERSION }));
+        res.end(
+          JSON.stringify({
+            status: dbOk ? 'ok' : 'degraded',
+            server: SERVER_NAME,
+            version: SERVER_VERSION,
+          })
+        );
         return;
       }
 
@@ -59,10 +72,14 @@ async function main() {
           return;
         }
         if (req.method === 'POST') {
-          const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: () => randomUUID() });
+          const transport = new StreamableHTTPServerTransport({
+            sessionIdGenerator: () => randomUUID(),
+          });
           const server = createSessionServer();
           await server.connect(transport);
-          transport.onclose = () => { if (transport.sessionId) sessions.delete(transport.sessionId); };
+          transport.onclose = () => {
+            if (transport.sessionId) sessions.delete(transport.sessionId);
+          };
           await transport.handleRequest(req, res);
           if (transport.sessionId) sessions.set(transport.sessionId, transport);
           return;
@@ -76,16 +93,23 @@ async function main() {
       res.end(JSON.stringify({ error: 'Not found' }));
     } catch (error) {
       console.error('[HTTP] Unhandled error:', error);
-      if (!res.headersSent) { res.writeHead(500); res.end(JSON.stringify({ error: 'Internal server error' })); }
+      if (!res.headersSent) {
+        res.writeHead(500);
+        res.end(JSON.stringify({ error: 'Internal server error' }));
+      }
     }
   });
 
-  httpServer.listen(PORT, () => { console.log(`${SERVER_NAME} v${SERVER_VERSION} HTTP server on port ${PORT}`); });
+  httpServer.listen(PORT, () => {
+    console.log(`${SERVER_NAME} v${SERVER_VERSION} HTTP server on port ${PORT}`);
+  });
 
   const shutdown = () => {
     for (const [, t] of sessions) t.close().catch(() => {});
     sessions.clear();
-    try { templateInstance.close(); } catch {}
+    try {
+      templateInstance.close();
+    } catch {}
     httpServer.close(() => process.exit(0));
     setTimeout(() => process.exit(1), 5000);
   };
@@ -93,4 +117,7 @@ async function main() {
   process.on('SIGINT', shutdown);
 }
 
-main().catch((err) => { console.error('Fatal:', err); process.exit(1); });
+main().catch((err) => {
+  console.error('Fatal:', err);
+  process.exit(1);
+});

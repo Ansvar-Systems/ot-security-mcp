@@ -21,15 +21,31 @@ import { getRequirementRationale } from '../../src/tools/get-requirement-rationa
 import { join } from 'path';
 import { existsSync } from 'fs';
 
+const testDbPath = join(process.cwd(), 'data/ot-security.db');
+
 describe('Stage 2: End-to-End Workflow Tests', () => {
   let db: DatabaseClient;
-  const testDbPath = join(process.cwd(), 'data/ot-security.db');
+  let hasIEC62443: boolean;
+  let hasZoneData: boolean;
+  let hasSecurityLevels: boolean;
 
   beforeAll(async () => {
     if (!existsSync(testDbPath)) {
       throw new Error(`Database not found at ${testDbPath}. Run ingestion scripts first.`);
     }
     db = new DatabaseClient(testDbPath);
+
+    // Check data availability for conditional test execution
+    const iecCount = db.queryOne<{ count: number }>(
+      "SELECT COUNT(*) as count FROM ot_requirements WHERE standard_id LIKE 'iec62443%'"
+    );
+    hasIEC62443 = (iecCount?.count ?? 0) > 0;
+
+    const zoneCount = db.queryOne<{ count: number }>('SELECT COUNT(*) as count FROM zones');
+    hasZoneData = (zoneCount?.count ?? 0) > 0;
+
+    const slCount = db.queryOne<{ count: number }>('SELECT COUNT(*) as count FROM security_levels');
+    hasSecurityLevels = (slCount?.count ?? 0) > 0;
   });
 
   afterAll(async () => {
@@ -39,7 +55,8 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
   });
 
   describe('Workflow 1: Cross-Standard Query (IEC ↔ NIST Mappings)', () => {
-    it('should discover NIST 800-53 controls mapped to IEC 62443 requirements', async () => {
+    it('should discover NIST 800-53 controls mapped to IEC 62443 requirements', async (ctx) => {
+      if (!hasIEC62443) ctx.skip();
       // Step 1: Search for access control in IEC 62443
       const iecResults = await searchRequirements(db, {
         query: 'authentication',
@@ -134,7 +151,8 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
   });
 
   describe('Workflow 2: Security Level Filtering', () => {
-    it('should map all requirements for Security Level 2 (SL-2)', async () => {
+    it('should map all requirements for Security Level 2 (SL-2)', async (ctx) => {
+      if (!hasSecurityLevels) ctx.skip();
       const sl2Requirements = await mapSecurityLevelRequirements(db, {
         security_level: 2,
         include_enhancements: true,
@@ -208,7 +226,8 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
   });
 
   describe('Workflow 3: Zone/Conduit Guidance Generation', () => {
-    it('should generate guidance for Level 3 (SCADA DMZ) zone', async () => {
+    it('should generate guidance for Level 3 (SCADA DMZ) zone', async (ctx) => {
+      if (!hasZoneData) ctx.skip();
       const result = await getZoneConduitGuidance(db, {
         purdue_level: 3,
         security_level_target: 2,
@@ -278,7 +297,8 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
   });
 
   describe('Workflow 4: Requirement Rationale with Metadata', () => {
-    it('should retrieve complete rationale for SR 1.1 requirement', async () => {
+    it('should retrieve complete rationale for SR 1.1 requirement', async (ctx) => {
+      if (!hasIEC62443) ctx.skip();
       const rationaleResult = await getRequirementRationale(db, {
         requirement_id: 'SR 1.1',
         standard: 'iec62443-3-3',
@@ -304,7 +324,8 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
       expect(rationaleResult?.standard.id).toBe('iec62443-3-3');
     });
 
-    it('should include related standards in rationale', async () => {
+    it('should include related standards in rationale', async (ctx) => {
+      if (!hasIEC62443) ctx.skip();
       const rationaleResult = await getRequirementRationale(db, {
         requirement_id: 'SR 1.1',
         standard: 'iec62443-3-3',
@@ -315,7 +336,8 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
       expect(Array.isArray(rationaleResult?.related_standards)).toBe(true);
     });
 
-    it('should provide detailed capability level explanations', async () => {
+    it('should provide detailed capability level explanations', async (ctx) => {
+      if (!hasIEC62443) ctx.skip();
       const rationaleResult = await getRequirementRationale(db, {
         requirement_id: 'SR 1.1',
         standard: 'iec62443-3-3',
@@ -370,7 +392,8 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
       }
     });
 
-    it('should support zone-based security planning workflow', async () => {
+    it('should support zone-based security planning workflow', async (ctx) => {
+      if (!hasZoneData || !hasSecurityLevels) ctx.skip();
       // Step 1: Get zone guidance for SCADA DMZ
       const zoneResult = await getZoneConduitGuidance(db, {
         purdue_level: 3,
@@ -465,22 +488,23 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
     });
 
     it('should validate all requirements have proper structure', async () => {
-      // Get requirements from multiple standards
-      const iecReq = await getRequirement(db, {
-        requirement_id: 'SR 1.1',
-        standard: 'iec62443-3-3',
-        options: {},
-      });
+      // Validate IEC requirement structure (only when IEC data is available)
+      if (hasIEC62443) {
+        const iecReq = await getRequirement(db, {
+          requirement_id: 'SR 1.1',
+          standard: 'iec62443-3-3',
+          options: {},
+        });
 
-      // Validate IEC requirement structure
-      expect(iecReq).toBeDefined();
-      expect(iecReq?.requirement_id).toBe('SR 1.1');
-      expect(iecReq?.standard_id).toBe('iec62443-3-3');
-      expect(iecReq?.title).toBeDefined();
-      expect(iecReq?.description).toBeDefined();
-      expect(Array.isArray(iecReq?.security_levels)).toBe(true);
+        expect(iecReq).toBeDefined();
+        expect(iecReq?.requirement_id).toBe('SR 1.1');
+        expect(iecReq?.standard_id).toBe('iec62443-3-3');
+        expect(iecReq?.title).toBeDefined();
+        expect(iecReq?.description).toBeDefined();
+        expect(Array.isArray(iecReq?.security_levels)).toBe(true);
+      }
 
-      // Get a NIST requirement
+      // Get a NIST requirement (always available)
       const nistResults = await searchRequirements(db, {
         query: 'access',
         options: {
@@ -489,18 +513,17 @@ describe('Stage 2: End-to-End Workflow Tests', () => {
         },
       });
 
-      if (nistResults.length > 0) {
-        const nistReq = await getRequirement(db, {
-          requirement_id: nistResults[0].requirement_id,
-          standard: 'nist-800-53',
-          options: {},
-        });
+      expect(nistResults.length).toBeGreaterThan(0);
+      const nistReq = await getRequirement(db, {
+        requirement_id: nistResults[0].requirement_id,
+        standard: 'nist-800-53',
+        options: {},
+      });
 
-        expect(nistReq).toBeDefined();
-        expect(nistReq?.requirement_id).toBeDefined();
-        expect(nistReq?.standard_id).toBe('nist-800-53');
-        expect(nistReq?.title).toBeDefined();
-      }
+      expect(nistReq).toBeDefined();
+      expect(nistReq?.requirement_id).toBeDefined();
+      expect(nistReq?.standard_id).toBe('nist-800-53');
+      expect(nistReq?.title).toBeDefined();
     });
 
     it('should verify all zone data has valid Purdue levels', async () => {
