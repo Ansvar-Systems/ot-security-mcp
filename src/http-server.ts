@@ -1,4 +1,12 @@
 #!/usr/bin/env node
+/**
+ * ot-security-mcp — HTTP transport for Docker deployment.
+ *
+ * Re-uses the McpServer class but connects via StreamableHTTPServerTransport
+ * instead of StdioServerTransport.
+ */
+
+import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { createServer as createHttpServer, IncomingMessage, ServerResponse } from 'node:http';
 import { randomUUID } from 'crypto';
@@ -8,22 +16,22 @@ import { McpServer } from './index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const PORT = parseInt(process.env.PORT || '3000', 10);
+const packageRoot = join(__dirname, '..');
 
 const SERVER_NAME = 'ot-security-mcp';
 const SERVER_VERSION = '0.4.0';
-
-function resolveDbPath(): string {
-  if (process.env.OT_MCP_DB_PATH) return process.env.OT_MCP_DB_PATH;
-  return join(__dirname, '..', 'data', 'ot-security.db');
-}
+const PORT = parseInt(process.env.PORT || '3000', 10);
+const DB_PATH = process.env.OT_MCP_DB_PATH || join(packageRoot, 'data', 'ot-security.db');
 
 async function main() {
-  const dbPath = resolveDbPath();
+  // Create a "template" McpServer instance for health checks / DB validation
+  const templateInstance = new McpServer(DB_PATH);
   const sessions = new Map<string, StreamableHTTPServerTransport>();
 
-  function createMCPServerInstance(): McpServer {
-    return new McpServer(dbPath);
+  function createSessionServer(): Server {
+    // Each session gets its own McpServer (which registers tools + handlers)
+    const instance = new McpServer(DB_PATH);
+    return instance.getServer();
   }
 
   const httpServer = createHttpServer(async (req: IncomingMessage, res: ServerResponse) => {
@@ -41,10 +49,15 @@ async function main() {
       }
 
       if (url.pathname === '/health' && req.method === 'GET') {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
+        let dbOk = false;
+        try {
+          templateInstance.getDatabase().query('SELECT 1');
+          dbOk = true;
+        } catch {}
+        res.writeHead(dbOk ? 200 : 503, { 'Content-Type': 'application/json' });
         res.end(
           JSON.stringify({
-            status: 'ok',
+            status: dbOk ? 'ok' : 'degraded',
             server: SERVER_NAME,
             version: SERVER_VERSION,
           })
@@ -54,18 +67,15 @@ async function main() {
 
       if (url.pathname === '/mcp') {
         const sessionId = req.headers['mcp-session-id'] as string | undefined;
-
         if (sessionId && sessions.has(sessionId)) {
           await sessions.get(sessionId)!.handleRequest(req, res);
           return;
         }
-
         if (req.method === 'POST') {
           const transport = new StreamableHTTPServerTransport({
             sessionIdGenerator: () => randomUUID(),
           });
-          const mcpServer = createMCPServerInstance();
-          const server = mcpServer.getServer();
+          const server = createSessionServer();
           await server.connect(transport);
           transport.onclose = () => {
             if (transport.sessionId) sessions.delete(transport.sessionId);
@@ -74,9 +84,8 @@ async function main() {
           if (transport.sessionId) sessions.set(transport.sessionId, transport);
           return;
         }
-
         res.writeHead(400, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Bad request — missing or invalid session' }));
+        res.end(JSON.stringify({ error: 'Bad request' }));
         return;
       }
 
@@ -85,20 +94,22 @@ async function main() {
     } catch (error) {
       console.error('[HTTP] Unhandled error:', error);
       if (!res.headersSent) {
-        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.writeHead(500);
         res.end(JSON.stringify({ error: 'Internal server error' }));
       }
     }
   });
 
   httpServer.listen(PORT, () => {
-    console.log(`${SERVER_NAME} v${SERVER_VERSION} HTTP server listening on port ${PORT}`);
+    console.log(`${SERVER_NAME} v${SERVER_VERSION} HTTP server on port ${PORT}`);
   });
 
   const shutdown = () => {
-    console.log('Shutting down...');
     for (const [, t] of sessions) t.close().catch(() => {});
     sessions.clear();
+    try {
+      templateInstance.close();
+    } catch {}
     httpServer.close(() => process.exit(0));
     setTimeout(() => process.exit(1), 5000);
   };

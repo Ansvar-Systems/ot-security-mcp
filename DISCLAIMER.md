@@ -1,34 +1,21 @@
 # Disclaimer
 
-## Not Legal Advice
+## Not Professional Advice
 
-This MCP server provides reference information about Ot Security legislation. **Nothing in this server constitutes legal, regulatory, or compliance advice.**
+This MCP server provides **reference data only**. It is not a substitute for professional legal, regulatory, compliance, or security advice.
 
-The information is compiled from publicly available official sources. It may be incomplete, outdated, or inaccurate. Legislation is amended regularly, and the data in this server is a point-in-time snapshot.
+- All data is sourced from authoritative publications (see `sources.yml` for provenance).
+- Zero AI-generated or summarized content in the database -- all entries are extracted from official sources.
+- Automated golden tests verify data integrity on every build.
+- Scheduled ingestion keeps data current (see `COVERAGE.md` for refresh schedule).
 
-## No Substitute for Professional Guidance
-
-Before making legal or compliance decisions based on information from this server:
-
-1. **Consult the official government gazette** or legislative portal
-2. **Engage qualified legal counsel** with jurisdiction-specific expertise
-3. **Verify current legislation status** directly with official sources
-
-## No Warranty
-
-THE SOFTWARE AND DATA ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
-
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+However, automated ingestion can introduce errors. When precision matters, cross-reference with the authoritative source.
 
 ## Limitation of Liability
 
-The authors, contributors, and Ansvar Systems accept no liability for:
+The maintainers of this project make no warranties, express or implied, regarding the accuracy, completeness, or fitness for any particular purpose of the data provided. Use at your own risk.
 
-- Errors, omissions, or inaccuracies in the legislative data
-- Decisions made based on information from this server
-- Financial, legal, or other losses arising from use of this software
-- Changes in legislation not yet reflected in the database
+## Data Currency
 
-## Open Source
+Data may not reflect the very latest amendments or updates. Use the `check_data_freshness` tool to verify currency before relying on any result for compliance decisions.
 
-This project is open source under the Apache License 2.0. See [LICENSE](LICENSE) for details.

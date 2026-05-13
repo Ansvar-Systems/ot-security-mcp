@@ -31,8 +31,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Database
+# Database (allow data/ot-security.db for deployment)
 *.db
+!data/ot-security.db
 *.db-shm
 *.db-wal
 *.sqlite
