@@ -69,6 +69,7 @@
     "@types/node": "^25.0.10",
     "@typescript-eslint/eslint-plugin": "^8.54.0",
     "@typescript-eslint/parser": "^8.54.0",
+    "@vitest/coverage-v8": "^4.1.6",
     "eslint": "^10.0.3",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
