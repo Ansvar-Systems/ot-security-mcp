@@ -366,13 +366,18 @@ describe('Content Smoke Tests - Data Quality Verification', () => {
       expect(orphans.length).toBe(0);
     });
 
-    it('should have IEC 62443 to NIST 800-53 mappings (40+)', () => {
+    it('should NOT ship IEC 62443 to NIST 800-53 mappings (ISA/IEC redistribution forbidden)', () => {
+      // 2026-05-14: IEC 62443 source pulled per ADR-030 / 100%-commercial-use-legal floor.
+      // The shipped DB MUST contain zero IEC-derived mapping rows. Users may
+      // optionally ingest their own licensed IEC data at runtime via the
+      // (architectural) extension points, but nothing IEC-derived is built into
+      // the distributed image.
       const count = db.queryOne<{ count: number }>(
         `SELECT COUNT(*) as count FROM ot_mappings
-         WHERE source_standard LIKE 'iec62443%' AND target_standard = 'nist-800-53'`
+         WHERE source_standard LIKE 'iec62443%' OR target_standard LIKE 'iec62443%'`
       );
 
-      expect(count?.count).toBeGreaterThanOrEqual(40);
+      expect(count?.count).toBe(0);
     });
 
     it('should have MITRE to NIST 800-53 mappings (30+)', () => {

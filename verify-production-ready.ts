@@ -14,28 +14,32 @@ async function verifyProductionReadiness() {
   console.log('TEST 1: Search for "segmentation"');
   const test1 = await searchRequirements(db, {
     query: 'segmentation',
-    options: { limit: 5 }
+    options: { limit: 5 },
   });
   if (test1.length > 0) {
     console.log(`  ✓ PASS - Found ${test1.length} results`);
-    test1.slice(0, 2).forEach(r => console.log(`    ${r.requirement_id}: ${r.title}`));
+    test1.slice(0, 2).forEach((r) => console.log(`    ${r.requirement_id}: ${r.title}`));
     passCount++;
   } else {
     console.log('  ✗ FAIL - No results found');
     failCount++;
   }
 
-  // Test 2: IEC 62443 search
-  console.log('\nTEST 2: Search IEC 62443 for "authentication"');
+  // Test 2: NIST authentication coverage
+  // (Was "IEC 62443 authentication search" pre-2026-05-14; IEC content
+  // removed because ISA/IEC forbid bulk redistribution. The architectural
+  // extension point for user-supplied IEC data remains, but the canonical
+  // distribution must not depend on it.)
+  console.log('\nTEST 2: Search NIST 800-53 for "authentication"');
   const test2 = await searchRequirements(db, {
     query: 'authentication',
-    options: { standards: ['iec62443-3-3', 'iec62443-4-2'], limit: 5 }
+    options: { standards: ['nist-800-53'], limit: 5 },
   });
   if (test2.length > 0) {
-    console.log(`  ✓ PASS - Found ${test2.length} IEC requirements`);
+    console.log(`  ✓ PASS - Found ${test2.length} NIST 800-53 authentication requirements`);
     passCount++;
   } else {
-    console.log('  ✗ FAIL - No IEC authentication requirements found');
+    console.log('  ✗ FAIL - No NIST 800-53 authentication requirements found');
     failCount++;
   }
 
@@ -77,21 +81,26 @@ async function verifyProductionReadiness() {
 
   // Test 5: MITRE data completeness
   console.log('\nTEST 5: MITRE ATT&CK ICS data');
-  const techniques = db.queryOne<{ count: number }>('SELECT COUNT(*) as count FROM mitre_ics_techniques');
-  const mitigations = db.queryOne<{ count: number }>('SELECT COUNT(*) as count FROM mitre_ics_mitigations');
+  const techniques = db.queryOne<{ count: number }>(
+    'SELECT COUNT(*) as count FROM mitre_ics_techniques'
+  );
+  const mitigations = db.queryOne<{ count: number }>(
+    'SELECT COUNT(*) as count FROM mitre_ics_mitigations'
+  );
   if (techniques && techniques.count >= 80 && mitigations && mitigations.count >= 50) {
     console.log(`  ✓ PASS - ${techniques.count} techniques, ${mitigations.count} mitigations`);
     passCount++;
   } else {
-    console.log(`  ✗ FAIL - Insufficient data: ${techniques?.count} techniques, ${mitigations?.count} mitigations`);
+    console.log(
+      `  ✗ FAIL - Insufficient data: ${techniques?.count} techniques, ${mitigations?.count} mitigations`
+    );
     failCount++;
   }
 
   // Data completeness summary
+  // IEC 62443 entries intentionally absent — see TEST 2 comment.
   console.log('\n=== DATA COMPLETENESS SUMMARY ===');
   const standards = [
-    { id: 'iec62443-3-3', name: 'IEC 62443-3-3', expected: 'SAMPLE (2)', critical: false },
-    { id: 'iec62443-4-2', name: 'IEC 62443-4-2', expected: 'SAMPLE (2)', critical: false },
     { id: 'nist-800-53', name: 'NIST 800-53', expected: '200+', critical: true },
     { id: 'nist-800-82', name: 'NIST 800-82', expected: '5-10', critical: true },
   ];
@@ -105,7 +114,9 @@ async function verifyProductionReadiness() {
     console.log(`  ${status} ${std.name}: ${count?.count || 0} (expected: ${std.expected})`);
   }
 
-  const mitreCount = db.queryOne<{ count: number }>('SELECT COUNT(*) as count FROM mitre_ics_techniques');
+  const mitreCount = db.queryOne<{ count: number }>(
+    'SELECT COUNT(*) as count FROM mitre_ics_techniques'
+  );
   console.log(`  ✓ MITRE ATT&CK ICS: ${mitreCount?.count || 0} techniques (expected: 80+)`);
 
   // Final verdict
@@ -117,7 +128,6 @@ async function verifyProductionReadiness() {
     console.log('\n✅ PRODUCTION READY - All critical tests passing');
   } else {
     console.log('\n⚠️  NOT PRODUCTION READY - Some tests failing');
-    console.log('Note: IEC 62443 sample data is expected (requires licensed content)');
   }
 
   db.close();
