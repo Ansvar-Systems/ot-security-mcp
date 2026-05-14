@@ -36,28 +36,34 @@ from pathlib import Path
 _NATIVE_DEPS: tuple[str, ...] = ("better-sqlite3",)
 
 
-def _detect_native_dep(repo_root: Path) -> str:
-    """Return the native dep name found in package.json, or '' if none.
+def _detect_native_dep(repo_root: Path) -> tuple[str, bool]:
+    """Return (dep_name, is_runtime_dep) for the first native dep found.
 
-    Walks both `dependencies` and `devDependencies`. A repo without a
-    package.json sibling to the Dockerfile is treated as non-Node and
-    the gate skips.
+    `is_runtime_dep=True` when the dep appears in `dependencies` — runtime
+    needs the native binding. `is_runtime_dep=False` when the dep appears
+    only in `devDependencies` — build-time only (e.g. `scripts/build-db.ts`
+    using `better-sqlite3` to populate a DB that is then baked into the
+    image). In the latter case, `npm ci --omit=dev` in the runtime stage
+    correctly strips the dep, so the runtime-stage check must NOT fire.
+
+    A repo without a package.json sibling to the Dockerfile is treated as
+    non-Node and the gate skips.
     """
     pkg_path = repo_root / "package.json"
     if not pkg_path.is_file():
-        return ""
+        return ("", False)
     try:
         manifest = json.loads(pkg_path.read_text())
     except (json.JSONDecodeError, OSError):
-        return ""
-    deps = {
-        **(manifest.get("dependencies") or {}),
-        **(manifest.get("devDependencies") or {}),
-    }
+        return ("", False)
+    runtime_deps = manifest.get("dependencies") or {}
+    dev_deps = manifest.get("devDependencies") or {}
     for name in _NATIVE_DEPS:
-        if name in deps:
-            return name
-    return ""
+        if name in runtime_deps:
+            return (name, True)
+        if name in dev_deps:
+            return (name, False)
+    return ("", False)
 
 
 def _split_stages(dockerfile: str) -> list[tuple[str, str]]:
@@ -107,7 +113,7 @@ def lint(dockerfile_path: Path, repo_root: Path) -> list[str]:
     if not stages:
         return ["Dockerfile has no FROM directive"]
 
-    dep_name = _detect_native_dep(repo_root)
+    dep_name, is_runtime_dep = _detect_native_dep(repo_root)
     if not dep_name:
         # Pure-JS MCPs (no native bindings) are allowed single-stage with
         # `npm ci --ignore-scripts`. The regression doesn't apply.
@@ -124,7 +130,11 @@ def lint(dockerfile_path: Path, repo_root: Path) -> list[str]:
 
     runtime_idx = _runtime_stage_index(stages)
     runtime_body = stages[runtime_idx][1]
-    if re.search(r"npm\s+ci\b[^\n]*--ignore-scripts", runtime_body):
+    # Only fires when the dep is in `dependencies` (i.e. runtime actually
+    # uses the native binding). When it's only in `devDependencies` for a
+    # build-time tool (e.g. `scripts/build-db.ts`), `npm ci --omit=dev` in
+    # the runtime stage correctly strips it and the regression doesn't apply.
+    if is_runtime_dep and re.search(r"npm\s+ci\b[^\n]*--ignore-scripts", runtime_body):
         issues.append(
             f"Runtime stage runs `npm ci --ignore-scripts` while `{dep_name}` is a "
             f"native dependency. This strips the postinstall step that fetches or "
