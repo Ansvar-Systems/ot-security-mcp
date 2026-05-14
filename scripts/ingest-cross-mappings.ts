@@ -4,34 +4,12 @@ import { DatabaseClient } from '../src/database/client.js';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
-// --- IEC 62443 <-> NIST 800-53 types ---
-
-interface IecNistMeta {
-  title: string;
-  description: string;
-  version: string;
-  created_date: string;
-  sources: string[];
-  confidence_basis: string;
-  notes?: string;
-}
-
-interface IecNistMapping {
-  source_standard: string;
-  source_requirement: string;
-  target_standard: string;
-  target_requirement: string;
-  mapping_type: string;
-  confidence: number;
-  notes: string;
-}
-
-interface IecNistJson {
-  meta: IecNistMeta;
-  mappings: IecNistMapping[];
-}
-
 // --- MITRE <-> NIST 800-53 types ---
+//
+// Note: The IEC 62443 <-> NIST 800-53 mapping half was removed 2026-05-14 along
+// with the iec-62443 source — ISA/IEC 62443 standards forbid bulk redistribution,
+// so even publicly-known requirement IDs were pruned out of an abundance of
+// caution. See sources.yml header for context.
 
 interface MitreNistMeta {
   title: string;
@@ -55,42 +33,6 @@ interface MitreNistJson {
 
 export class CrossMappingsIngester {
   constructor(private db: DatabaseClient) {}
-
-  /**
-   * Validate IEC-NIST mapping JSON structure
-   */
-  validateIecNistStructure(data: any): void {
-    if (!data.meta || typeof data.meta.title !== 'string') {
-      throw new Error('Invalid IEC-NIST JSON: missing or invalid meta.title');
-    }
-
-    if (!Array.isArray(data.mappings)) {
-      throw new Error('Invalid IEC-NIST JSON: mappings must be an array');
-    }
-
-    for (const mapping of data.mappings) {
-      if (
-        !mapping.source_standard ||
-        !mapping.source_requirement ||
-        !mapping.target_standard ||
-        !mapping.target_requirement ||
-        !mapping.mapping_type
-      ) {
-        throw new Error(
-          `Invalid mapping entry: missing required fields (source_standard, source_requirement, target_standard, target_requirement, mapping_type)`
-        );
-      }
-
-      if (
-        mapping.confidence !== undefined &&
-        (typeof mapping.confidence !== 'number' || mapping.confidence < 0 || mapping.confidence > 1)
-      ) {
-        throw new Error(
-          `Invalid mapping entry for ${mapping.source_requirement}: confidence must be between 0 and 1`
-        );
-      }
-    }
-  }
 
   /**
    * Validate MITRE-NIST linkage JSON structure
@@ -117,52 +59,6 @@ export class CrossMappingsIngester {
         );
       }
     }
-  }
-
-  /**
-   * Ingest IEC 62443 <-> NIST 800-53 mappings
-   */
-  ingestIecNistMappings(data: IecNistJson): number {
-    console.log(`Ingesting ${data.mappings.length} IEC-NIST mappings...`);
-
-    // Clean up existing IEC-sourced mappings for idempotent re-runs
-    const deleted = this.db.run(
-      `DELETE FROM ot_mappings WHERE source_standard LIKE 'iec62443%' AND target_standard = 'nist-800-53'`
-    );
-    if (deleted.changes > 0) {
-      console.log(`  Cleaned ${deleted.changes} existing IEC-NIST mappings`);
-    }
-
-    let inserted = 0;
-    for (const mapping of data.mappings) {
-      this.db.run(
-        `
-        INSERT OR REPLACE INTO ot_mappings (
-          source_standard,
-          source_requirement,
-          target_standard,
-          target_requirement,
-          mapping_type,
-          confidence,
-          notes,
-          created_date
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'))
-      `,
-        [
-          mapping.source_standard,
-          mapping.source_requirement,
-          mapping.target_standard,
-          mapping.target_requirement,
-          mapping.mapping_type,
-          mapping.confidence,
-          mapping.notes,
-        ]
-      );
-      inserted++;
-    }
-
-    console.log(`Ingested ${inserted} IEC-NIST mappings`);
-    return inserted;
   }
 
   /**
@@ -244,24 +140,9 @@ export class CrossMappingsIngester {
     const startTime = Date.now();
 
     try {
-      // --- IEC 62443 <-> NIST 800-53 ---
-      const iecNistPath = resolve('data/mappings/iec62443-nist80053-mappings.json');
-      console.log(`Loading IEC-NIST mappings from: ${iecNistPath}`);
-
-      const iecNistContent = readFileSync(iecNistPath, 'utf-8');
-      const iecNistData: IecNistJson = JSON.parse(iecNistContent);
-
-      this.validateIecNistStructure(iecNistData);
-      console.log(`Validated IEC-NIST JSON: ${iecNistData.meta.title}`);
-
-      let iecNistCount = 0;
-      this.db.transaction(() => {
-        iecNistCount = this.ingestIecNistMappings(iecNistData);
-      });
-
       // --- MITRE <-> NIST 800-53 ---
       const mitreNistPath = resolve('data/mappings/mitre-nist80053-linkages.json');
-      console.log(`\nLoading MITRE-NIST linkages from: ${mitreNistPath}`);
+      console.log(`Loading MITRE-NIST linkages from: ${mitreNistPath}`);
 
       const mitreNistContent = readFileSync(mitreNistPath, 'utf-8');
       const mitreNistData: MitreNistJson = JSON.parse(mitreNistContent);
@@ -276,7 +157,6 @@ export class CrossMappingsIngester {
 
       // Log ingestion
       const duration = Date.now() - startTime;
-      const totalMappings = iecNistCount + mitreResult.mappings;
 
       this.db.run(
         `
@@ -286,9 +166,9 @@ export class CrossMappingsIngester {
         [
           'ingest:cross-mappings',
           'success',
-          totalMappings,
+          mitreResult.mappings,
           duration,
-          `IEC-NIST: ${iecNistCount}, MITRE-NIST: ${mitreResult.mappings}, MITRE linkages: ${mitreResult.linkages}`,
+          `MITRE-NIST: ${mitreResult.mappings}, MITRE linkages: ${mitreResult.linkages}`,
           'v1.0',
         ]
       );
@@ -303,7 +183,6 @@ export class CrossMappingsIngester {
       );
 
       console.log('\n=== Ingestion Complete ===');
-      console.log(`IEC 62443 → NIST 800-53 mappings: ${iecNistCount}`);
       console.log(`MITRE ICS → NIST 800-53 mappings: ${mitreResult.mappings}`);
       console.log(`MITRE technique-mitigation linkages updated: ${mitreResult.linkages}`);
       console.log(`Total mappings in database: ${totalMappingCount?.count || 0}`);
