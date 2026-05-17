@@ -1,8 +1,54 @@
 # OT Security MCP Server
 
+<!-- ANSVAR-CTA-BEGIN -->
+> ### ▶ Try this MCP instantly via Ansvar Gateway
+> **50 free queries/day · no card required · OAuth signup at [ansvar.eu/gateway](https://ansvar.eu/gateway)**
+>
+> One endpoint, one OAuth signup, access from any MCP-compatible client.
+
+### Connect
+
+**Claude Code** (one line):
+
+```bash
+claude mcp add ansvar --transport http https://gateway.ansvar.eu/mcp
+```
+
+**Claude Desktop / Cursor** — add to `claude_desktop_config.json` (or `mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "ansvar": {
+      "type": "url",
+      "url": "https://gateway.ansvar.eu/mcp"
+    }
+  }
+}
+```
+
+**Claude.ai** — Settings → Connectors → Add custom connector → paste `https://gateway.ansvar.eu/mcp`
+
+First request opens an OAuth flow at [ansvar.eu/gateway](https://ansvar.eu/gateway). After signup, your client is bound to your account; tier (free / premium / team / company) determines fan-out, quota, and which downstream MCPs are reachable.
+
+---
+
+## Self-host this MCP
+
+You can also clone this repo and build the corpus yourself. The schema,
+fetcher, and tool implementations all live here. What is not in the repo is
+the pre-built database — TDM and standards-licensing constraints on the
+upstream sources mean we host the corpus on Ansvar infrastructure rather
+than redistribute it as a public artifact.
+
+Build your own: run this repo's ingestion script (entry-point varies per
+repo — typically `scripts/ingest.sh`, `npm run ingest`, or `make ingest`;
+check the repo root).
+<!-- ANSVAR-CTA-END -->
+
+
 **IEC 62443 for the AI age.**
 
-[![npm version](https://badge.fury.io/js/@ansvar%2Fot-security-mcp.svg)](https://www.npmjs.com/package/@ansvar/ot-security-mcp)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![GitHub stars](https://img.shields.io/github/stars/Ansvar-Systems/ot-security-mcp?style=social)](https://github.com/Ansvar-Systems/ot-security-mcp)
 [![Database](https://img.shields.io/badge/database-pre--built-green)](docs/coverage.md)
@@ -37,10 +83,6 @@ This MCP server makes **OT security standards searchable, cross-referenceable, a
 
 ### Installation
 
-```bash
-npm install @ansvar/ot-security-mcp
-```
-
 ### Claude Desktop
 
 Add to your `claude_desktop_config.json`:
@@ -48,59 +90,19 @@ Add to your `claude_desktop_config.json`:
 **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
 **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
 
-```json
-{
- "mcpServers": {
- "ot-security": {
- "command": "npx",
- "args": ["-y", "@ansvar/ot-security-mcp"]
- }
- }
-}
-```
-
 Restart Claude Desktop. Done.
 
 ### Cursor / VS Code
 
-```json
-{
- "mcp.servers": {
- "ot-security": {
- "command": "npx",
- "args": ["-y", "@ansvar/ot-security-mcp"]
- }
- }
-}
-```
-
 ---
-
 
 ### Public Endpoint (Streamable HTTP)
 
 Connect from any MCP client (Claude Desktop, ChatGPT, Cursor, VS Code, GitHub Copilot):
 
-```
-https://mcp.ansvar.eu/ot-security/mcp
-```
-
 **Claude Code:**
-```bash
-claude mcp add ot-security --transport http https://mcp.ansvar.eu/ot-security/mcp
-```
 
 **Claude Desktop / Cursor** (`claude_desktop_config.json`):
-```json
-{
- "mcpServers": {
- "ot-security": {
- "type": "url",
- "url": "https://mcp.ansvar.eu/ot-security/mcp"
- }
- }
-}
-```
 
 No authentication required. See [all Ansvar MCP endpoints](https://github.com/Ansvar-Systems/Ansvar-Architecture-Documentation/blob/main/docs/mcp-remote-access.md).
 ## Example Queries
@@ -262,61 +264,9 @@ Official Source → Parse → Validate → SQLite → MCP Tools → AI Response
 
 ---
 
-## Related Projects: Ansvar Compliance Suite
+## More Ansvar MCPs
 
-This server is part of **Ansvar's MCP ecosystem** for industrial and enterprise security:
-
-### OT Security MCP (This Project)
-**Query IEC 62443, NIST 800-82/53, and MITRE ATT&CK for ICS**
-- Specialized for OT/ICS environments (manufacturing, energy, critical infrastructure)
-- Security levels, Purdue Model, zone/conduit architecture
-- MITRE ATT&CK for ICS threat intelligence
-- **Install:** `npm install @ansvar/ot-security-mcp`
-
-### [Security Controls MCP](https://github.com/Ansvar-Systems/security-controls-mcp)
-**Query 1,451 security controls across 28 IT/OT frameworks**
-- ISO 27001, NIST CSF, DORA, PCI DSS, SOC 2, CMMC, and 22 more
-- Bidirectional framework mapping and gap analysis
-- Works with OT Security MCP for complete IT/OT coverage
-- **Install:** `pipx install security-controls-mcp`
-
-### 🇪🇺 [EU Regulations MCP](https://github.com/Ansvar-Systems/EU_compliance_MCP)
-**Query 47 EU regulations including NIS2 and Cyber Resilience Act**
-- GDPR, AI Act, DORA, NIS2, MDR, CRA, and 41 more
-- Critical for EU OT operators under NIS2 directive
-- **Install:** `npx @ansvar/eu-regulations-mcp`
-
-### 🇺🇸 [US Regulations MCP](https://github.com/Ansvar-Systems/US_Compliance_MCP)
-**Query US compliance laws including TSA Pipeline Security**
-- HIPAA, CCPA, SOX, GLBA, FERPA, COPPA, and 9 more
-- Relevant for US critical infrastructure operators
-- **Install:** `npm install @ansvar/us-regulations-mcp`
-
-### How They Work Together for OT Security
-
-**Complete OT compliance workflow:**
-
-```
-1. "What are NIS2 requirements for energy sector OT systems?"
- → EU Regulations MCP returns NIS2 Article 21 requirements
-
-2. "What IEC 62443 security level satisfies NIS2 Article 21?"
- → OT Security MCP recommends Security Level 2-3 based on risk assessment
-
-3. "Map IEC 62443-4-2 SR 1.1 to NIST 800-53 controls"
- → Security Controls MCP shows bidirectional mapping to AC-2, IA-2, etc.
-
-4. "What MITRE ATT&CK techniques target this configuration?"
- → OT Security MCP shows relevant ICS attack techniques and mitigations
-```
-
-**Stack these servers for:**
-- **EU OT operators** (NIS2 + IEC 62443 + ISO 27001)
-- **US critical infrastructure** (NIST + IEC 62443 + sector-specific regulations)
-- **Global manufacturers** (All compliance + OT security + framework mapping)
-
----
-
+Full fleet at [ansvar.eu/gateway](https://ansvar.eu/gateway).
 ## About Ansvar Systems
 
 We build AI-accelerated threat modeling and compliance tools for automotive OEMs, Tier 1 suppliers, industrial manufacturers, and critical infrastructure operators. This MCP server started as our internal IEC 62443 reference tool — turns out everyone securing OT environments has the same "6 documentation sites, 12 PDFs" problem.
@@ -403,10 +353,7 @@ We maintain a family of MCP servers for compliance and security professionals:
 
 | Server | Description | Install |
 |--------|-------------|---------|
-| **[EU Regulations](https://github.com/Ansvar-Systems/EU_compliance_MCP)** | 47 EU regulations (GDPR, AI Act, DORA, NIS2, MiFID II, eIDAS, MDR...) | `npx @ansvar/eu-regulations-mcp` |
-| **[US Regulations](https://github.com/Ansvar-Systems/US_Compliance_MCP)** | HIPAA, CCPA, SOX, GLBA, FERPA, COPPA, FDA 21 CFR Part 11, state privacy laws | `npx @ansvar/us-regulations-mcp` |
 | **[Security Controls](https://github.com/Ansvar-Systems/security-controls-mcp)** | 1,451 controls across 28 frameworks (ISO 27001, NIST CSF, PCI DSS, CMMC...) | `pipx install security-controls-mcp` |
-| **[Automotive](https://github.com/Ansvar-Systems/Automotive-MCP)** | UNECE R155/R156, ISO 21434 for automotive cybersecurity | `npx @ansvar/automotive-cybersecurity-mcp` |
 | **[Sanctions](https://github.com/Ansvar-Systems/Sanctions-MCP)** | Offline sanctions screening with OpenSanctions (30+ lists) | `pip install ansvar-sanctions-mcp` |
 
 Browse all projects: [ansvar.eu/open-source](https://ansvar.eu/open-source)
